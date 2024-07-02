@@ -213,6 +213,10 @@ object PrettyPrinter {
     pw.close
   }
 
+  def possStepsToString(poss_steps: FSet.fset[(Nat.nat, Transition.transition_ext[Unit])]): String = poss_steps match {
+    case FSet.fset_of_list(l) => l.map(x => f"(${show(x._1)}, ${show(x._2)})").toString
+  }
+
   def runinfo2dot(e: IEFSM, run_info: List[(Map[Nat.nat, Option[Value.value]], (Nat.nat, (Map[Nat.nat, Option[Value.value]], (Map[Nat.nat, Option[Value.value]], (List[Value.value], (List[Nat.nat], Transition.transition_ext[Unit]))))))], f: String) = {
     val pw = new PrintWriter(new File(f"${Config.config.dotfiles}/${f}.dot"))
     pw.write(Run_Info_DOT.runinfo2dot(e, run_info))
