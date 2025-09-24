@@ -1,0 +1,16 @@
+digraph "EFSM" {
+s0;
+s1;
+s3;
+s2;
+s0 -> s1 [key=0, label="a(_)/A(add(i0, r_b))", configuration="[0,0,0]", color=black];
+s0 -> s3 [key=0, label="b(_)/B", configuration="[0,0,0]", color=black];
+s1 -> s0 [key=0, label="b(_)/B", configuration="[0,0,0]", color=black];
+s1 -> s2 [key=0, label="a(_)/B", configuration="[0,0,0]", color=black];
+s1 -> s3 [key=0, label="a(_)/A(i0)", configuration="[0,1,0]", color=black];
+s3 -> s2 [key=0, label="a(_)/B", configuration="[0,0,0]", color=black];
+s3 -> s3 [key=0, label="b(_)/A(r_A)", configuration="[0,0,0]", color=black];
+s3 -> s0 [key=0, label="b(_)/B", configuration="[1,1,0]", color=black];
+s2 -> s1 [key=0, label="a(_)/B", configuration="[0,0,0]", color=black];
+s2 -> s0 [key=0, label="b(_)/A(mul(i0, r_b))", configuration="[0,0,0]", color=black];
+}

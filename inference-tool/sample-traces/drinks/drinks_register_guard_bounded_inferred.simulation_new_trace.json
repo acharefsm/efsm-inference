@@ -1,0 +1,7026 @@
+[
+  [
+    {
+      "label": "init",
+      "inputs": [],
+      "outputs": [
+        "epsilon"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "tea"
+      ],
+      "outputs": [
+        "Beverage",
+        "tea",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "tea",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        30
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        40
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        30
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        20
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Reject",
+        10
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Display",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        60
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        70
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        80
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        90
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        50
+      ],
+      "outputs": [
+        "Reject",
+        50
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        200
+      ],
+      "outputs": [
+        "Reject",
+        200
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        100
+      ],
+      "outputs": [
+        "Reject",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "omega"
+      ]
+    },
+    {
+      "label": "coin",
+      "inputs": [
+        10
+      ],
+      "outputs": [
+        "Display",
+        100
+      ]
+    },
+    {
+      "label": "vend",
+      "inputs": [],
+      "outputs": [
+        "Serv",
+        "coffee",
+        0,
+        0
+      ]
+    },
+    {
+      "label": "select",
+      "inputs": [
+        "coffee"
+      ],
+      "outputs": [
+        "Beverage",
+        "coffee",
+        0,
+        100
+      ]
+    }
+  ]
+]

@@ -1,0 +1,17 @@
+digraph "EFSM" {
+s1;
+s2;
+s0;
+s1 -> s1 [key=0, label="coin[not ((i0 <= r3))]/Reject(i0) (r0,i0,r2,r3)"];
+s1 -> s1 [key=1, label="select/Omega (r0,r1,r2,r3)"];
+s1 -> s1 [key=2, label="vend/omega (r0,r1,r2,r3)"];
+s1 -> s2 [key=0, label="coin[(i0 <= 100)]/Display(i0) (r0,i0,o0,r3)"];
+s2 -> s0 [key=0, label="vend[(r2 = 100)]/Serv(r0,0,0) (r0,r1,o1,o2)"];
+s2 -> s2 [key=0, label="coin[(i0 = 10)]/Display((r2 + i0)) (r0,i0,o0,r3)"];
+s2 -> s2 [key=1, label="coin[((i0 + r2) >= 100)]/Reject(i0) (r0,i0,r2,r3)"];
+s2 -> s2 [key=2, label="select/Omega (r0,r1,r2,r3)"];
+s2 -> s2 [key=3, label="vend[not ((r3 <= r2))]/omega (r0,r1,r2,r3)"];
+s0 -> s0 [key=0, label="coin/Omega (r0,r1,r2,r3)"];
+s0 -> s0 [key=1, label="vend/Omega (r0,r1,r2,r3)"];
+s0 -> s1 [key=0, label="select/Beverage(i0,r3,(100 + r2)) (i0,r1,o1,o2)"];
+}

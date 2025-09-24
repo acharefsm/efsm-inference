@@ -1,0 +1,5469 @@
+[
+  [
+    {
+      "label": "INIT",
+      "inputs": [],
+      "outputs": [
+        "INIT"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        2
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        2
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        2
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "A",
+        1
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        1
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "b",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "A",
+        0
+      ]
+    },
+    {
+      "label": "a",
+      "inputs": [
+        0
+      ],
+      "outputs": [
+        "B"
+      ]
+    }
+  ]
+]

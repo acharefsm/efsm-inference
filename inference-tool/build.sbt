@@ -7,7 +7,7 @@ val cleanDotfiles = taskKey[Int]("Deletes everything from the ./dotfiles folder"
 val mkdirs = taskKey[Unit]("Creates the ./dotfiles directories for the program to put stuff in as it runs")
 val buildDOT = taskKey[Unit]("Builds the dotfiles")
 
-ThisBuild / scalaVersion     := "2.12.8"
+ThisBuild / scalaVersion     := "2.12.18"
 ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.example"
 ThisBuild / organizationName := "example"
@@ -24,12 +24,12 @@ def cleanDirectory(dirName: String):Int = {
   return 0
 }
 
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
  case x => MergeStrategy.first
 }
 
-mainClass in assembly := Some("FrontEnd")
+assembly / mainClass := Some("FrontEnd")
 
 def mkdir(name: String) = {
   val dir = new File(name)
@@ -44,18 +44,21 @@ def getListOfFiles(dir: File, extensions: List[String]): List[File] = {
     }
 }
 
-
+/*
 lazy val python = Python()
 
 lazy val javaOpts = python.scalapyProperties.get.map {
   case (k, v) => s"""-D$k=$v"""
 }.toSeq
-
+*/
 lazy val root = (project in file("."))
+  
   .settings(
     fork := true,
-    javaOptions ++= javaOpts,
+    //javaOptions ++= javaOpts,
     name := "inference-tool",
+    Compile / scalaSource := (Compile / scalaSource).value / "inference",
+
     libraryDependencies += scalaTest % Test,
     libraryDependencies += "net.liftweb" %% "lift-json" % "3.3.0",
     libraryDependencies += "commons-io" % "commons-io" % "2.6",
@@ -76,11 +79,15 @@ lazy val root = (project in file("."))
     cleanDotfiles := {
       cleanDirectory("dotfiles")
     },
+
     clean := clean.dependsOn(cleanDotfiles).value,
+
     mkdirs := {
       mkdir("dotfiles")
     },
-    (run in Compile) := (run in Compile).dependsOn(mkdirs).evaluated,
+    
+    Compile / run := (Compile / run).dependsOn(mkdirs).evaluated,
+    
     buildDOT := {
       for (f <- getListOfFiles(new File("dotfiles"), List("dot"))) {
         val b = f.getName().replaceFirst("[.][^.]+$", "");

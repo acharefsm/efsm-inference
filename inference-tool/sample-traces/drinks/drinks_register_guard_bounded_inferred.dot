@@ -1,0 +1,27 @@
+digraph g {
+
+
+
+	/*
+	 * EFSM Definitions
+	 */
+
+	registers="[tea,coffee],INTEGER,INTEGER,INTEGER"
+	inputs="select(b:[tea,coffee]) | coin(c:INTEGER) | vend"
+	outputs="Beverage(b:[tea,coffee],t:INTEGER,p:INTEGER) | Serv(b:[tea,coffee],t:INTEGER,p:INTEGER) | Display(t:INTEGER) | Reject(c:INTEGER)"
+
+	s0 [shape="circle" label=<s0>];
+	s1 [shape="circle" label=<s1>];
+	s2 [shape="circle" label=<s2>];
+	s0 -> s1 [label=<select[true]/Beverage(i0,0,100) ( i0 , r1 , o1 , o2 )>];
+	s1 -> s2 [label=<coin[i0 &lt;= r3]/Display(i0) ( r0 , i0 , o0 , r3 )>];
+	s1 -> s1 [label=<coin[i0 &gt; r3]/Reject(i0) ( r0 , i0 , r2 , r3 )>];
+	s1 -> s1 [label=<vend[false]/ ( r0 , r1 , r2 , r3 )>];
+	s2 -> s2 [label=<coin[( r2 + i0 ) &lt;= r3]/Display(r2 + i0) ( r0 , i0 , o0 , r3 )>];
+	s2 -> s2 [label=<coin[( r2 + i0 ) &gt; r3]/Reject(i0) ( r0 , i0 , r2 , r3 )>];
+	s2 -> s0 [label=<vend[r2 &gt;= r3]/Serv(r0,0,0) ( r0 , r1 , o1 , o2 )>];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s0;
+
+}

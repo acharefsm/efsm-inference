@@ -22,3 +22,10 @@ inference-tool/dotfiles*
 output
 
 *.zip
+
+# Ignore vscode metals files
+.vscode/*
+.metals
+.bloop
+.sbt
+.bsp
