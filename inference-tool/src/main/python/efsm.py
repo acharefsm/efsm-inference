@@ -55,8 +55,8 @@ def efsm(nfsm : nx.Graph) -> EFSM:
 
     for (origin,dest,ip_sig,op_sig), group_samples in observations.groupby(["origin", "dest", "ip_sig", "op_sig"]):
 
-        ip_arity    = group_samples["ip_arity"].max().item()
-        op_arity    = group_samples["op_arity"].max().item()
+        ip_arity    = group_samples["ip_arity"].max()
+        op_arity    = group_samples["op_arity"].max()
 
         registers   = expand_list(group_samples,"registers","r")
         ip_args     = expand_list(group_samples,"ip_args","i")
@@ -122,6 +122,10 @@ def generalise(efsm : EFSM, infer_function,*args, **kwargs) -> EFSM :
             columns         = transition.samples.columns.to_list()
             output_columns  = columns[-transition.output_arity:] if transition.output_arity != 0 else []
             args_columns    = columns[:-transition.output_arity] if transition.output_arity != 0 else columns
+
+            for output in output_columns:
+                print(ip_sig, op_sig, dest, output)
+                print("===================================================================================================")
 
             transition.output = [infer_output(transition.samples[args_columns + [output]]) for output in output_columns]
 

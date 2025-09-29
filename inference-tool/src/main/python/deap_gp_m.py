@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Sep 3 11:47:57 2025
+Created on Mon Jan  3 11:47:57 2022
 
-@author: Luca Devlin Luca0414
+@author: michael
 """
 
 import operator
 import random
-from pyrsistent import pset
 import z3
 import sys
 import traceback
-import statsmodels
-import patsy
 
 from deap import algorithms
 from deap import base
@@ -25,7 +22,6 @@ from math import sqrt, isclose
 
 import pandas as pd
 import numpy as np
-import statsmodels.formula.api as smf
 
 from enchant.utils import levenshtein
 from numbers import Number
@@ -317,33 +313,21 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
 
     assert output_type in {int, float, str, bool}, f"Bad output type {output_type}"
 
-    datatypes = {}
-    for col in points:
-        datatypes[col] = type(points[col].tolist()[0])
+    types = points.dtypes.to_dict()
+    names = list(types)
+    datatypes = [generators[types[v]] for v in names]
+    assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
 
-    # types = points.dtypes.to_dict()
-    # print("points")
-    # print(points)
-    # print("types", types)
-    # names = list(datatypes)
-    # print("names", names)
-    # datatypes = [generators[types[v]] for v in names]
-    # assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
+    pset = gp.PrimitiveSet("MAIN", len(names))
 
-    pset = gp.PrimitiveSet("MAIN", len(datatypes))
-
-    rename = {f"ARG{i}": col for i, col in enumerate(datatypes)}
+    rename = {f"ARG{i}": col for i, col in enumerate(names)}
     pset.renameArguments(**rename)
 
     assert all([type(t.value) in {int, str, float} for t in pset.mapping.values() if hasattr(t, "value")]), "Bad type"
 
     # Add literal terminals
-    # print("-" * 80)
-    # print("TERMINALS")
-    # print(names)
-    for v, typ in datatypes.items():
-        print("----------", v, typ)
-        # assert typ in {int, str, float, bool}, f"Bad pset terminal type {typ}"
+    for v, typ in zip(names, datatypes):
+        assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
         term_set = set(points[v])
         for term in term_set:
             if not is_null(term):
@@ -355,16 +339,16 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     ), f"Bad type: {types}"
 
     pset.addTerminal("", str)
-    # pset.addTerminal(0.0)
-    # pset.addTerminal(1.0)
-    # pset.addTerminal(2.0)
+    pset.addTerminal(0.0)
+    pset.addTerminal(1.0)
+    pset.addTerminal(2.0)
     pset.addPrimitive(operator.add, 2)
     pset.addPrimitive(operator.sub, 2)
     pset.addPrimitive(operator.mul, 2)
     pset.addPrimitive(protectedDiv, 2, name="div")
-    # pset.addTerminal(0)
-    # pset.addTerminal(1)
-    # pset.addTerminal(2)
+    pset.addTerminal(0)
+    pset.addTerminal(1)
+    pset.addTerminal(2)
     pset.addTerminal(True)
     pset.addTerminal(False)
     pset.addPrimitive(operator.__le__, 2)
@@ -433,23 +417,15 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     :return: The primitive set.
     :rtype: gp.PrimitiveSet
     """
-    # strs = [col for col in points.columns if points[col].dtype == np.dtype("O")]
-    # print([points[col].dtype for col in points.columns])
-    # print(strs)
-    # for col in strs:
-    #     del points[col]
-
     generators = {
         np.dtype("float64"): float,
         np.dtype("int64"): int,
-        np.dtype("int32"): int,
         np.dtype("bool"): bool,
-        np.dtype("O"): str,
         pd.Int64Dtype(): int,
         pd.StringDtype(): str,
     }
     output_type = generators[points.dtypes[points.columns[-1]]]
-    # generators[np.dtype("O")] = output_type
+    generators[np.dtype("O")] = output_type
 
     assert output_type in {int, float, str, bool}, f"Bad output type {output_type}"
 
@@ -469,57 +445,47 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     for v, typ in zip(names, datatypes):
         assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
         term_set = set(points[v])
-        print("----------", v, typ)
         for term in term_set:
             if not is_null(term):
                 pset.addTerminal(typ(term), typ)
-                print(typ(term))
 
     types = [(t.value, type(t.value)) for t in pset.mapping.values() if hasattr(t, "value")]
     assert all(
         [type(t.value) in {int, str, float, bool} for t in pset.mapping.values() if hasattr(t, "value")]
     ), f"Bad type: {types}"
 
-    # pset.addPrimitive(is_coffee, [str], bool, name="is_coffee")
-    # pset.addPrimitive(is_tea, [str], bool, name="is_tea")
-    # pset.addPrimitive(if_then_else, [bool, float, float], float, name="if")
-
-    # pset.addPrimitive(coffee_if_then_else, [str, float, float], float, name="coffee_if")
-    # pset.addPrimitive(tea_if_then_else, [str, float, float], float, name="tea_if")
-    # pset.addPrimitive(milk_if_then_else, [str, float, float], float, name="milk_if")
-
     if output_type == str:
         pset.addTerminal("", str)
         # pset.addPrimitive(lambda x: x, [str], str, name="id")
-    # elif output_type == float:
-    #     # pset.addTerminal(0.0, float)
-    #     # pset.addTerminal(1.0, float)
-    #     # pset.addTerminal(2.0, float)
-    #     pset.addPrimitive(operator.add, [float, float], float)
-    #     pset.addPrimitive(operator.sub, [float, float], float)
-    #     pset.addPrimitive(operator.mul, [float, float], float)
-    #     pset.addPrimitive(protectedDiv, [float, float], float, name="div")
+    elif output_type == float:
+        pset.addTerminal(0.0, float)
+        pset.addTerminal(1.0, float)
+        pset.addTerminal(2.0, float)
+        pset.addPrimitive(operator.add, [float, float], float)
+        pset.addPrimitive(operator.sub, [float, float], float)
+        pset.addPrimitive(operator.mul, [float, float], float)
+        pset.addPrimitive(protectedDiv, [float, float], float, name="div")
     elif output_type == int:
-        # pset.addTerminal(0, int)
-        # pset.addTerminal(1, int)
-        # pset.addTerminal(2, int)
+        pset.addTerminal(0, int)
+        pset.addTerminal(1, int)
+        pset.addTerminal(2, int)
         pset.addPrimitive(operator.add, [int, int], int)
         pset.addPrimitive(operator.sub, [int, int], int)
         pset.addPrimitive(operator.mul, [int, int], int)
     elif output_type == bool:
         pset.addTerminal(True, bool)
         pset.addTerminal(False, bool)
-        # pset.addTerminal(0.0, float)
-        # pset.addTerminal(1.0, float)
-        # pset.addTerminal(2.0, float)
-        # pset.addTerminal(0, int)
-        # pset.addTerminal(1, int)
-        # pset.addTerminal(2, int)
-        # pset.addPrimitive(operator.__le__, [float, float], bool)
-        # pset.addPrimitive(operator.__ge__, [float, float], bool)
-        # pset.addPrimitive(operator.__lt__, [float, float], bool)
-        # pset.addPrimitive(operator.__gt__, [float, float], bool)
-        # pset.addPrimitive(operator.__eq__, [float, float], bool)
+        pset.addTerminal(0.0, float)
+        pset.addTerminal(1.0, float)
+        pset.addTerminal(2.0, float)
+        pset.addTerminal(0, int)
+        pset.addTerminal(1, int)
+        pset.addTerminal(2, int)
+        pset.addPrimitive(operator.__le__, [float, float], bool)
+        pset.addPrimitive(operator.__ge__, [float, float], bool)
+        pset.addPrimitive(operator.__lt__, [float, float], bool)
+        pset.addPrimitive(operator.__gt__, [float, float], bool)
+        pset.addPrimitive(operator.__eq__, [float, float], bool)
         pset.addPrimitive(operator.__le__, [int, int], bool)
         pset.addPrimitive(operator.__ge__, [int, int], bool)
         pset.addPrimitive(operator.__lt__, [int, int], bool)
@@ -529,20 +495,20 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         pset.addPrimitive(operator.__or__, [bool, bool], bool)
         pset.addPrimitive(operator.__not__, [bool], bool)
         if int in datatypes:
-            # pset.addTerminal(0, int)
-            # pset.addTerminal(1, int)
-            # pset.addTerminal(2, int)
+            pset.addTerminal(0, int)
+            pset.addTerminal(1, int)
+            pset.addTerminal(2, int)
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)
             pset.addPrimitive(operator.mul, [int, int], int)
-        # if float in datatypes:
-            # pset.addTerminal(0.0, float)
-            # pset.addTerminal(1.0, float)
-            # pset.addTerminal(2.0, float)
-            # pset.addPrimitive(operator.add, [float, float], float)
-            # pset.addPrimitive(operator.sub, [float, float], float)
-            # pset.addPrimitive(operator.mul, [float, float], float)
-            # pset.addPrimitive(protectedDiv, [float, float], float, name="div")
+        if float in datatypes:
+            pset.addTerminal(0.0, float)
+            pset.addTerminal(1.0, float)
+            pset.addTerminal(2.0, float)
+            pset.addPrimitive(operator.add, [float, float], float)
+            pset.addPrimitive(operator.sub, [float, float], float)
+            pset.addPrimitive(operator.mul, [float, float], float)
+            pset.addPrimitive(protectedDiv, [float, float], float, name="div")
     else:
         raise ValueError(f"Invalid output type {output_type}.")
 
@@ -551,79 +517,14 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     ), "Bad type"
     return pset
 
-# def coffee_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "coffee" else out2
-
-# def tea_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "tea" else out2
-
-# def milk_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "milk" else out2
-
-# def if_then_else(condition: bool, out1: float, out2: float) -> float:
-#     return out1 if condition else out2
-
-# def is_coffee(x: str) -> bool:
-#     return x == "coffee"
-
-# def is_tea(x: str) -> bool:
-#     return x == "tea"
-
-# def is_milk(x: str) -> bool:
-#     return x == "milk"
-
-def split(individual):
-    if len(individual) > 1:
-        terms = []
-        # Recurse over children if add/sub
-        if individual[0].name in ['add','sub']:
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).start:individual.searchSubtree(1).stop]))))
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop:]))))
-        else:
-            terms.append(individual)
-        return terms
-    return [individual]
-
-def repair(individual, data_points, pset):
-    if data_points.iloc[:, -1].dtype == int:
-        eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
-        data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
-        data_points = data_points.astype(float)
-        try:
-            # Create model, fit (run) it, give estimates from it]
-            model = smf.ols(eq, data_points)
-            res = model.fit()
-
-            eqn = f"{float(round(res.params['Intercept']))}"
-            for term, coefficient in res.params.items():
-                if term != "Intercept":
-                    eqn = f"add({eqn}, mul({float(round(coefficient))}, {term}))"
-            repaired = type(individual)(gp.PrimitiveTree.from_string(eqn, pset))
-            return repaired
-        except (
-            OverflowError,
-            ValueError,
-            ZeroDivisionError,
-            statsmodels.tools.sm_exceptions.MissingDataError,
-            patsy.PatsyError,
-            np.core._exceptions._UFuncOutputCastingError,
-            np.linalg.LinAlgError
-        ) as e:
-            # print(e)
-            return individual
-    else:
-        return individual
-
 
 def choose_terminal(pset, type_, prob=0.7):
-    try:
-        variables = [t for t in pset.terminals[type_] if t.name.startswith("ARG")]
+    variables = [t for t in pset.terminals[type_] if t.name.startswith("ARG")]
+    constants = [t for t in pset.terminals[type_] if t not in variables]
+    if random.random() < prob and variables != []:
         return random.choice(variables)
-    except IndexError:
-        constants = [t for t in pset.terminals[type_] if t not in variables]
+    else:
         return random.choice(constants)
-    
-    
 
 
 def mutateByTerminal(individual, pset):
@@ -890,7 +791,7 @@ def run_gp(
     bad=[],
 ):
     print("Running GP")
-    points = points.replace({np.nan: None})
+    points = points.replace({np.nan: None, np.NaN: None})
     random.seed(random_seed)
 
     # seeds = ["add(r1, 50)", "sub(r1, 50)"]
@@ -917,7 +818,6 @@ def run_gp(
     generators = {
         np.dtype("float64"): z3.Real,
         np.dtype("int64"): z3.Int,
-        np.dtype("int32"): z3.Int,
         np.dtype("bool"): z3.Bool,
         pd.Int64Dtype(): z3.Int,
         pd.StringDtype(): z3.String,
@@ -943,13 +843,11 @@ def run_gp(
     toolbox.decorate("mate", gp.staticLimit(key=operator.attrgetter("height"), max_value=17))
     toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max_value=17))
 
-    toolbox.register("repair", repair, data_points=points, pset=pset)
-    print(points)
-
     print("Generating initial population")
 
     pop = toolbox.population(n=mu)
-    # print(f"Fitness of pop[0] {pop[0]} is {pop[0].fitness.values}")
+    print(f"Fitness of pop[0] {pop[0]} is {pop[0].fitness.values}")
+    print("pop", [str(x) for x in pop])
 
     if len(seeds) > 0:
         logger.debug("SEEDS!")
@@ -983,9 +881,7 @@ def run_gp(
 
     assert is_distinct(pop), "Population contains duplicated individuals."
     pop += toolbox.population(n=mu - len(pop))
-    pop = [toolbox.repair(ind) for ind in pop]
     pop = sorted(pop, key=lambda x: x.fitness.values)
-    print("pop", [str(x) for x in pop])
 
     hof = tools.HallOfFame(1)
 
@@ -1180,11 +1076,6 @@ def to_z3_string(individual, dtypes):
 
 
 def to_nodes_edges_labels(exp, pset, rename={}):
-    # print("=" * 80)
-    # print(exp)
-    # for k, v in pset.mapping.items():
-    #     print(f"{k}: {v}")
-    # print("=" * 80)
     exp = creator.Individual(gp.PrimitiveTree.from_string(exp, pset))
     rename = {k: gp.Terminal(v, None, object) for k, v in rename.items()}
     for inx, element in enumerate(exp):
@@ -1300,7 +1191,6 @@ def eaMuPlusLambda(
 
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in population if not ind.fitness.valid]
-    invalid_ind = [toolbox.repair(ind) for ind in invalid_ind]
     fitnesses = list(toolbox.map(toolbox.evaluate, invalid_ind))
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
@@ -1311,7 +1201,7 @@ def eaMuPlusLambda(
         halloffame.update(population)
 
     record = stats.compile(population) if stats is not None else {}
-    logbook.record(gen=0, nevals=len(invalid_ind), **(record.copy() if record else {}))
+    logbook.record(gen=0, nevals=len(invalid_ind), **record)
     if verbose:
         logger.debug(logbook.stream)
 
@@ -1336,7 +1226,6 @@ def eaMuPlusLambda(
         offspring = [toolbox.simplify(i) for i in offspring]
 
         population += offspring
-        population = [toolbox.repair(ind) for ind in population]
         population = make_distinct(population)
         assert is_distinct(population), "Population contains duplicates"
         population += toolbox.population(n=mu - len(population))
@@ -1352,7 +1241,7 @@ def eaMuPlusLambda(
         assert len(population) == mu, f"Population should contain {mu} individuals but contains {len(population)}."
         # Update the statistics with the new population
         # record = stats.compile(population) if stats is not None else {}
-        logbook.record(gen=gen, nevals=len(invalid_ind), **(record.copy() if record else {}))
+        logbook.record(gen=gen, nevals=len(invalid_ind), **record)
         if verbose:
             logger.debug(logbook.stream)
         # Update the hall of fame with the generated individuals
@@ -1386,7 +1275,6 @@ def set_to_na(training_set, latent_registers):
 def need_latent_aux(points: pd.DataFrame, latent_vars_rows: list) -> bool:
     points = points.copy()
     set_to_na(points, latent_vars_rows)
-    print(points)
 
     inputs = list(points.columns)[:-1]
     if len(set(points.iloc[:, -1])) <= 1:

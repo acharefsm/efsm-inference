@@ -179,7 +179,7 @@ def efsm_to_dot(_efsm : efsm.EFSM, filepath):
 
         operator.add.__name__       : "+",
         operator.sub.__name__       : "-",
-        operator.mul.__name__       : "-",
+        operator.mul.__name__       : "*",
         operator.truediv.__name__   : "/",
         "div"                       : "/",
         operator.__le__.__name__    : "<=",
