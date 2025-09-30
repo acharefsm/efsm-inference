@@ -8,6 +8,7 @@ Created on Wed Sep 3 11:47:57 2025
 
 import operator
 import random
+import re
 from pyrsistent import pset
 import z3
 import sys
@@ -1178,6 +1179,31 @@ def to_z3_string(individual, dtypes):
         return z3_exp.sexpr()
     except AttributeError:
         return str(z3_exp)
+    
+op_map = {
+    '+': 'add',
+    '-': 'sub',
+    '*': 'mul',
+    '/': 'truediv'  # use operator.truediv in pset
+}
+
+def infix_to_prefix(expr):
+    """
+    Convert a simple infix expression (like "r1 + i0") to DEAP prefix notation.
+    Only works for single-level binary operations (can be extended for more).
+    """
+    # Remove spaces
+    expr = expr.replace(" ", "")
+    
+    # Match simple binary operation: operand1 operator operand2
+    match = re.match(r"(\w+)([+\-*/])(\w+)", expr)
+    if not match:
+        raise ValueError(f"Expression '{expr}' not recognized")
+    
+    op1, operator_symbol, op2 = match.groups()
+    
+    prefix_op = op_map[operator_symbol]
+    return f"{prefix_op}({op1},{op2})"
 
 
 def to_nodes_edges_labels(exp, pset, rename={}):
@@ -1186,7 +1212,10 @@ def to_nodes_edges_labels(exp, pset, rename={}):
     # for k, v in pset.mapping.items():
     #     print(f"{k}: {v}")
     # print("=" * 80)
-    exp = creator.Individual(gp.PrimitiveTree.from_string(exp, pset))
+    try:
+        exp = creator.Individual(gp.PrimitiveTree.from_string(exp, pset))
+    except:
+        exp = creator.Individual(gp.PrimitiveTree.from_string(infix_to_prefix(exp), pset))
     rename = {k: gp.Terminal(v, None, object) for k, v in rename.items()}
     for inx, element in enumerate(exp):
         if isinstance(element, gp.Terminal) and element.format() in rename:
