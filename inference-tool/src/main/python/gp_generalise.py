@@ -8,6 +8,8 @@ import argparse
 import json
 import re
 
+import html
+import csv
 import efsm
 
 import pandas as pd
@@ -16,6 +18,7 @@ import deap_gp
 import networkx as nx
 
 from collections import OrderedDict
+from enchant.utils import levenshtein
 
 
 class AdditiveDict:
@@ -28,13 +31,11 @@ class AdditiveDict:
             self.data[key] = self.generator(self.data)
         return self.data[key]
 
-
-
-
-def infer_output(samples,**kwargs):
+def infer_output(samples, mu_size, lambda_size, generation_size, mut_proba, max_init_depth, max_depth, fitness_type, **kwargs):
+    global total_correct
     
     pset = deap_gp.setup_pset(samples)
-    best = deap_gp.run_gp(samples,pset,**kwargs)
+    best = deap_gp.run_gp(mut_proba, samples,pset, mu=mu_size, lamb=lambda_size, ngen=generation_size, type_=fitness_type, **kwargs)
 
     args        = samples[samples.columns[:-1]]
     outputs     = samples[samples.columns[-1]]
@@ -42,12 +43,14 @@ def infer_output(samples,**kwargs):
     correct = deap_gp.correct(best, samples, pset, [() for i in range(len(samples))])
 
     if not correct:
+        total_correct += 1
+        print(total_correct)
         bf = deap_gp.gp.compile(expr=best, pset=pset)
         predicted = args.apply(lambda args: bf(**(args.to_dict())),axis=1)
         correct   = outputs == predicted
-        print("guard inferred ",str(best))
-        print("samples",samples)
-        print("correct",correct)
+        # print("guard inferred ",str(best))
+        # print("samples",samples)
+        # print("correct",correct)
 
     return str(best)
 
@@ -230,6 +233,25 @@ def efsm_to_dot(_efsm : efsm.EFSM, filepath):
     
     return efsm.to_dot(_efsm,filepath, translation=translate)
 
+def compare_efsm_graphs(original : nx.MultiDiGraph, estimated : nx.MultiDiGraph) -> float:
+    for u in estimated:
+        for v in original[u]:
+            estimate_labels = []
+            original_labels = []
+            for label in original[u][v]:
+                estimate_labels.append(estimated[u][v][label].get('label', '').strip('<>'))
+                original_labels.append(original[u][v][label].get('label', '').strip('<>'))
+
+            for estimated_label in estimate_labels:
+                estimated_parts = estimated_label.split('/')
+                for original_label in original_labels:
+                    original_parts = original_label.split('/')
+                    if estimated_parts[0][:4] == original_parts[0][:4] and estimated_parts[1][:4] == original_parts[1][:4]:
+                        original_label = html.unescape(original_label)
+                        original_label = re.sub(r"([a-zA-Z_]\w*|-?\d+)\s*>=\s*([a-zA-Z_]\w*|-?\d+)", r"\2 <= \1", original_label)
+                        original_label = re.sub(r"([a-zA-Z_]\w*|-?\d+)\s*>\s*([a-zA-Z_]\w*|-?\d+)", r"\2 < \1", original_label)
+                        return levenshtein(estimated_label, original_label)
+
 parser = argparse.ArgumentParser(
     prog="get_groups.py",
     description="Determines the transition grouping and runs GP to generalise the conjecture model.",
@@ -237,15 +259,49 @@ parser = argparse.ArgumentParser(
 parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True)
 parser.add_argument("-t", "--trace", help="Path to the CSV containing the trace.", required=True)
 parser.add_argument("-s", "--seed", help="The random seed.", required=False, default=0)
+parser.add_argument("-e", "--efsm", help="The original EFSM", required=True)
 
 args = parser.parse_args()
 
-trace = pd.read_csv(args.trace, sep=";")
+original = nx.MultiDiGraph(nx.nx_pydot.read_dot(args.efsm))
+
+mu_sizes = [20]
+lambda_sizes = [5]
+generation_sizes = [50]
+mutation_probs = [0.5]
+max_depths = [(7, 15)]
+fitness_types = ["step", "continuous"]
+
+
+trace = pd.read_csv(args.trace)
 trace.set_index("Step",inplace=True,drop=False)
 trace_to_json(trace,args.trace.replace(".csv", "_new_trace.json"))
 
-conjecture = nx.nx_pydot.read_dot(args.conjecture)
-generalised = efsm.generalise(efsm.efsm(conjecture),infer_output,random_seed=args.seed)
+headers = ["mu_size", "lambda_size", "generation_size", "mutation_prob", "max_init_depth", "max_depth", "fitness_type", "levenshtein_distance", "total_wrong"]
 
-efsm_to_dot(generalised, args.conjecture.replace(".dot", f"_generalised.dot"))
-efsm_to_json(generalised, args.conjecture.replace(".dot", "_generalised.json"))
+# with open("experiment_results.csv", "w", newline="") as f:
+#     writer = csv.writer(f)
+#     writer.writerow(headers)
+
+conjecture = nx.nx_pydot.read_dot(args.conjecture)
+efsmm = efsm.efsm(conjecture)
+for mu_size in mu_sizes:
+    for lambda_size in lambda_sizes:
+        for generation_size in generation_sizes:
+            for mutation_prob in mutation_probs:
+                for max_init_depth, max_depth in max_depths:
+                    for fitness_type in fitness_types:
+                        total_correct = 0
+
+                        generalised = efsm.generalise(mu_size, lambda_size, generation_size, mutation_prob, max_init_depth, max_depth, fitness_type, efsmm, infer_output, random_seed=args.seed)
+
+                        print(mu_size, lambda_size, generation_size, mutation_prob, max_init_depth, max_depth, fitness_type)
+
+                        estimated = efsm_to_dot(generalised, args.conjecture.replace(".dot", f"_generalised_{mu_size}_{lambda_size}_{generation_size}_{mutation_prob}_{max_init_depth}_{max_depth}_{fitness_type}.dot"))
+                        efsm_to_json(generalised, args.conjecture.replace(".dot", f"_generalised_{mu_size}_{lambda_size}_{generation_size}_{mutation_prob}_{max_init_depth}_{max_depth}_{fitness_type}.json"))
+
+                        print(compare_efsm_graphs(original, estimated), total_correct)
+
+                        # with open("experiment_results.csv", "a", newline="") as f:
+                        #     writer = csv.writer(f)
+                        #     writer.writerow([mu_size, lambda_size, generation_size, mutation_prob, max_init_depth, max_depth, fitness_type, compare_efsm_graphs(original, estimated), total_correct])

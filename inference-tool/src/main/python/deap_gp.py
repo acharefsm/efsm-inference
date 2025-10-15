@@ -6,6 +6,10 @@ Created on Wed Sep 3 11:47:57 2025
 @author: Luca Devlin Luca0414
 """
 
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")
+
+
 import operator
 import random
 import re
@@ -47,9 +51,12 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
 
 
-def distance_between(expected, actual):
+def distance_between(expected, actual, type_="continuous"):
     if isinstance(expected, Number) and isinstance(actual, Number) and not is_null(actual):
-        return abs(expected - actual)
+        if type_ == "step":
+            return float(expected != actual)
+        else:
+            return abs(expected - actual)
     elif type(expected) == str and type(actual) == str:
         return levenshtein(expected, actual)
     elif type(expected) == bool and type(actual) == bool:
@@ -76,7 +83,7 @@ def is_null(value):
     return value is None or value is pd.NA or np.isnan(value)
 
 
-def find_smallest_distance(individual, pset, args, expected, latent_vars, verbose=False):
+def find_smallest_distance(individual, pset, args, expected, latent_vars, verbose=False, type_="continuous"):
     if verbose:
         print(f"Looking for smallest distance between {individual} and {expected}")
     undefined_vars = [x for x in args if is_null(args[x])]
@@ -84,15 +91,23 @@ def find_smallest_distance(individual, pset, args, expected, latent_vars, verbos
     type_ = individual[0].ret
 
     # print("INDIVIDUAL", individual, "ARGS:", pset.arguments, "HEIGHT:", individual.height)
-    if individual.height == 0 and individual.root.value not in pset.arguments:
-        return distance_between(pset.ret(expected), individual.root.value)
+    try:
+        height = individual.height
+    except IndexError:
+        # This individual is structurally invalid (e.g., a forest instead of a single tree).
+        # It cannot be evaluated, so return an infinite distance.
+        logger.debug(f"Malformed individual detected: {individual}")
+        return float("inf")
+
+    if height == 0 and individual.root.value not in pset.arguments:
+        return distance_between(pset.ret(expected), individual.root.value, type_=type_)
     func = gp.compile(expr=individual, pset=pset)
     if not callable(func):
-        return distance_between(pset.ret(expected), func)
+        return distance_between(pset.ret(expected), func, type_=type_)
 
     if len(undefined_vars) == 0:
         actual = func(**args)
-        distance = distance_between(pset.ret(expected), actual)
+        distance = distance_between(pset.ret(expected), actual, type_=type_)
         if isclose(distance, 0, abs_tol=1e-10):
             return 0
         if len(latent_vars) == 0:
@@ -113,7 +128,7 @@ def find_smallest_distance(individual, pset, args, expected, latent_vars, verbos
             logger.debug(f"Problem executing {individual} with {new_args}")
             logger.debug(traceback.format_exc())
             sys.exit(1)
-        off_by = distance_between(expected, actual)
+        off_by = distance_between(expected, actual, type_=type_)
         if off_by == 0:
             return 0
         if off_by < min_distance:
@@ -151,13 +166,14 @@ def add_consts_to_pset(individual, pset):
         sys.exit(1)
 
 
-def process_row(args):
+def process_row(args, type_="continuous"):
     (individual, (pset, ((inx, row), latent_vars))) = args
     try:
-        return find_smallest_distance(individual, pset, row.iloc[:-1].to_dict(), row.iloc[-1], latent_vars)
+        return find_smallest_distance(individual, pset, row.iloc[:-1].to_dict(), row.iloc[-1], latent_vars, type_=type_)
     except:
         logger.debug(f"Problem executing {individual} with arguments\n{row}")
-        sys.exit(1)
+        logger.debug(traceback.format_exc())
+        return float("inf")
 
 
 def get_unused_vars(individual, points, latent_vars_rows, verbose=False):
@@ -171,7 +187,7 @@ def get_unused_vars(individual, points, latent_vars_rows, verbose=False):
 
 
 def evaluate_candidate(
-    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars_rows, verbose=False
+    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars_rows, verbose=False, type_="continuous"
 ) -> float:
     """
     Evaluate a candidate function for a set of function executions and aggregate the distances between the expected
@@ -202,7 +218,7 @@ def evaluate_candidate(
     pset_rep = np.repeat(pset, len(points))
     data = zip(individual_rep, zip(pset_rep, zip(points.iterrows(), latent_vars_rows)))
 
-    distances = [process_row(row) for row in data]
+    distances = [process_row(row, type_) for row in data]
 
     if verbose:
         print(f"Evaluating {individual}")
@@ -222,11 +238,6 @@ def evaluate_candidate(
 
     return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
 
-    # if len(unused_vars) == 0:
-    #     return fitness
-    # else:
-    #     return fitness + len(latent_variables(individual, points))
-
 
 def fitness(
     individual,
@@ -234,6 +245,7 @@ def fitness(
     pset: gp.PrimitiveSet,
     bad: list,
     latent_vars_rows: list,
+    type_ = "continuous"
 ) -> float:
     """
     Determine the fitness of an individual based on its ability to account for a set of expected function executions.
@@ -251,14 +263,15 @@ def fitness(
     if individual in bad:
         return (float("inf"),)
     try:
-        score = evaluate_candidate(individual, points, pset, latent_vars_rows)
+        ind = repair(individual, points, pset)
+        score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)
         newline = "\n  "
         assert not is_null(score), f"Score cannot be nan\nPSET:\n  {newline.join(sorted(list(pset.mapping)))}"
         return (score,)
     except:
         # logger.debug(f"Problem evaluating candidate {individual}")
         logger.debug(traceback.format_exc())
-        sys.exit(1)
+        return (float("inf"),)
 
 
 def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars_rows: list) -> bool:
@@ -322,15 +335,6 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     for col in points:
         datatypes[col] = type(points[col].tolist()[0])
 
-    # types = points.dtypes.to_dict()
-    # print("points")
-    # print(points)
-    # print("types", types)
-    # names = list(datatypes)
-    # print("names", names)
-    # datatypes = [generators[types[v]] for v in names]
-    # assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
-
     pset = gp.PrimitiveSet("MAIN", len(datatypes))
 
     rename = {f"ARG{i}": col for i, col in enumerate(datatypes)}
@@ -342,9 +346,9 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     # print("-" * 80)
     # print("TERMINALS")
     # print(names)
-    print("printing full pset")
+    # print("printing full pset")
     for v, typ in datatypes.items():
-        print("----------", v, typ)
+        # print("----------", v, typ)
         # assert typ in {int, str, float, bool}, f"Bad pset terminal type {typ}"
         term_set = set(points[v])
         for term in term_set:
@@ -357,18 +361,9 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     ), f"Bad type: {types}"
 
     pset.addTerminal("", str)
-    # pset.addTerminal(0.0)
-    # pset.addTerminal(1.0)
-    # pset.addTerminal(2.0)
     pset.addPrimitive(operator.add, 2)
     pset.addPrimitive(operator.sub, 2)
     pset.addPrimitive(operator.mul, 2)
-    pset.addPrimitive(protectedDiv, 2, name="div")
-    # pset.addTerminal(0)
-    # pset.addTerminal(1)
-    # pset.addTerminal(2)
-    pset.addTerminal(True)
-    pset.addTerminal(False)
     pset.addPrimitive(operator.__le__, 2)
     pset.addPrimitive(operator.__ge__, 2)
     pset.addPrimitive(operator.__lt__, 2)
@@ -386,12 +381,6 @@ def setup_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     except:
         logger.debug(traceback.format_exc())
         sys.exit(1)
-
-
-def protectedDiv(left, right):
-    if right == 0:
-        return float("inf")
-    return left / right
 
 
 class PrimitiveSetTyped(gp.PrimitiveSetTyped):
@@ -435,11 +424,6 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     :return: The primitive set.
     :rtype: gp.PrimitiveSet
     """
-    # strs = [col for col in points.columns if points[col].dtype == np.dtype("O")]
-    # print([points[col].dtype for col in points.columns])
-    # print(strs)
-    # for col in strs:
-    #     del points[col]
 
     generators = {
         np.dtype("float64"): float,
@@ -482,46 +466,11 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         [type(t.value) in {int, str, float, bool} for t in pset.mapping.values() if hasattr(t, "value")]
     ), f"Bad type: {types}"
 
-    # pset.addPrimitive(is_coffee, [str], bool, name="is_coffee")
-    # pset.addPrimitive(is_tea, [str], bool, name="is_tea")
-    # pset.addPrimitive(if_then_else, [bool, float, float], float, name="if")
-
-    # pset.addPrimitive(coffee_if_then_else, [str, float, float], float, name="coffee_if")
-    # pset.addPrimitive(tea_if_then_else, [str, float, float], float, name="tea_if")
-    # pset.addPrimitive(milk_if_then_else, [str, float, float], float, name="milk_if")
-
-    if output_type == str:
-        pset.addTerminal("", str)
-        # pset.addPrimitive(lambda x: x, [str], str, name="id")
-    # elif output_type == float:
-    #     # pset.addTerminal(0.0, float)
-    #     # pset.addTerminal(1.0, float)
-    #     # pset.addTerminal(2.0, float)
-    #     pset.addPrimitive(operator.add, [float, float], float)
-    #     pset.addPrimitive(operator.sub, [float, float], float)
-    #     pset.addPrimitive(operator.mul, [float, float], float)
-    #     pset.addPrimitive(protectedDiv, [float, float], float, name="div")
-    elif output_type == int:
-        # pset.addTerminal(0, int)
-        # pset.addTerminal(1, int)
-        # pset.addTerminal(2, int)
+    if output_type == int:
         pset.addPrimitive(operator.add, [int, int], int)
         pset.addPrimitive(operator.sub, [int, int], int)
         pset.addPrimitive(operator.mul, [int, int], int)
     elif output_type == bool:
-        pset.addTerminal(True, bool)
-        pset.addTerminal(False, bool)
-        # pset.addTerminal(0.0, float)
-        # pset.addTerminal(1.0, float)
-        # pset.addTerminal(2.0, float)
-        # pset.addTerminal(0, int)
-        # pset.addTerminal(1, int)
-        # pset.addTerminal(2, int)
-        # pset.addPrimitive(operator.__le__, [float, float], bool)
-        # pset.addPrimitive(operator.__ge__, [float, float], bool)
-        # pset.addPrimitive(operator.__lt__, [float, float], bool)
-        # pset.addPrimitive(operator.__gt__, [float, float], bool)
-        # pset.addPrimitive(operator.__eq__, [float, float], bool)
         pset.addPrimitive(operator.__le__, [int, int], bool)
         pset.addPrimitive(operator.__ge__, [int, int], bool)
         pset.addPrimitive(operator.__lt__, [int, int], bool)
@@ -531,20 +480,9 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         pset.addPrimitive(operator.__or__, [bool, bool], bool)
         pset.addPrimitive(operator.__not__, [bool], bool)
         if int in datatypes:
-            # pset.addTerminal(0, int)
-            # pset.addTerminal(1, int)
-            # pset.addTerminal(2, int)
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)
             pset.addPrimitive(operator.mul, [int, int], int)
-        # if float in datatypes:
-            # pset.addTerminal(0.0, float)
-            # pset.addTerminal(1.0, float)
-            # pset.addTerminal(2.0, float)
-            # pset.addPrimitive(operator.add, [float, float], float)
-            # pset.addPrimitive(operator.sub, [float, float], float)
-            # pset.addPrimitive(operator.mul, [float, float], float)
-            # pset.addPrimitive(protectedDiv, [float, float], float, name="div")
     else:
         raise ValueError(f"Invalid output type {output_type}.")
 
@@ -553,26 +491,8 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     ), "Bad type"
     return pset
 
-# def coffee_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "coffee" else out2
-
-# def tea_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "tea" else out2
-
-# def milk_if_then_else(x: str, out1: float, out2: float) -> float:
-#     return out1 if x == "milk" else out2
-
 # def if_then_else(condition: bool, out1: float, out2: float) -> float:
 #     return out1 if condition else out2
-
-# def is_coffee(x: str) -> bool:
-#     return x == "coffee"
-
-# def is_tea(x: str) -> bool:
-#     return x == "tea"
-
-# def is_milk(x: str) -> bool:
-#     return x == "milk"
 
 def split(individual):
     if len(individual) > 1:
@@ -587,22 +507,47 @@ def split(individual):
     return [individual]
 
 def repair(individual, data_points, pset):
-    if data_points.iloc[:, -1].dtype == int:
+    if data_points.iloc[:, -1].dtype == "int64":
         eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
         data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
         data_points = data_points.astype(float)
+
+        
+        pattern_mul = r"mul\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_mul, eq):
+            eq = re.sub(pattern_mul, r"(\1 * \2)", eq)
+
+        pattern_div = r"div\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_div, eq):
+            eq = re.sub(pattern_div, r"(\1 / \2)", eq)
+
+        pattern_add = r"add\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_add, eq):
+            eq = re.sub(pattern_add, r"(\1 + \2)", eq)
+
+        pattern_sub = r"sub\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_sub, eq):
+            eq = re.sub(pattern_sub, r"(\1 - \2)", eq)
+
         try:
             # Create model, fit (run) it, give estimates from it]
             model = smf.ols(eq, data_points)
             res = model.fit()
 
-            eqn = f"{float(round(res.params['Intercept']))}"
+            if 'Intercept' in res.params:
+                eqn = f"{int(round(res.params['Intercept']))}"
+            else:
+                eqn = "0"            
             for term, coefficient in res.params.items():
                 if term != "Intercept":
-                    eqn = f"add({eqn}, mul({float(round(coefficient))}, {term}))"
+                    if ":" in term:
+                        parts = term.split(":")
+                        term = "mul(" + ", ".join(parts) + ")"
+                    eqn = f"add({eqn}, mul({int(round(coefficient))}, {term}))"
             repaired = type(individual)(gp.PrimitiveTree.from_string(eqn, pset))
             return repaired
         except (
+            TypeError,
             OverflowError,
             ValueError,
             ZeroDivisionError,
@@ -611,7 +556,7 @@ def repair(individual, data_points, pset):
             np.core._exceptions._UFuncOutputCastingError,
             np.linalg.LinAlgError
         ) as e:
-            # print(e)
+            print(e)
             return individual
     else:
         return individual
@@ -624,8 +569,6 @@ def choose_terminal(pset, type_, prob=0.7):
     except IndexError:
         constants = [t for t in pset.terminals[type_] if t not in variables]
         return random.choice(constants)
-    
-    
 
 
 def mutateByTerminal(individual, pset):
@@ -770,7 +713,6 @@ def gen_primitive(expr, pset, type_, stack, depth):
         for arg in reversed(prim.args):
             stack.append((depth + 1, arg))
     except IndexError:
-        # print(f"Failed to generate a primitive for type {type_}")
         gen_terminal(expr, pset, type_)
 
 
@@ -860,16 +802,6 @@ def parsimony_select(individuals, k):
     return sorted(individuals, key=operator.attrgetter("fitness", "height"), reverse=True)[:k]
 
 
-# def run_gp(
-#     points: pd.DataFrame, pset, mu=100, lamb=10, ngen=100, random_seed=0, seeds=[], bad=[]
-# ):
-#     try:
-#         run_gp_aux(points=points, pset=pset, mu=mu, lamb=lamb, ngen=ngen, seeds=seeds, bad=bad)
-#     except:
-#         logger.debug(traceback.format_exc())
-#         sys.exit(0)
-
-
 def sort_height(individual, training_set):
     height = individual.height
     if height > 0:
@@ -881,22 +813,23 @@ def sort_height(individual, training_set):
 
 
 def run_gp(
+    mut_prob,
     points: pd.DataFrame,
     pset,
     latent_vars_rows=None,
-    mu=100,
+    max_init=1,
+    max_depth=5,
+    type_="continuous",
+    mu=500,
     lamb=10,
     ngen=100,
     random_seed=0,
     seeds=[],
     bad=[],
 ):
-    print("Running GP")
+    # print("Running GP")
     points = points.replace({np.nan: None})
     random.seed(random_seed)
-
-    # seeds = ["add(r1, 50)", "sub(r1, 50)"]
-    # seeds = ["add(r1, i0)", "sub(i0, r1)"]
 
     toolbox = base.Toolbox()
 
@@ -913,6 +846,7 @@ def run_gp(
         pset=pset,
         bad=bad,
         latent_vars_rows=latent_vars_rows,
+        type_=type_,
     )
     toolbox.register("height", sort_height, training_set=points)
 
@@ -932,8 +866,7 @@ def run_gp(
         genHalfAndHalf,
         pset=pset,
         min_=1,
-        max_=1,
-        simp=lambda x: simplify(x, pset, types),
+        max_=max_init,
     )
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -942,13 +875,13 @@ def run_gp(
     toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
     toolbox.register("mutate", mutate, pset=pset)
 
-    toolbox.decorate("mate", gp.staticLimit(key=operator.attrgetter("height"), max_value=17))
-    toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max_value=17))
+    toolbox.decorate("mate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
+    toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
 
     toolbox.register("repair", repair, data_points=points, pset=pset)
     print(points)
 
-    print("Generating initial population")
+    # print("Generating initial population")
 
     pop = toolbox.population(n=mu)
     # print(f"Fitness of pop[0] {pop[0]} is {pop[0].fitness.values}")
@@ -985,7 +918,8 @@ def run_gp(
 
     assert is_distinct(pop), "Population contains duplicated individuals."
     pop += toolbox.population(n=mu - len(pop))
-    pop = [toolbox.repair(ind) for ind in pop]
+    # pop = [toolbox.simplify(i) for i in pop]
+    # pop = [toolbox.repair(ind) for ind in pop]
     pop = sorted(pop, key=lambda x: x.fitness.values)
     print("pop", [str(x) for x in pop])
 
@@ -1000,25 +934,25 @@ def run_gp(
     mstats.register("max", np.max)
 
     try:
-        print("Calling eaMuPlusLambda")
+        # print("Calling eaMuPlusLambda")
         pop, log = eaMuPlusLambda(
             pop,
             toolbox,
             mu,
             lamb,
-            0.5,
-            0.5,
+            1 - mut_prob,
+            mut_prob,
             ngen,
             stats=mstats,
             halloffame=None,
             verbose=False,
         )
-        print("Finished GP")
+        # print("Finished GP")
 
         # for p in pop:
         #     logger.debug(str(p), p.fitness.values, toolbox.height(p))
 
-        return pop[0]
+        return toolbox.simplify(toolbox.repair(pop[0]))
     except:
         logger.debug(traceback.format_exc())
         sys.exit(1)
@@ -1058,10 +992,10 @@ def to_z3(tree, labels, types):
             return c1 < c2
         if labels[root] == "ge":
             c1, c2 = nested
-            return c1 >= c2
+            return c2 <= c1
         if labels[root] == "gt":
             c1, c2 = nested
-            return c1 > c2
+            return c2 < c1
         if labels[root] == "le":
             c1, c2 = nested
             return c1 <= c2
@@ -1184,7 +1118,7 @@ op_map = {
     '+': 'add',
     '-': 'sub',
     '*': 'mul',
-    '/': 'truediv'  # use operator.truediv in pset
+    '/': 'div'  # use operator.truediv in pset
 }
 
 def infix_to_prefix(expr):
@@ -1330,7 +1264,6 @@ def eaMuPlusLambda(
 
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in population if not ind.fitness.valid]
-    invalid_ind = [toolbox.repair(ind) for ind in invalid_ind]
     fitnesses = list(toolbox.map(toolbox.evaluate, invalid_ind))
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
@@ -1346,9 +1279,9 @@ def eaMuPlusLambda(
         logger.debug(logbook.stream)
 
     # Begin the generational process
-    print("Entering main loop")
+    # print("Entering main loop")
     for gen in range(0, ngen):
-        print("gen", gen, "best", population[0], population[0].fitness.values)
+        print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
             return population, logbook
         assert all([ind.fitness.valid for ind in population]), "Invalid fitnesses in population"
@@ -1363,10 +1296,9 @@ def eaMuPlusLambda(
 
         # Vary the population
         offspring = algorithms.varOr(population, toolbox, lambda_, cxpb, mutpb)
-        offspring = [toolbox.simplify(i) for i in offspring]
+        # offspring = [toolbox.simplify(i) for i in offspring]
 
         population += offspring
-        population = [toolbox.repair(ind) for ind in population]
         population = make_distinct(population)
         assert is_distinct(population), "Population contains duplicates"
         population += toolbox.population(n=mu - len(population))
@@ -1447,35 +1379,7 @@ if __name__ == "__main__":
     for col in points:
         if points.dtypes[col] == object:
             points[col] = points[col].astype("string")
-        # if points.dtypes[col] == np.int64:
-        #     points[col] = points[col].astype("float")
-    # logger.info(f"\n{points}")
-    # points["perfect"] = points["i0"] - points["i1"]
-    # logger.info(f"\n{points}")
-    # logger.info(points.dtypes)
-    # assert False
-
-    # if "r1" not in points.columns:
-    #     points.insert(0, "r1", None)
     pset = setup_pset(points)
-    # pset.addTerminal(200, int)
-
-    # ind = gp.PrimitiveTree.from_string("add(-100, r1)", pset)
-    # logger.info(f"Fitness of {ind} is {fitness(ind, points, pset, [], [() for i in range(len(points))])}")
-    # logger.info(f"{ind} is correct? {correct(ind, points, pset, [() for i in range(len(points))])}")
-    # assert False
-
-    # expr = "add(sub(r1, 350), add(5, 250))"
-    # individual = creator.Individual(gp.PrimitiveTree.from_string(expr, pset))
-    # logger.debug(individual)
-    # types = {"r1": z3.Int, "expected": z3.Int}
-    # simplified = simplify(individual, pset, types)
-    # logger.debug(simplified)
-    # assert False
-
-    # ind = gp.PrimitiveTree.from_string("sub(i0, i1)", pset)
-    # logger.info(f"Fitness of {ind} is {fitness(ind, points, pset)}")
-    # assert False
 
     best = run_gp(
         points,
@@ -1486,33 +1390,3 @@ if __name__ == "__main__":
     )
     logger.debug(f"\nbest is {best}")
     logger.debug(best.height)
-
-    # bad = []
-    # for s in range(10):
-    #     logger.debug(f"=== {s} ===")
-    #     best = run_gp(points, pset, random_seed=1, ngen=200, bad=bad)
-    #     logger.debug(f"Gen {s} best {best}: {fitness(best, points, pset, bad)}")
-    #     if str(best) != "add(i1, r1)":
-    #         bad.append(best)
-
-    # expected = points.columns[-1]
-
-    # logger.info(f"exected type {points.dtypes[expected]}")
-
-    # generators = {
-    #     np.dtype("float64"): z3.Real,
-    #     np.dtype("int64"): z3.Int,
-    #     pd.Int64Dtype(): z3.Int,
-    #     pd.StringDtype(): z3.String,
-    # }
-    # logger.info(generators)
-
-    # types = {
-    #     k: generators.get(points.dtypes[k], generators[points.dtypes[expected]])
-    #     for k in points
-    # }
-
-    # simplified = simplify(best, pset, types)
-    # logger.info(simplified)
-    # logger.info(correct(simplified, points, pset))
-    # logger.info(get_types(points))

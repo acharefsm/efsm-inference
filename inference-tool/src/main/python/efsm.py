@@ -104,13 +104,13 @@ def to_dot(efsm, filepath, translation = None):
     nx.nx_pydot.write_dot(G, filepath)
     return G
 
-def generalise(efsm : EFSM, infer_function,*args, **kwargs) -> EFSM :
+def generalise(mu_size, lambda_size, ngen, mut_prob, max_init_depth, max_depth, fitness_type, efsm : EFSM, infer_function,*args, **kwargs) -> EFSM :
     """
     Generalises an EFSM by inferring output functions from samples associated with each edge. 
     """
 
     def infer_output(samples : pd.DataFrame) :
-        return infer_function(samples,*args,**kwargs)
+        return infer_function(samples,mu_size=mu_size, lambda_size=lambda_size, generation_size=ngen, mut_proba=mut_prob, max_init_depth=max_init_depth, max_depth=max_depth, fitness_type=fitness_type, *args,**kwargs)
     
     for origin in efsm:
 
@@ -123,9 +123,9 @@ def generalise(efsm : EFSM, infer_function,*args, **kwargs) -> EFSM :
             output_columns  = columns[-transition.output_arity:] if transition.output_arity != 0 else []
             args_columns    = columns[:-transition.output_arity] if transition.output_arity != 0 else columns
 
-            for output in output_columns:
-                print(ip_sig, op_sig, dest, output)
-                print("===================================================================================================")
+            # for output in output_columns:
+            #     print(ip_sig, op_sig, dest, output)
+            #     print("===================================================================================================")
 
             transition.output = [infer_output(transition.samples[args_columns + [output]]) for output in output_columns]
 
