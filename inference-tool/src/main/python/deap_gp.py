@@ -6,9 +6,12 @@ Created on Wed Sep 3 11:47:57 2025
 @author: Luca Devlin Luca0414
 """
 
+import ast
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")
 
+from sympy import sympify
+from sympy.printing.precedence import precedence
 
 import operator
 import random
@@ -35,6 +38,7 @@ import statsmodels.formula.api as smf
 from enchant.utils import levenshtein
 from numbers import Number
 from itertools import product
+from patsy import EvalEnvironment
 
 import networkx as nx
 import logging
@@ -60,7 +64,7 @@ def distance_between(expected, actual, type_="continuous"):
     elif type(expected) == str and type(actual) == str:
         return levenshtein(expected, actual)
     elif type(expected) == bool and type(actual) == bool:
-        return float(expected == actual)
+        return float(expected != actual)
     # elif type(expected) != type(actual) or is_null(actual):
     #     print(f"BAD TYPES {type(expected)} and {type(actual)}")
     #     return float("inf")
@@ -96,7 +100,6 @@ def find_smallest_distance(individual, pset, args, expected, latent_vars, verbos
     except IndexError:
         # This individual is structurally invalid (e.g., a forest instead of a single tree).
         # It cannot be evaluated, so return an infinite distance.
-        logger.debug(f"Malformed individual detected: {individual}")
         return float("inf")
 
     if height == 0 and individual.root.value not in pset.arguments:
@@ -127,7 +130,6 @@ def find_smallest_distance(individual, pset, args, expected, latent_vars, verbos
         except:
             logger.debug(f"Problem executing {individual} with {new_args}")
             logger.debug(traceback.format_exc())
-            sys.exit(1)
         off_by = distance_between(expected, actual, type_=type_)
         if off_by == 0:
             return 0
@@ -163,7 +165,6 @@ def add_consts_to_pset(individual, pset):
     except:
         logger.debug("Problem with", individual)
         logger.debug(traceback.format_exc())
-        sys.exit(1)
 
 
 def process_row(args, type_="continuous"):
@@ -238,6 +239,19 @@ def evaluate_candidate(
 
     return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
 
+def get_children(individual, index=0):
+    node = individual[index]
+
+    children = []
+    pos = index + 1
+    for _ in range(node.arity):
+        child_slice = individual.searchSubtree(pos)
+        child = individual[child_slice]
+        children.append(gp.PrimitiveTree(child))
+        
+        pos = child_slice.stop
+    return children
+
 
 def fitness(
     individual,
@@ -264,7 +278,16 @@ def fitness(
         return (float("inf"),)
     try:
         ind = repair(individual, points, pset)
-        score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)
+        
+        if type_ == "step":
+            score = score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)
+        elif type_ == "recursive" and len(ind) > 2 and ind[0].arity == 2 and ind[0].ret == bool:
+            child1, child2 = get_children(ind)
+            score1 = fitness(individual=child1, points=points, pset=pset, bad=[], latent_vars_rows=latent_vars_rows, type_="recursive")
+            score2 = fitness(individual=child2, points=points, pset=pset, bad=[], latent_vars_rows=latent_vars_rows, type_="recursive")
+            score = score1[0] + score2[0]
+        else:
+            score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_="continuous")
         newline = "\n  "
         assert not is_null(score), f"Score cannot be nan\nPSET:\n  {newline.join(sorted(list(pset.mapping)))}"
         return (score,)
@@ -303,7 +326,6 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
                 return False
         except:
             logger.debug(f"Problem executing {individual} with arguments\n{row}")
-            sys.exit(1)
     return True
 
 
@@ -380,7 +402,6 @@ def setup_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
         return setup_pset_aux(points)
     except:
         logger.debug(traceback.format_exc())
-        sys.exit(1)
 
 
 class PrimitiveSetTyped(gp.PrimitiveSetTyped):
@@ -455,11 +476,11 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     for v, typ in zip(names, datatypes):
         assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
         term_set = set(points[v])
-        print("----------", v, typ)
+        # print("----------", v, typ)
         for term in term_set:
             if not is_null(term):
                 pset.addTerminal(typ(term), typ)
-                print(typ(term))
+                # print(typ(term))
 
     types = [(t.value, type(t.value)) for t in pset.mapping.values() if hasattr(t, "value")]
     assert all(
@@ -506,20 +527,52 @@ def split(individual):
         return terms
     return [individual]
 
+op_mapp = {
+    ast.Add: "add",
+    ast.Sub: "sub",
+    ast.Mult: "mul",
+}
+
+def infix_to_prefix2(expr):
+    """
+    Convert an infix arithmetic expression like '(r0 + r2 * 10)' 
+    into DEAP prefix notation: add(r0, mul(r2, 10))
+    """
+    tree = ast.parse(expr, mode='eval')
+    return recurse(tree.body)
+
+def recurse(node):
+    if isinstance(node, ast.BinOp):
+        op = op_mapp[type(node.op)]
+        return f"{op}({recurse(node.left)}, {recurse(node.right)})"
+    elif isinstance(node, ast.UnaryOp):
+        if isinstance(node.op, ast.USub):
+            return f"-{recurse(node.operand)}"
+        return recurse(node.operand)
+    elif isinstance(node, ast.Constant):
+        return str(node.value)
+    elif isinstance(node, ast.Name):
+        return node.id
+    elif isinstance(node, ast.Call):
+        # Handle inner I(...) wrappers
+        if isinstance(node.func, ast.Name) and node.func.id == 'I':
+            return recurse(node.args[0])
+        elif isinstance(node.func, ast.Name) and node.func.id in {"add", "sub", "mul", "div", "pow"}:
+            args = ", ".join(recurse(a) for a in node.args)
+            return f"{node.func.id}({args})"
+        raise NotImplementedError(node)
+    else:
+        raise NotImplementedError(node)
+
 def repair(individual, data_points, pset):
     if data_points.iloc[:, -1].dtype == "int64":
         eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
         data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
         data_points = data_points.astype(float)
-
         
         pattern_mul = r"mul\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
         while re.search(pattern_mul, eq):
             eq = re.sub(pattern_mul, r"(\1 * \2)", eq)
-
-        pattern_div = r"div\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
-        while re.search(pattern_div, eq):
-            eq = re.sub(pattern_div, r"(\1 / \2)", eq)
 
         pattern_add = r"add\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
         while re.search(pattern_add, eq):
@@ -529,24 +582,57 @@ def repair(individual, data_points, pset):
         while re.search(pattern_sub, eq):
             eq = re.sub(pattern_sub, r"(\1 - \2)", eq)
 
+        # If both sides constant e.g 1000 + 10 then evaluate and replace with constant e.g 1010
+        match = re.search(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', eq)
+        if match:
+            left, op, right = match.groups()
+            result = eval(f"{left} {op} {right}")
+            # print(result)
+            eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', str(result), eq)
+            if (re.match(r'^\s*y\s*~\s*\(?\s*-?\d+(?:\.\d+)?\s*\)?\s*$', eq)):
+                return individual
+
+        # Add I() to right/left side constant and left/right side variable e.g 1000 + r2
+        eq = re.sub(r'(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)', r'I(\1 \2 \3)', eq)
+        # constant in parentheses
+        eq = re.sub(r'(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*\((?<![A-Za-z_])(-?\d+\.?\d*)\)', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r'\((?<![A-Za-z_])(-?\d+\.?\d*)\)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)', r'I(\1 \2 \3)', eq)
+
+        # Add I() to right/left side constant and left/right side expression I() e.g 1000 * I(10 + r2)
+        eq = re.sub(r'\(?\s*I\(([^()]*)\)\s*\)?\s*([\+\-\*/])\s*(?<![A-Za-z_])(\d+\.?\d*)', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r'(?<![A-Za-z_])(\d+\.?\d*)\s*([\+\-\*/])\s*\(?\s*I\(([^()]*)\)\s*\)?', r'I(\1 \2 \3)', eq)
+
+        # Add I() to right/left side constant and left/right side expression () e.g 1000 * (r0 + r2)
+        eq = re.sub(r'(\([^()]+\))\s*([\+\-\*/])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', r'I((\1) \2 \3)', eq)
+        eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\+\-\*/])\s*(\([^()]+\))', r'I(\1 \2 (\3))', eq)
+
+        env = EvalEnvironment.capture()
+
         try:
             # Create model, fit (run) it, give estimates from it]
-            model = smf.ols(eq, data_points)
+            model = smf.ols(eq, data_points, eval_env=env)
             res = model.fit()
 
             if 'Intercept' in res.params:
                 eqn = f"{int(round(res.params['Intercept']))}"
             else:
-                eqn = "0"            
+                eqn = "0" 
             for term, coefficient in res.params.items():
                 if term != "Intercept":
                     if ":" in term:
                         parts = term.split(":")
                         term = "mul(" + ", ".join(parts) + ")"
+                    term = re.sub(r'I\((.*?)\)', r'(\1)', term)
+
+                    term = infix_to_prefix2(term)
+
                     eqn = f"add({eqn}, mul({int(round(coefficient))}, {term}))"
             repaired = type(individual)(gp.PrimitiveTree.from_string(eqn, pset))
             return repaired
         except (
+            UnboundLocalError,
+            SyntaxError,
             TypeError,
             OverflowError,
             ValueError,
@@ -556,7 +642,6 @@ def repair(individual, data_points, pset):
             np.core._exceptions._UFuncOutputCastingError,
             np.linalg.LinAlgError
         ) as e:
-            print(e)
             return individual
     else:
         return individual
@@ -812,6 +897,38 @@ def sort_height(individual, training_set):
     return height
 
 
+def new_mate(ind1, ind2, pset):
+    def new_mate_and(ind1, ind2):
+        try:
+            return creator.Individual.from_string("and_(" + str(ind1) + ", " + str(ind2) + ")", pset)
+        except Exception as e:
+            print(e)
+            return ind1
+    def new_mate_or(ind1, ind2):
+        try:
+            return creator.Individual.from_string("or_(" + str(ind1) + ", " + str(ind2) + ")", pset)
+        except Exception as e:
+            for name, primitive in pset.primitives.items():
+                print(f"Type: {name}")
+                for prim in primitive:
+                    print(prim.name, prim.args, prim.ret, prim.arity)
+            for name, terminal in pset.terminals.items():
+                print(f"  Type: {name}")
+                for term in terminal:
+                    print(f"    {term.value}")
+            print(e)
+            print(pset.ret)
+            return ind1
+        
+    if pset.ret != bool:
+        return gp.cxOnePoint(ind1, ind2)
+    else:
+        offspring1 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
+        offspring2 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
+        
+        return offspring1, offspring2
+
+
 def run_gp(
     mut_prob,
     points: pd.DataFrame,
@@ -870,8 +987,8 @@ def run_gp(
     )
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("select", parsimony_select)
-    toolbox.register("mate", gp.cxOnePoint)
+    toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox.register("mate", new_mate, pset=pset)
     toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
     toolbox.register("mutate", mutate, pset=pset)
 
@@ -901,7 +1018,6 @@ def run_gp(
                 logger.debug(f"Failed to add seed {seed}")
                 # logger.debug("Type error.")
                 logger.debug(traceback.format_exc())
-                # sys.exit(1)
                 # logger.debug(pset.mapping)
                 # assert False
                 # pass
@@ -928,8 +1044,6 @@ def run_gp(
     stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
     stats_size = tools.Statistics(len)
     mstats = tools.MultiStatistics(fitness=stats_fit, size=stats_size)
-    mstats.register("avg", np.mean)
-    mstats.register("std", np.std)
     mstats.register("min", np.min)
     mstats.register("max", np.max)
 
@@ -955,7 +1069,6 @@ def run_gp(
         return toolbox.simplify(toolbox.repair(pop[0]))
     except:
         logger.debug(traceback.format_exc())
-        sys.exit(1)
 
 
 def graph(best) -> ([int], [(int, int)], {int: str}):
@@ -1184,7 +1297,6 @@ def simplify(individual, pset, types):
         logger.debug("types", types)
         logger.debug("labels", [(v, type(v)) for v in labels.values()])
         logger.debug(traceback.format_exc())
-        sys.exit(1)
 
 
 def fill_pop(more, individual, avoid=[], TIMEOUT=3):
@@ -1281,7 +1393,7 @@ def eaMuPlusLambda(
     # Begin the generational process
     # print("Entering main loop")
     for gen in range(0, ngen):
-        print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
+        # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
             return population, logbook
         assert all([ind.fitness.valid for ind in population]), "Invalid fitnesses in population"
@@ -1302,6 +1414,8 @@ def eaMuPlusLambda(
         population = make_distinct(population)
         assert is_distinct(population), "Population contains duplicates"
         population += toolbox.population(n=mu - len(population))
+
+        print("pop", [str(x) for x in population])
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in population if not ind.fitness.valid]
@@ -1333,7 +1447,6 @@ def need_latent(points: pd.DataFrame, latent_vars_rows: list) -> bool:
         return need_latent_aux(points, latent_vars_rows)
     except:
         logger.debug(traceback.format_exc())
-        sys.exit(0)
 
 
 def set_to_na(training_set, latent_registers):
