@@ -7,45 +7,30 @@ Created on Wed Sep 3 11:47:57 2025
 """
 
 import ast
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")
-
-from sympy import sympify
-from sympy.printing.precedence import precedence
-
+import logging
 import operator
 import random
 import re
-from pyrsistent import pset
-import z3
 import sys
 import traceback
-import statsmodels
-import patsy
-
-from deap import algorithms
-from deap import base
-from deap import creator
-from deap import tools
-from deap import gp
-
-from math import sqrt, isclose
-
-import pandas as pd
-import numpy as np
-import statsmodels.formula.api as smf
-
-from enchant.utils import levenshtein
-from numbers import Number
+import warnings
 from itertools import product
-from patsy import EvalEnvironment
+from math import isclose, sqrt
+from numbers import Number
 
 import networkx as nx
-import logging
-import multiprocessing
+import numpy as np
+import pandas as pd
+import patsy
+import statsmodels
+import statsmodels.formula.api as smf
+import z3
+from deap import algorithms, base, creator, gp, tools
+from enchant.utils import levenshtein
+from patsy import EvalEnvironment
+from pyrsistent import pset
 
-from sys import argv
-
+warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")
 logging.basicConfig()
 
 logger = logging.getLogger("main")
@@ -59,11 +44,10 @@ def distance_between(expected, actual, type_="continuous"):
     if isinstance(expected, Number) and isinstance(actual, Number) and not is_null(actual):
         if type_ == "step":
             return float(expected != actual)
-        else:
-            return abs(expected - actual)
-    elif type(expected) == str and type(actual) == str:
+        return abs(expected - actual)
+    if type(expected) == str and type(actual) == str:
         return levenshtein(expected, actual)
-    elif type(expected) == bool and type(actual) == bool:
+    if type(expected) == bool and type(actual) == bool:
         return float(expected != actual)
     # elif type(expected) != type(actual) or is_null(actual):
     #     print(f"BAD TYPES {type(expected)} and {type(actual)}")
@@ -239,6 +223,7 @@ def evaluate_candidate(
 
     return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
 
+
 def get_children(individual, index=0):
     node = individual[index]
 
@@ -248,18 +233,13 @@ def get_children(individual, index=0):
         child_slice = individual.searchSubtree(pos)
         child = individual[child_slice]
         children.append(gp.PrimitiveTree(child))
-        
+
         pos = child_slice.stop
     return children
 
 
 def fitness(
-    individual,
-    points: pd.DataFrame,
-    pset: gp.PrimitiveSet,
-    bad: list,
-    latent_vars_rows: list,
-    type_ = "continuous"
+    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, bad: list, latent_vars_rows: list, type_="continuous"
 ) -> float:
     """
     Determine the fitness of an individual based on its ability to account for a set of expected function executions.
@@ -278,13 +258,27 @@ def fitness(
         return (float("inf"),)
     try:
         ind = repair(individual, points, pset)
-        
+
         if type_ == "step":
             score = score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)
         elif type_ == "recursive" and len(ind) > 2 and ind[0].arity == 2 and ind[0].ret == bool:
             child1, child2 = get_children(ind)
-            score1 = fitness(individual=child1, points=points, pset=pset, bad=[], latent_vars_rows=latent_vars_rows, type_="recursive")
-            score2 = fitness(individual=child2, points=points, pset=pset, bad=[], latent_vars_rows=latent_vars_rows, type_="recursive")
+            score1 = fitness(
+                individual=child1,
+                points=points,
+                pset=pset,
+                bad=[],
+                latent_vars_rows=latent_vars_rows,
+                type_="recursive",
+            )
+            score2 = fitness(
+                individual=child2,
+                points=points,
+                pset=pset,
+                bad=[],
+                latent_vars_rows=latent_vars_rows,
+                type_="recursive",
+            )
             score = score1[0] + score2[0]
         else:
             score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_="continuous")
@@ -512,20 +506,31 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     ), "Bad type"
     return pset
 
+
 # def if_then_else(condition: bool, out1: float, out2: float) -> float:
 #     return out1 if condition else out2
+
 
 def split(individual):
     if len(individual) > 1:
         terms = []
         # Recurse over children if add/sub
-        if individual[0].name in ['add','sub']:
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).start:individual.searchSubtree(1).stop]))))
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop:]))))
+        if individual[0].name in ["add", "sub"]:
+            terms.extend(
+                split(
+                    creator.Individual(
+                        gp.PrimitiveTree(
+                            individual[individual.searchSubtree(1).start : individual.searchSubtree(1).stop]
+                        )
+                    )
+                )
+            )
+            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop :]))))
         else:
             terms.append(individual)
         return terms
     return [individual]
+
 
 op_mapp = {
     ast.Add: "add",
@@ -533,13 +538,15 @@ op_mapp = {
     ast.Mult: "mul",
 }
 
+
 def infix_to_prefix2(expr):
     """
-    Convert an infix arithmetic expression like '(r0 + r2 * 10)' 
+    Convert an infix arithmetic expression like '(r0 + r2 * 10)'
     into DEAP prefix notation: add(r0, mul(r2, 10))
     """
-    tree = ast.parse(expr, mode='eval')
+    tree = ast.parse(expr, mode="eval")
     return recurse(tree.body)
+
 
 def recurse(node):
     if isinstance(node, ast.BinOp):
@@ -555,7 +562,7 @@ def recurse(node):
         return node.id
     elif isinstance(node, ast.Call):
         # Handle inner I(...) wrappers
-        if isinstance(node.func, ast.Name) and node.func.id == 'I':
+        if isinstance(node.func, ast.Name) and node.func.id == "I":
             return recurse(node.args[0])
         elif isinstance(node.func, ast.Name) and node.func.id in {"add", "sub", "mul", "div", "pow"}:
             args = ", ".join(recurse(a) for a in node.args)
@@ -564,12 +571,13 @@ def recurse(node):
     else:
         raise NotImplementedError(node)
 
+
 def repair(individual, data_points, pset):
     if data_points.iloc[:, -1].dtype == "int64":
         eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
         data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
         data_points = data_points.astype(float)
-        
+
         pattern_mul = r"mul\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
         while re.search(pattern_mul, eq):
             eq = re.sub(pattern_mul, r"(\1 * \2)", eq)
@@ -583,29 +591,29 @@ def repair(individual, data_points, pset):
             eq = re.sub(pattern_sub, r"(\1 - \2)", eq)
 
         # If both sides constant e.g 1000 + 10 then evaluate and replace with constant e.g 1010
-        match = re.search(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', eq)
+        match = re.search(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", eq)
         if match:
             left, op, right = match.groups()
             result = eval(f"{left} {op} {right}")
             # print(result)
-            eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', str(result), eq)
-            if (re.match(r'^\s*y\s*~\s*\(?\s*-?\d+(?:\.\d+)?\s*\)?\s*$', eq)):
+            eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", str(result), eq)
+            if re.match(r"^\s*y\s*~\s*\(?\s*-?\d+(?:\.\d+)?\s*\)?\s*$", eq):
                 return individual
 
         # Add I() to right/left side constant and left/right side variable e.g 1000 + r2
-        eq = re.sub(r'(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', r'I(\1 \2 \3)', eq)
-        eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r"(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)", r"I(\1 \2 \3)", eq)
         # constant in parentheses
-        eq = re.sub(r'(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*\((?<![A-Za-z_])(-?\d+\.?\d*)\)', r'I(\1 \2 \3)', eq)
-        eq = re.sub(r'\((?<![A-Za-z_])(-?\d+\.?\d*)\)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r"(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*\((?<![A-Za-z_])(-?\d+\.?\d*)\)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"\((?<![A-Za-z_])(-?\d+\.?\d*)\)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)", r"I(\1 \2 \3)", eq)
 
         # Add I() to right/left side constant and left/right side expression I() e.g 1000 * I(10 + r2)
-        eq = re.sub(r'\(?\s*I\(([^()]*)\)\s*\)?\s*([\+\-\*/])\s*(?<![A-Za-z_])(\d+\.?\d*)', r'I(\1 \2 \3)', eq)
-        eq = re.sub(r'(?<![A-Za-z_])(\d+\.?\d*)\s*([\+\-\*/])\s*\(?\s*I\(([^()]*)\)\s*\)?', r'I(\1 \2 \3)', eq)
+        eq = re.sub(r"\(?\s*I\(([^()]*)\)\s*\)?\s*([\+\-\*/])\s*(?<![A-Za-z_])(\d+\.?\d*)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(\d+\.?\d*)\s*([\+\-\*/])\s*\(?\s*I\(([^()]*)\)\s*\)?", r"I(\1 \2 \3)", eq)
 
         # Add I() to right/left side constant and left/right side expression () e.g 1000 * (r0 + r2)
-        eq = re.sub(r'(\([^()]+\))\s*([\+\-\*/])\s*(?<![A-Za-z_])(-?\d+\.?\d*)', r'I((\1) \2 \3)', eq)
-        eq = re.sub(r'(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\+\-\*/])\s*(\([^()]+\))', r'I(\1 \2 (\3))', eq)
+        eq = re.sub(r"(\([^()]+\))\s*([\+\-\*/])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", r"I((\1) \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\+\-\*/])\s*(\([^()]+\))", r"I(\1 \2 (\3))", eq)
 
         env = EvalEnvironment.capture()
 
@@ -614,16 +622,16 @@ def repair(individual, data_points, pset):
             model = smf.ols(eq, data_points, eval_env=env)
             res = model.fit()
 
-            if 'Intercept' in res.params:
+            if "Intercept" in res.params:
                 eqn = f"{int(round(res.params['Intercept']))}"
             else:
-                eqn = "0" 
+                eqn = "0"
             for term, coefficient in res.params.items():
                 if term != "Intercept":
                     if ":" in term:
                         parts = term.split(":")
                         term = "mul(" + ", ".join(parts) + ")"
-                    term = re.sub(r'I\((.*?)\)', r'(\1)', term)
+                    term = re.sub(r"I\((.*?)\)", r"(\1)", term)
 
                     term = infix_to_prefix2(term)
 
@@ -640,7 +648,7 @@ def repair(individual, data_points, pset):
             statsmodels.tools.sm_exceptions.MissingDataError,
             patsy.PatsyError,
             np.core._exceptions._UFuncOutputCastingError,
-            np.linalg.LinAlgError
+            np.linalg.LinAlgError,
         ) as e:
             return individual
     else:
@@ -904,6 +912,7 @@ def new_mate(ind1, ind2, pset):
         except Exception as e:
             print(e)
             return ind1
+
     def new_mate_or(ind1, ind2):
         try:
             return creator.Individual.from_string("or_(" + str(ind1) + ", " + str(ind2) + ")", pset)
@@ -919,13 +928,13 @@ def new_mate(ind1, ind2, pset):
             print(e)
             print(pset.ret)
             return ind1
-        
+
     if pset.ret != bool:
         return gp.cxOnePoint(ind1, ind2)
     else:
         offspring1 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
         offspring2 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
-        
+
         return offspring1, offspring2
 
 
@@ -1066,7 +1075,9 @@ def run_gp(
         # for p in pop:
         #     logger.debug(str(p), p.fitness.values, toolbox.height(p))
 
-        return toolbox.simplify(toolbox.repair(pop[0]))
+        best = toolbox.simplify(toolbox.repair(pop[0]))
+        best.fitness.values = toolbox.evaluate(best)
+        return best
     except:
         logger.debug(traceback.format_exc())
 
@@ -1226,13 +1237,10 @@ def to_z3_string(individual, dtypes):
         return z3_exp.sexpr()
     except AttributeError:
         return str(z3_exp)
-    
-op_map = {
-    '+': 'add',
-    '-': 'sub',
-    '*': 'mul',
-    '/': 'div'  # use operator.truediv in pset
-}
+
+
+op_map = {"+": "add", "-": "sub", "*": "mul", "/": "div"}  # use operator.truediv in pset
+
 
 def infix_to_prefix(expr):
     """
@@ -1241,14 +1249,14 @@ def infix_to_prefix(expr):
     """
     # Remove spaces
     expr = expr.replace(" ", "")
-    
+
     # Match simple binary operation: operand1 operator operand2
     match = re.match(r"(\w+)([+\-*/])(\w+)", expr)
     if not match:
         raise ValueError(f"Expression '{expr}' not recognized")
-    
+
     op1, operator_symbol, op2 = match.groups()
-    
+
     prefix_op = op_map[operator_symbol]
     return f"{prefix_op}({op1},{op2})"
 
@@ -1393,6 +1401,7 @@ def eaMuPlusLambda(
     # Begin the generational process
     # print("Entering main loop")
     for gen in range(0, ngen):
+        print("pop", [(str(x), round(x.fitness.values[0], 2)) for x in population])
         # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
             return population, logbook
@@ -1414,8 +1423,6 @@ def eaMuPlusLambda(
         population = make_distinct(population)
         assert is_distinct(population), "Population contains duplicates"
         population += toolbox.population(n=mu - len(population))
-
-        print("pop", [str(x) for x in population])
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in population if not ind.fitness.valid]
@@ -1485,7 +1492,7 @@ def shortcut_latent(points: pd.DataFrame) -> bool:
 
 
 if __name__ == "__main__":
-    train = "test3.csv" if not len(sys.argv) > 1 else sys.argv[1]
+    train = "test-guard.csv" if not len(sys.argv) > 1 else sys.argv[1]
 
     points = pd.read_csv(train)
 
@@ -1495,11 +1502,15 @@ if __name__ == "__main__":
     pset = setup_pset(points)
 
     best = run_gp(
+        1,
         points,
         pset,
         random_seed=3,
         seeds=[],
+        mu=10,
+        lamb=5,
+        ngen=10,
         latent_vars_rows=[() for i in range(len(points))],
     )
-    logger.debug(f"\nbest is {best}")
+    logger.debug(f"\nbest is {best}:{round(best.fitness.values[0],2)}")
     logger.debug(best.height)

@@ -1,13 +1,13 @@
 import sympy
+from sympy import And, Not, Or
 from sympy.core.relational import (
-    StrictLessThan,
-    StrictGreaterThan,
-    LessThan,
-    GreaterThan,
-    Unequality,
     Equality,
+    GreaterThan,
+    LessThan,
+    StrictGreaterThan,
+    StrictLessThan,
+    Unequality,
 )
-from sympy import And, Or, Not
 
 
 class DOTprinter(sympy.StrPrinter):

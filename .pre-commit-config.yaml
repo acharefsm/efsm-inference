@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        files: ^inference-tool/src/
+      - id: end-of-file-fixer
+        files: ^inference-tool/src/
+      - id: check-added-large-files
+        files: ^inference-tool/src/
+      - id: check-merge-conflict
+        files: ^inference-tool/src/
+      - id: debug-statements
+        files: ^inference-tool/src/
+      - id: mixed-line-ending
+        files: ^inference-tool/src/
+
+  - repo: https://github.com/psf/black
+    rev: 25.9.0
+    hooks:
+      - id: black
+        args: ['--line-length=120', '--target-version=py310']
+        files: ^inference-tool/src/main/python/
+
+  - repo: https://github.com/pycqa/isort
+    rev: 7.0.0
+    hooks:
+      - id: isort
+        args: ['--profile', 'black', '--line-length', '120']
+        files: ^inference-tool/src/main/python/
+
+  # - repo: local
+  #   hooks:
+  #     - id: pylint
+  #       name: pylint
+  #       entry: pylint
+  #       language: system
+  #       types: [python]
+  #       args: ['--rcfile=.pylintrc', '--max-line-length=120', '--max-positional-arguments=12', '--disable=W1401']
+  #       files: ^inference-tool/src/main/python/

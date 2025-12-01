@@ -6,32 +6,23 @@ Created on Mon Jan  3 11:47:57 2022
 @author: michael
 """
 
-import operator
-import random
-import z3
-import sys
-import traceback
-
-from deap import algorithms
-from deap import base
-from deap import creator
-from deap import tools
-from deap import gp
-
-from math import sqrt, isclose
-
-import pandas as pd
-import numpy as np
-
-from enchant.utils import levenshtein
-from numbers import Number
-from itertools import product
-
-import networkx as nx
 import logging
 import multiprocessing
-
+import operator
+import random
+import sys
+import traceback
+from itertools import product
+from math import isclose, sqrt
+from numbers import Number
 from sys import argv
+
+import networkx as nx
+import numpy as np
+import pandas as pd
+import z3
+from deap import algorithms, base, creator, gp, tools
+from enchant.utils import levenshtein
 
 logging.basicConfig()
 

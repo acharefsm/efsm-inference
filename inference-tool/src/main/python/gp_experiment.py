@@ -1,44 +1,56 @@
 import csv
 
-import efsm
 import deap_gp
-
+import efsm
 import networkx as nx
 import numpy as np
-
+from generalise_helper import efsm_to_dot, efsm_to_json
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.validation import check_is_fitted
 
-from generalise_helper import efsm_to_json, efsm_to_dot
 
-
-def infer_output(samples, mu_size, lambda_size, generation_size, mut_proba, max_init_depth, max_depth, fitness_type, **kwargs):
+def infer_output(
+    samples, mu_size, lambda_size, generation_size, mut_proba, max_init_depth, max_depth, fitness_type, **kwargs
+):
     global total_correct
-    
-    pset = deap_gp.setup_pset(samples)
-    best = deap_gp.run_gp(mut_proba, samples,pset, mu=mu_size, lamb=lambda_size, max_init=max_init_depth, max_depth=max_depth, ngen=generation_size, type_=fitness_type, **kwargs)
 
-    args        = samples[samples.columns[:-1]]
-    outputs     = samples[samples.columns[-1]]
+    pset = deap_gp.setup_pset(samples)
+    best = deap_gp.run_gp(
+        mut_proba,
+        samples,
+        pset,
+        mu=mu_size,
+        lamb=lambda_size,
+        max_init=max_init_depth,
+        max_depth=max_depth,
+        ngen=generation_size,
+        type_=fitness_type,
+        **kwargs,
+    )
+
+    args = samples[samples.columns[:-1]]
+    outputs = samples[samples.columns[-1]]
 
     correct = deap_gp.correct(best, samples, pset, [() for i in range(len(samples))])
 
     if not correct:
         total_correct += 1
         bf = deap_gp.gp.compile(expr=best, pset=pset)
-        predicted = args.apply(lambda args: bf(**(args.to_dict())),axis=1)
-        correct   = outputs == predicted
+        predicted = args.apply(lambda args: bf(**(args.to_dict())), axis=1)
+        correct = outputs == predicted
         # print("guard inferred ",str(best))
         # print("samples",samples)
         # print("correct",correct)
 
     return str(best)
 
+
 def get_total_correct():
     global total_correct
 
     return total_correct
+
 
 class EFSMGeneraliserEstimator(BaseEstimator):
     def __init__(
@@ -51,14 +63,12 @@ class EFSMGeneraliserEstimator(BaseEstimator):
         max_init_depth=1,
         max_depth=5,
         fitness_type="step",
-        
         conjecture_efsm=None,
         original=None,
         conjecture_path=None,
         random_seed=None,
-
         infer_output=None,
-        total_wrong_fn=None
+        total_wrong_fn=None,
     ):
         self.mu_size = mu_size
         self.lambda_size = lambda_size
@@ -87,9 +97,9 @@ class EFSMGeneraliserEstimator(BaseEstimator):
             raise ValueError("sampled efsm (the EFSM model to generalise) must be provided")
         if self.original is None:
             raise ValueError("original (the original EFSM graph) must be provided")
-        
+
         global total_correct
-        
+
         total_correct = 0
 
         generalised = efsm.generalise(
@@ -102,14 +112,14 @@ class EFSMGeneraliserEstimator(BaseEstimator):
             self.fitness_type,
             self.conjecture_efsm,
             self.infer_output,
-            random_seed=self.random_seed
+            random_seed=self.random_seed,
         )
 
         if self.conjecture_path:
             dot_path = self.conjecture_path.replace(
                 ".dot",
                 f"_generalised_{self.mu_size}_{self.lambda_size}_{self.generation_size}_"
-                f"{self.mutation_prob}_{self.max_init_depth}_{self.max_depth}_{self.fitness_type}.dot"
+                f"{self.mutation_prob}_{self.max_init_depth}_{self.max_depth}_{self.fitness_type}.dot",
             )
             json_path = dot_path.replace(".dot", ".json")
             try:
@@ -141,11 +151,12 @@ class EFSMGeneraliserEstimator(BaseEstimator):
         check_is_fitted(self, "total_wrong")
         return -float(self.total_wrong)
 
+
 def run_experiment(trace, conjecture_path, seed, n_jobs):
     original = nx.nx_pydot.read_dot(conjecture_path)
     conjecture_efsm = efsm.efsm(original)
 
-        # param_grid = {
+    # param_grid = {
     #     "mu_size": [20, 40, 60, 80, 100],
     #     "lambda_size": [5, 10, 15, 20, 25],
     #     "generation_size": [25, 50, 75, 100, 125],
@@ -162,7 +173,7 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
         "mutation_prob": [0.5],
         "max_init_depth": [1],
         "max_depth": [5],
-        "fitness_type": ["step"]
+        "fitness_type": ["step"],
     }
 
     base_est = EFSMGeneraliserEstimator(
@@ -171,7 +182,7 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
         conjecture_path=conjecture_path,
         random_seed=seed,
         infer_output=infer_output,
-        total_wrong_fn=get_total_correct
+        total_wrong_fn=get_total_correct,
     )
 
     X = np.zeros((1, 1))
@@ -182,19 +193,25 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
     gs = GridSearchCV(
         estimator=base_est,
         param_grid=param_grid,
-        scoring=None,   # estimator.score will be used (i.e. -total_wrong)
+        scoring=None,  # estimator.score will be used (i.e. -total_wrong)
         cv=cv_splits,
         refit=False,
         n_jobs=n_jobs,
-        verbose=2
+        verbose=2,
     )
 
     gs.fit(X, y)
 
     headers = [
-        "mu_size", "lambda_size", "generation_size", "mutation_prob",
-        "max_init_depth", "max_depth", "fitness_type",
-         "total_wrong", "mean_test_score"
+        "mu_size",
+        "lambda_size",
+        "generation_size",
+        "mutation_prob",
+        "max_init_depth",
+        "max_depth",
+        "fitness_type",
+        "total_wrong",
+        "mean_test_score",
     ]
 
     with open("experiment_results___.csv", "w", newline="") as f:
@@ -204,7 +221,9 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
         # results_ contains one row per parameter combination
         results = gs.cv_results_
         params_list = results["params"]
-        mean_test_scores = results["mean_test_score"]  # this is -total_wrong (since estimator.score returns -total_wrong)
+        mean_test_scores = results[
+            "mean_test_score"
+        ]  # this is -total_wrong (since estimator.score returns -total_wrong)
 
         for params, mean_score in zip(params_list, mean_test_scores):
             # mean_score is negative total_wrong (or NaN if fit failed)
@@ -214,7 +233,7 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
                 conjecture_path=conjecture_path,
                 infer_output=None,
                 random_seed=seed,
-                total_wrong_fn=None
+                total_wrong_fn=None,
             )
 
             est.set_params(**params)
@@ -225,17 +244,19 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
                 levenshtein_val = None
                 total_wrong_val = None
 
-            writer.writerow([
-                params["mu_size"],
-                params["lambda_size"],
-                params["generation_size"],
-                params["mutation_prob"],
-                params["max_init_depth"],
-                params["max_depth"],
-                params["fitness_type"],
-                total_wrong_val,
-                mean_score
-            ])
+            writer.writerow(
+                [
+                    params["mu_size"],
+                    params["lambda_size"],
+                    params["generation_size"],
+                    params["mutation_prob"],
+                    params["max_init_depth"],
+                    params["max_depth"],
+                    params["fitness_type"],
+                    total_wrong_val,
+                    mean_score,
+                ]
+            )
 
     try:
         best_idx = np.nanargmax(results["mean_test_score"])

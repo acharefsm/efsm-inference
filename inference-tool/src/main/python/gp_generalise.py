@@ -8,42 +8,33 @@ import argparse
 import json
 
 import efsm
-
 import pandas as pd
-
 from gp_experiment import run_experiment
 
 
-def trace_to_json(trace : pd.DataFrame, filepath):
+def trace_to_json(trace: pd.DataFrame, filepath):
 
     with open(filepath, "w") as f:
-        
-        inputs      = efsm.expand_parametrised(trace,"Input")
-        outputs     = efsm.expand_parametrised(trace,"Output")
+
+        inputs = efsm.expand_parametrised(trace, "Input")
+        outputs = efsm.expand_parametrised(trace, "Output")
 
         json.dump(
             [
-                [
+                [{"label": "init", "inputs": [], "outputs": ["epsilon"]}]
+                + [
                     {
-                        "label" : "init",
-                        "inputs" : [],
-                        "outputs" : ["epsilon"]
+                        "label": inputs.loc[step]["signature"],
+                        "inputs": inputs.loc[step]["args"],
+                        "outputs": [outputs.loc[step]["signature"]] + outputs.loc[step]["args"],
                     }
-                ]
-                +
-                [
-                    {
-                        "label":    inputs.loc[step]["signature"],
-                        "inputs":   inputs.loc[step]["args"],
-                        "outputs":  [outputs.loc[step]["signature"]]+outputs.loc[step]["args"],
-                    }
-
                     for step in trace.index
                 ]
             ],
             f,
             indent=2,
         )
+
 
 parser = argparse.ArgumentParser(
     prog="get_groups.py",
