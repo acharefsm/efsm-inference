@@ -1,0 +1,271 @@
+import logging
+import traceback
+from itertools import product
+from math import isclose, sqrt
+from numbers import Number
+
+import numpy as np
+import pandas as pd
+from deap import gp
+from enchant.utils import levenshtein
+from gp_repair import repair
+
+logger = logging.getLogger("main")
+
+
+def distance_between(expected, actual, type_="continuous"):
+    if isinstance(expected, Number) and isinstance(actual, Number) and not is_null(actual):
+        if type_ == "step":
+            return float(expected != actual)
+        return abs(expected - actual)
+    if type(expected) == str and type(actual) == str:
+        return levenshtein(expected, actual)
+    if type(expected) == bool and type(actual) == bool:
+        return float(expected != actual)
+    # elif type(expected) != type(actual) or is_null(actual):
+    #     print(f"BAD TYPES {type(expected)} and {type(actual)}")
+    #     return float("inf")
+    raise ValueError(
+        f"Expected bool, int, float, or string type, not {expected}:{type(expected)} {actual}:{type(actual)}."
+    )
+
+
+def rmsd(errors: [float]) -> float:
+    assert len(errors) > 0, "Cannot calculate RMSD of empty list."
+    total = sum([float(d) ** 2 for d in errors])
+    assert not is_null(total), f"sum of {errors} cannot be nan"
+    mean = total / len(errors)
+    return sqrt(mean)
+
+
+def is_null(value):
+    if isinstance(value, str):
+        return value is None
+    return value is None or value is pd.NA or np.isnan(value)
+
+
+def find_smallest_distance(individual, pset, args, expected, latent_vars, verbose=False, type_="continuous"):
+    if verbose:
+        print(f"Looking for smallest distance between {individual} and {expected}")
+    undefined_vars = [x for x in args if is_null(args[x])]
+    consts = set()
+    type_ = individual[0].ret
+
+    # print("INDIVIDUAL", individual, "ARGS:", pset.arguments, "HEIGHT:", individual.height)
+    try:
+        height = individual.height
+    except IndexError:
+        # This individual is structurally invalid (e.g., a forest instead of a single tree).
+        # It cannot be evaluated, so return an infinite distance.
+        return float("inf")
+
+    if height == 0 and individual.root.value not in pset.arguments:
+        return distance_between(pset.ret(expected), individual.root.value, type_=type_)
+    func = gp.compile(expr=individual, pset=pset)
+    if not callable(func):
+        return distance_between(pset.ret(expected), func, type_=type_)
+
+    if len(undefined_vars) == 0:
+        actual = func(**args)
+        distance = distance_between(pset.ret(expected), actual, type_=type_)
+        if isclose(distance, 0, abs_tol=1e-10):
+            return 0
+        if len(latent_vars) == 0:
+            return distance
+
+    consts = set([c.value for c in pset.terminals[type_] if type(c.value) == type_])
+    assignments = [
+        {k: v for k, v in zip(latent_vars, assignment)} for assignment in product(consts, repeat=len(latent_vars))
+    ]
+
+    min_distance = float("inf")
+    for assignment in assignments:
+        new_args = args.copy()
+        new_args.update(assignment)
+        try:
+            actual = func(**new_args)
+        except:
+            logger.debug(f"Problem executing {individual} with {new_args}")
+            logger.debug(traceback.format_exc())
+        off_by = distance_between(expected, actual, type_=type_)
+        if off_by == 0:
+            return 0
+        if off_by < min_distance:
+            min_distance = off_by
+
+    if isclose(min_distance, 0, abs_tol=1e-10):
+        return 0
+    assert not is_null(min_distance), "min_distance cannot be nan"
+    return min_distance
+
+
+def vars_in_tree(individual):
+    _, _, labels = gp.graph(individual)
+    return labels.values()
+
+
+def latent_variables(individual, points, criterion=lambda points_c: any([is_null(v) for v in points_c])):
+    undefined_at = [c for c in list(points) if criterion(points[c])]
+    return list(set(undefined_at).intersection(vars_in_tree(individual)))
+
+
+def all_vars_defined(individual, pset):
+    return all([str(v) in pset.mapping for v in vars_in_tree(individual)])
+
+
+def process_row(args, type_="continuous"):
+    (individual, (pset, ((inx, row), latent_vars))) = args
+    try:
+        return find_smallest_distance(individual, pset, row.iloc[:-1].to_dict(), row.iloc[-1], latent_vars, type_=type_)
+    except:
+        logger.debug(f"Problem executing {individual} with arguments\n{row}")
+        logger.debug(traceback.format_exc())
+        return float("inf")
+
+
+def get_unused_vars(individual, points, latent_vars_rows, verbose=False):
+    total_vars = list(points.columns)[:-1]
+    undefined_vars = [item for items in latent_vars_rows for item in items]
+    if verbose:
+        print("Total vars:", total_vars)
+        print("undefined_vars:", undefined_vars)
+        print("vars in tree:", vars_in_tree(individual))
+    return set(total_vars).difference(vars_in_tree(individual)).difference(undefined_vars)
+
+
+def evaluate_candidate(
+    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars_rows, verbose=False, type_="continuous"
+) -> float:
+    """
+    Evaluate a candidate function for a set of function executions and aggregate the distances between the expected
+    and actual values.
+
+    :param individual: The candidate function to be evaluated.
+    :type individual: TYPE
+    :param points: The points with which to evaluate the individual.
+    N.B. The expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The aggregated distance between expected and actual values.
+    :rtype: float
+    """
+    if str(individual) in ["True", "False"]:
+        return float("inf")
+    assert len(points) == len(
+        latent_vars_rows
+    ), "Must have latent variable information for every row in the training set"
+    if isinstance(individual, str):
+        individual = creator.Individual(gp.PrimitiveTree.from_string(individual, pset))
+
+    latent_vars_rows = [list(r) for r in latent_vars_rows]
+    unused_vars = get_unused_vars(individual, points, latent_vars_rows)
+
+    individual_rep = [individual for _ in range(len(points))]
+    pset_rep = np.repeat(pset, len(points))
+    data = zip(individual_rep, zip(pset_rep, zip(points.iterrows(), latent_vars_rows)))
+
+    distances = [process_row(row, type_) for row in data]
+
+    if verbose:
+        print(f"Evaluating {individual}")
+        print("  distances", distances)
+
+    assert not any([is_null(x) for x in distances]), "no distance can be nan"
+
+    copy = points.copy()
+    copy["distances"] = distances
+
+    mistakes = sum([x > 0 for x in distances])
+
+    assert not is_null(rmsd(distances)), "rmsd(distances) cannot be nan (evaluate_candidate:145)"
+    fitness = rmsd(distances) + mistakes
+
+    assert not is_null(fitness), "fitness cannot be nan (evaluate_candidate:148)"
+
+    return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
+
+
+def fitness(
+    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, bad: list, latent_vars_rows: list, type_="continuous"
+) -> float:
+    """
+    Determine the fitness of an individual based on its ability to account for a set of expected function executions.
+
+    :param individual: The candidate function to be evaluated.
+    :type individual: TYPE
+    :param points: The points with which to evaluate the individual.
+    N.B. The expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The fitness of the individnal.
+    :rtype: float
+    """
+    if individual in bad:
+        return (float("inf"),)
+    try:
+        ind = repair(individual, points, pset)
+
+        if type_ == "step":
+            score = score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)
+        elif type_ == "recursive" and len(ind) > 2 and ind[0].arity == 2 and ind[0].ret == bool:
+            child1, child2 = get_children(ind)
+            score1 = fitness(
+                individual=child1,
+                points=points,
+                pset=pset,
+                bad=[],
+                latent_vars_rows=latent_vars_rows,
+                type_="recursive",
+            )
+            score2 = fitness(
+                individual=child2,
+                points=points,
+                pset=pset,
+                bad=[],
+                latent_vars_rows=latent_vars_rows,
+                type_="recursive",
+            )
+            score = score1[0] + score2[0]
+        else:
+            score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_="continuous")
+        newline = "\n  "
+        assert not is_null(score), f"Score cannot be nan\nPSET:\n  {newline.join(sorted(list(pset.mapping)))}"
+        return (score,)
+    except:
+        # logger.debug(f"Problem evaluating candidate {individual}")
+        logger.debug(traceback.format_exc())
+        return (float("inf"),)
+
+
+def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars_rows: list) -> bool:
+    """
+    Does the candidate function perfectly reproduce the expected executions, assuming any latent variables hold the
+    correct values upon evaluation?
+
+    :param individual: The candidate function to be evaluated.
+    :type individual: TYPE
+    :param points: The points with which to evaluate the individual.
+    N.B. The expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The fitness of the individnal.
+    :rtype: bool
+    """
+
+    assert len(points) == len(
+        latent_vars_rows
+    ), "Must have latent variable information for every row in the training set"
+    if isinstance(individual, str):
+        individual = creator.Individual(gp.PrimitiveTree.from_string(individual, pset))
+
+    for (inx, row), latent_vars in zip(points.iterrows(), latent_vars_rows):
+        try:
+            best = find_smallest_distance(individual, pset, row.iloc[:-1].to_dict(), row[-1], latent_vars)
+            if best > 0:
+                return False
+        except:
+            logger.debug(f"Problem executing {individual} with arguments\n{row}")
+    return True

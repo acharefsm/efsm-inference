@@ -1,0 +1,86 @@
+import patsy
+import statsmodels
+import statsmodels.formula.api as smf
+
+
+def repair(individual, data_points, pset):
+    if data_points.iloc[:, -1].dtype == "int64":
+        eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
+        data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
+        data_points = data_points.astype(float)
+
+        pattern_mul = r"mul\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_mul, eq):
+            eq = re.sub(pattern_mul, r"(\1 * \2)", eq)
+
+        pattern_add = r"add\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_add, eq):
+            eq = re.sub(pattern_add, r"(\1 + \2)", eq)
+
+        pattern_sub = r"sub\s*\(\s*([^,]+?)\s*,\s*([^)]+?)\s*\)"
+        while re.search(pattern_sub, eq):
+            eq = re.sub(pattern_sub, r"(\1 - \2)", eq)
+
+        # If both sides constant e.g 1000 + 10 then evaluate and replace with constant e.g 1010
+        match = re.search(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", eq)
+        if match:
+            left, op, right = match.groups()
+            result = eval(f"{left} {op} {right}")
+            # print(result)
+            eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", str(result), eq)
+            if re.match(r"^\s*y\s*~\s*\(?\s*-?\d+(?:\.\d+)?\s*\)?\s*$", eq):
+                return individual
+
+        # Add I() to right/left side constant and left/right side variable e.g 1000 + r2
+        eq = re.sub(r"(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)", r"I(\1 \2 \3)", eq)
+        # constant in parentheses
+        eq = re.sub(r"(\b[A-Za-z_]+\d*\b)\s*([\*/\+\-])\s*\((?<![A-Za-z_])(-?\d+\.?\d*)\)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"\((?<![A-Za-z_])(-?\d+\.?\d*)\)\s*([\*/\+\-])\s*(\b[A-Za-z_]+\d*\b)", r"I(\1 \2 \3)", eq)
+
+        # Add I() to right/left side constant and left/right side expression I() e.g 1000 * I(10 + r2)
+        eq = re.sub(r"\(?\s*I\(([^()]*)\)\s*\)?\s*([\+\-\*/])\s*(?<![A-Za-z_])(\d+\.?\d*)", r"I(\1 \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(\d+\.?\d*)\s*([\+\-\*/])\s*\(?\s*I\(([^()]*)\)\s*\)?", r"I(\1 \2 \3)", eq)
+
+        # Add I() to right/left side constant and left/right side expression () e.g 1000 * (r0 + r2)
+        eq = re.sub(r"(\([^()]+\))\s*([\+\-\*/])\s*(?<![A-Za-z_])(-?\d+\.?\d*)", r"I((\1) \2 \3)", eq)
+        eq = re.sub(r"(?<![A-Za-z_])(-?\d+\.?\d*)\s*([\+\-\*/])\s*(\([^()]+\))", r"I(\1 \2 (\3))", eq)
+
+        env = EvalEnvironment.capture()
+
+        try:
+            # Create model, fit (run) it, give estimates from it]
+            model = smf.ols(eq, data_points, eval_env=env)
+            res = model.fit()
+
+            if "Intercept" in res.params:
+                eqn = f"{int(round(res.params['Intercept']))}"
+            else:
+                eqn = "0"
+            for term, coefficient in res.params.items():
+                if term != "Intercept":
+                    if ":" in term:
+                        parts = term.split(":")
+                        term = "mul(" + ", ".join(parts) + ")"
+                    term = re.sub(r"I\((.*?)\)", r"(\1)", term)
+
+                    term = infix_to_prefix2(term)
+
+                    eqn = f"add({eqn}, mul({int(round(coefficient))}, {term}))"
+            repaired = type(individual)(gp.PrimitiveTree.from_string(eqn, pset))
+            return repaired
+        except (
+            UnboundLocalError,
+            SyntaxError,
+            TypeError,
+            OverflowError,
+            ValueError,
+            ZeroDivisionError,
+            statsmodels.tools.sm_exceptions.MissingDataError,
+            patsy.PatsyError,
+            np.core._exceptions._UFuncOutputCastingError,
+            np.linalg.LinAlgError,
+        ) as e:
+            return individual
+    else:
+        return individual
