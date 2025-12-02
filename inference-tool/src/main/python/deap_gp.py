@@ -6,6 +6,7 @@ Created on Wed Sep 3 11:47:57 2025
 This module implements the `run_gp` function, which is the main access point for running GP.
 
 @author: Luca Devlin Luca0414
+@author: Michael Foster Jmafoster1
 """
 
 import logging
@@ -398,15 +399,6 @@ if __name__ == "__main__":
     pset = setup_pset(points)
     print(pset.mapping)
 
-    best = run_gp(
-        1,
-        points,
-        pset,
-        random_seed=3,
-        seeds=[],
-        mu=10,
-        lamb=5,
-        ngen=10,
-    )
+    best = run_gp(1, points, pset, random_seed=3, seeds=[], mu=10, lamb=5, ngen=20, max_init=2)
     logger.debug(f"\nbest is {best}:{round(best.fitness.values[0],2)}")
     logger.debug(best.height)

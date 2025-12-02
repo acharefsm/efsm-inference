@@ -66,13 +66,7 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     assert all([type(t.value) in {int, str, float} for t in pset.mapping.values() if hasattr(t, "value")]), "Bad type"
 
     # Add literal terminals
-    # print("-" * 80)
-    # print("TERMINALS")
-    # print(names)
-    # print("printing full pset")
     for v, typ in datatypes.items():
-        # print("----------", v, typ)
-        # assert typ in {int, str, float, bool}, f"Bad pset terminal type {typ}"
         term_set = set(points[v])
         for term in term_set:
             if not is_null(term):
@@ -99,6 +93,58 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
 
 
 class PrimitiveSetTyped(gp.PrimitiveSetTyped):
+
+    def __init__(self, name, in_types, ret_type, prefix="ARG", weights=None):
+        super().__init__(name, in_types, ret_type, prefix)
+        if weights is None:
+            weights = [1] * len(in_types)
+        elif len(weights) != len(in_types):
+            raise ValueError(f"Please specify a weight for each of the {len(in_types)} arguments.")
+        self.weights = {f"{prefix}{index}": weight for index, weight in enumerate(weights)}
+
+    def renameArguments(self, **kargs):
+        """
+        Rename function arguments with new names from *kargs*.
+        """
+        super().renameArguments(**kargs)
+        for old_name in kargs:
+            if old_name in self.weights:
+                new_name = kargs[old_name]
+                self.weights[new_name] = self.weights[old_name]
+                del self.weights[old_name]
+
+    def addPrimitive(self, primitive, in_types, ret_type, name=None, weight=1):
+        """Add a primitive to the set.
+
+        :param primitive: callable object or a function.
+        :param in_types: list of primitives arguments' type
+        :param ret_type: type returned by the primitive.
+        :param name: alternative name for the primitive instead
+                     of its __name__ attribute.
+        :param weight: The weight of the parameter for random choice.
+                       Higher weights indicate chosen more often.
+        """
+        super().addPrimitive(primitive, in_types, ret_type, name)
+        self.weights[primitive] = weight
+
+    def addTerminal(self, terminal, ret_type, name=None, weight=1):
+        """Add a terminal to the set. Terminals can be named
+        using the optional *name* argument. This should be
+        used : to define named constant (i.e.: pi); to speed the
+        evaluation time when the object is long to build; when
+        the object does not have a __repr__ functions that returns
+        the code to build the object; when the object class is
+        not a Python built-in.
+
+        :param terminal: Object, or a function with no arguments.
+        :param ret_type: Type of the terminal.
+        :param name: defines the name of the terminal in the expression.
+        :param weight: The weight of the parameter for random choice.
+                       Higher weights indicate chosen more often.
+        """
+        super().addTerminal(terminal, ret_type, name)
+        self.weights[terminal] = weight
+
     def _add(self, prim):
         def addType(dict_, ret_type):
             if ret_type not in dict_:
@@ -186,14 +232,14 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         pset.addPrimitive(operator.sub, [int, int], int)
         pset.addPrimitive(operator.mul, [int, int], int)
     elif output_type == bool:
-        pset.addPrimitive(operator.__le__, [int, int], bool)
-        pset.addPrimitive(operator.__ge__, [int, int], bool)
-        pset.addPrimitive(operator.__lt__, [int, int], bool)
-        pset.addPrimitive(operator.__gt__, [int, int], bool)
-        pset.addPrimitive(operator.__eq__, [int, int], bool)
-        pset.addPrimitive(operator.__and__, [bool, bool], bool)
-        pset.addPrimitive(operator.__or__, [bool, bool], bool)
-        pset.addPrimitive(operator.__not__, [bool], bool)
+        pset.addPrimitive(operator.__le__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__ge__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__lt__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__gt__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__eq__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__and__, [bool, bool], bool, weight=1)
+        pset.addPrimitive(operator.__or__, [bool, bool], bool, weight=1)
+        pset.addPrimitive(operator.__not__, [bool], bool, weight=2)
         if int in datatypes:
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)
@@ -210,7 +256,8 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
 
 
 def setup_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
-    try:
-        return setup_pset_aux(points)
-    except:
-        logger.debug(traceback.format_exc())
+    # try:
+    #     return setup_pset_aux(points)
+    # except:
+    #     logger.debug(traceback.format_exc())
+    return setup_pset_aux(points)

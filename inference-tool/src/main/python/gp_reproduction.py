@@ -4,6 +4,7 @@ including mating, mutation, and random initial generation.
 """
 
 import random
+import sys
 
 from deap import gp
 
@@ -43,10 +44,10 @@ def new_mate(ind1, ind2, pset, creator):
 def choose_terminal(pset, type_, prob=0.7):
     try:
         variables = [t for t in pset.terminals[type_] if t.name.startswith("ARG")]
-        return random.choice(variables)
+        return random.choices(variables, weights=[pset.weights[v.value] for v in variables])[0]
     except IndexError:
         constants = [t for t in pset.terminals[type_] if t not in variables]
-        return random.choice(constants)
+        return random.choices(constants, weights=[pset.weights[c.value] for c in constants])[0]
 
 
 def mutateByTerminal(individual, pset):
@@ -186,7 +187,8 @@ def gen_terminal(expr, pset, type_):
 
 def gen_primitive(expr, pset, type_, stack, depth):
     try:
-        prim = random.choice(pset.primitives[type_])
+        primitives = list(pset.primitives[type_])
+        prim = random.choices(primitives, weights=[pset.weights[pset.context[p.name]] for p in primitives])[0]
         expr.append(prim)
         for arg in reversed(prim.args):
             stack.append((depth + 1, arg))
