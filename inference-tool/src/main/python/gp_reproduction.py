@@ -1,6 +1,43 @@
+"""
+This module implements all the functions necessary to produce and reproduce individuals,
+including mating, mutation, and random initial generation.
+"""
+
 import random
 
 from deap import gp
+
+
+def new_mate(ind1, ind2, pset, creator):
+    def new_mate_and(ind1, ind2):
+        try:
+            return creator.Individual.from_string("and_(" + str(ind1) + ", " + str(ind2) + ")", pset)
+        except Exception as e:
+            print(e)
+            return ind1
+
+    def new_mate_or(ind1, ind2):
+        try:
+            return creator.Individual.from_string("or_(" + str(ind1) + ", " + str(ind2) + ")", pset)
+        except Exception as e:
+            for name, primitive in pset.primitives.items():
+                print(f"Type: {name}")
+                for prim in primitive:
+                    print(prim.name, prim.args, prim.ret, prim.arity)
+            for name, terminal in pset.terminals.items():
+                print(f"  Type: {name}")
+                for term in terminal:
+                    print(f"    {term.value}")
+            print(e)
+            print(pset.ret)
+            return ind1
+
+    if pset.ret != bool:
+        return gp.cxOnePoint(ind1, ind2)
+
+    offspring1 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
+    offspring2 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
+    return offspring1, offspring2
 
 
 def choose_terminal(pset, type_, prob=0.7):

@@ -1,3 +1,7 @@
+"""
+This module contains Luca's repair function and auxilliary functions.
+"""
+
 import ast
 import re
 

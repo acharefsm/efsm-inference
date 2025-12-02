@@ -1,3 +1,7 @@
+"""
+This module implements the GP fitness function and auxilliary functions.
+"""
+
 import logging
 import traceback
 from itertools import product
@@ -8,6 +12,7 @@ import numpy as np
 import pandas as pd
 from deap import gp
 from enchant.utils import levenshtein
+from gp_pset import is_null
 from gp_repair import repair
 
 logger = logging.getLogger("main")
@@ -50,12 +55,6 @@ def rmsd(errors: [float]) -> float:
     assert not is_null(total), f"sum of {errors} cannot be nan"
     mean = total / len(errors)
     return sqrt(mean)
-
-
-def is_null(value):
-    if isinstance(value, str):
-        return value is None
-    return value is None or value is pd.NA or np.isnan(value)
 
 
 def find_smallest_distance(individual, pset, args, expected, latent_vars, verbose=False, type_="continuous"):
@@ -165,6 +164,7 @@ def evaluate_candidate(
     :rtype: float
     """
     if str(individual) in ["True", "False"]:
+        logger.debug(f"Literal {individual}")
         return float("inf")
     assert len(points) == len(
         latent_vars_rows
@@ -201,7 +201,13 @@ def evaluate_candidate(
 
 
 def fitness(
-    individual, points: pd.DataFrame, pset: gp.PrimitiveSet, bad: list, latent_vars_rows: list, type_="continuous"
+    individual,
+    points: pd.DataFrame,
+    pset: gp.PrimitiveSet,
+    bad: list,
+    latent_vars_rows: list,
+    creator,
+    type_="continuous",
 ) -> float:
     """
     Determine the fitness of an individual based on its ability to account for a set of expected function executions.
@@ -219,7 +225,7 @@ def fitness(
     if individual in bad:
         return (float("inf"),)
     try:
-        ind = repair(individual, points, pset)
+        ind = repair(individual, points, pset, creator)
 
         if type_ == "step":
             score = score = evaluate_candidate(ind, points, pset, latent_vars_rows, type_=type_)

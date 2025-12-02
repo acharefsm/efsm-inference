@@ -1,3 +1,7 @@
+"""
+This module contains the functions necessary to set up the pset.
+"""
+
 import logging
 import operator
 import traceback
@@ -5,9 +9,14 @@ import traceback
 import numpy as np
 import pandas as pd
 from deap import gp
-from gp_fitness import is_null
 
 logger = logging.getLogger(__name__)
+
+
+def is_null(value):
+    if isinstance(value, str):
+        return value is None
+    return value is None or value is pd.NA or np.isnan(value)
 
 
 def add_consts_to_pset(individual, pset):

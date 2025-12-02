@@ -1,3 +1,8 @@
+"""
+This module contains the z3 simplification code.
+Long term, it would be nice to switch to sympy.
+"""
+
 import networkx as nx
 import numpy as np
 import z3

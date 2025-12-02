@@ -3,25 +3,27 @@
 """
 Created on Wed Sep 3 11:47:57 2025
 
+This module implements the `run_gp` function, which is the main access point for running GP.
+
 @author: Luca Devlin Luca0414
 """
 
-import ast
 import logging
 import operator
 import random
 import sys
 import traceback
 import warnings
+from math import isclose
 
 import numpy as np
 import pandas as pd
 import z3
 from deap import algorithms, base, creator, gp, tools
 from gp_fitness import fitness, latent_variables
-from gp_generation_mutation import genHalfAndHalf, mutate
 from gp_pset import setup_pset
 from gp_repair import repair
+from gp_reproduction import genHalfAndHalf, mutate, new_mate
 from gp_simplification import simplify
 from patsy import EvalEnvironment
 from pyrsistent import pset
@@ -41,8 +43,7 @@ def is_distinct(pop):
     for p in pop:
         if p in seen:
             return False
-        else:
-            seen.append(p)
+        seen.append(p)
     return True
 
 
@@ -60,39 +61,6 @@ def sort_height(individual, training_set):
     return height
 
 
-def new_mate(ind1, ind2, pset):
-    def new_mate_and(ind1, ind2):
-        try:
-            return creator.Individual.from_string("and_(" + str(ind1) + ", " + str(ind2) + ")", pset)
-        except Exception as e:
-            print(e)
-            return ind1
-
-    def new_mate_or(ind1, ind2):
-        try:
-            return creator.Individual.from_string("or_(" + str(ind1) + ", " + str(ind2) + ")", pset)
-        except Exception as e:
-            for name, primitive in pset.primitives.items():
-                print(f"Type: {name}")
-                for prim in primitive:
-                    print(prim.name, prim.args, prim.ret, prim.arity)
-            for name, terminal in pset.terminals.items():
-                print(f"  Type: {name}")
-                for term in terminal:
-                    print(f"    {term.value}")
-            print(e)
-            print(pset.ret)
-            return ind1
-
-    if pset.ret != bool:
-        return gp.cxOnePoint(ind1, ind2)
-    else:
-        offspring1 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
-        offspring2 = random.choice([new_mate_and(ind1, ind2), new_mate_or(ind1, ind2)])
-
-        return offspring1, offspring2
-
-
 def run_gp(
     mut_prob,
     points: pd.DataFrame,
@@ -105,10 +73,12 @@ def run_gp(
     lamb=10,
     ngen=100,
     random_seed=0,
-    seeds=[],
-    bad=[],
+    seeds=None,
+    bad=None,
 ):
-    # print("Running GP")
+    seeds = [] if seeds is None else seeds
+    bad = [] if bad is None else bad
+
     points = points.replace({np.nan: None})
     random.seed(random_seed)
 
@@ -128,6 +98,7 @@ def run_gp(
         bad=bad,
         latent_vars_rows=latent_vars_rows,
         type_=type_,
+        creator=creator,
     )
     toolbox.register("height", sort_height, training_set=points)
 
@@ -146,7 +117,7 @@ def run_gp(
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("select", tools.selTournament, tournsize=3)
-    toolbox.register("mate", new_mate, pset=pset)
+    toolbox.register("mate", new_mate, pset=pset, creator=creator)
     toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
     toolbox.register("mutate", mutate, pset=pset, creator=creator)
 
@@ -170,11 +141,7 @@ def run_gp(
                 pop.append(individual)
             except TypeError:
                 logger.debug(f"Failed to add seed {seed}")
-                # logger.debug("Type error.")
                 logger.debug(traceback.format_exc())
-                # logger.debug(pset.mapping)
-                # assert False
-                # pass
 
     # for terms in pset.terminals.values():
     #     terms = [creator.Individual([i]) for i in terms]
@@ -182,9 +149,7 @@ def run_gp(
     #         if t not in pop:
     #             logger.debug(str(t))
     #             pop.append(t)
-    # logger.debug("Initial population:", len(pop), [str(p) for p in pop])
     pop = make_distinct(pop)
-    # logger.debug("\nDistinct Initial population:", len(pop), [str(p) for p in pop])
 
     assert is_distinct(pop), "Population contains duplicated individuals."
     pop += toolbox.population(n=mu - len(pop))
@@ -192,8 +157,6 @@ def run_gp(
     # pop = [toolbox.repair(ind) for ind in pop]
     pop = sorted(pop, key=lambda x: x.fitness.values)
     print("pop", [str(x) for x in pop])
-
-    hof = tools.HallOfFame(1)
 
     stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
     stats_size = tools.Statistics(len)
@@ -203,7 +166,7 @@ def run_gp(
 
     try:
         # print("Calling eaMuPlusLambda")
-        pop, log = eaMuPlusLambda(
+        pop, _ = eaMuPlusLambda(
             pop,
             toolbox,
             mu,
@@ -215,10 +178,6 @@ def run_gp(
             halloffame=None,
             verbose=False,
         )
-        # print("Finished GP")
-
-        # for p in pop:
-        #     logger.debug(str(p), p.fitness.values, toolbox.height(p))
 
         best = toolbox.simplify(toolbox.repair(pop[0]))
         best.fitness.values = toolbox.evaluate(best)
@@ -325,7 +284,7 @@ def eaMuPlusLambda(
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
     population = sorted(population, key=lambda i: i.fitness.values + (toolbox.height(i),))[:mu]
-    assert all([ind.fitness.valid for ind in population]), "Invalid fitnesses in population after setting fitnesses!"
+    assert all(ind.fitness.valid for ind in population), "Invalid fitnesses in population after setting fitnesses!"
 
     if halloffame is not None:
         halloffame.update(population)
@@ -342,7 +301,7 @@ def eaMuPlusLambda(
         # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
             return population, logbook
-        assert all([ind.fitness.valid for ind in population]), "Invalid fitnesses in population"
+        assert all(ind.fitness.valid for ind in population), "Invalid fitnesses in population"
         # logger.debug("\ngen", gen, "best", str(halloffame[0]))
         # logger.debug([str(x) for x in population])
         seen = {}
@@ -421,7 +380,7 @@ def need_latent_aux(points: pd.DataFrame, latent_vars_rows: list) -> bool:
                         return True
         return False
     else:
-        return any([len(set(group.iloc[:, -1])) > 1 for _, group in points.groupby(inputs)])
+        return any(len(set(group.iloc[:, -1])) > 1 for _, group in points.groupby(inputs))
 
 
 def shortcut_latent(points: pd.DataFrame) -> bool:
