@@ -3,6 +3,60 @@ import statsmodels
 import statsmodels.formula.api as smf
 
 
+def recurse(node):
+    if isinstance(node, ast.BinOp):
+        op = op_mapp[type(node.op)]
+        return f"{op}({recurse(node.left)}, {recurse(node.right)})"
+    elif isinstance(node, ast.UnaryOp):
+        if isinstance(node.op, ast.USub):
+            return f"-{recurse(node.operand)}"
+        return recurse(node.operand)
+    elif isinstance(node, ast.Constant):
+        return str(node.value)
+    elif isinstance(node, ast.Name):
+        return node.id
+    elif isinstance(node, ast.Call):
+        # Handle inner I(...) wrappers
+        if isinstance(node.func, ast.Name) and node.func.id == "I":
+            return recurse(node.args[0])
+        elif isinstance(node.func, ast.Name) and node.func.id in {"add", "sub", "mul", "div", "pow"}:
+            args = ", ".join(recurse(a) for a in node.args)
+            return f"{node.func.id}({args})"
+        raise NotImplementedError(node)
+    else:
+        raise NotImplementedError(node)
+
+
+def infix_to_prefix2(expr):
+    """
+    Convert an infix arithmetic expression like '(r0 + r2 * 10)'
+    into DEAP prefix notation: add(r0, mul(r2, 10))
+    """
+    tree = ast.parse(expr, mode="eval")
+    return recurse(tree.body)
+
+
+def split(individual):
+    if len(individual) > 1:
+        terms = []
+        # Recurse over children if add/sub
+        if individual[0].name in ["add", "sub"]:
+            terms.extend(
+                split(
+                    creator.Individual(
+                        gp.PrimitiveTree(
+                            individual[individual.searchSubtree(1).start : individual.searchSubtree(1).stop]
+                        )
+                    )
+                )
+            )
+            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop :]))))
+        else:
+            terms.append(individual)
+        return terms
+    return [individual]
+
+
 def repair(individual, data_points, pset):
     if data_points.iloc[:, -1].dtype == "int64":
         eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"

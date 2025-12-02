@@ -21,6 +21,7 @@ import pandas as pd
 import z3
 from deap import algorithms, base, creator, gp, tools
 from gp_fitness import fitness, is_null
+from gp_generation_mutation import genHalfAndHalf, mutate
 from gp_pset import setup_pset
 from gp_repair import repair
 from patsy import EvalEnvironment
@@ -36,291 +37,11 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
 
 
-def split(individual):
-    if len(individual) > 1:
-        terms = []
-        # Recurse over children if add/sub
-        if individual[0].name in ["add", "sub"]:
-            terms.extend(
-                split(
-                    creator.Individual(
-                        gp.PrimitiveTree(
-                            individual[individual.searchSubtree(1).start : individual.searchSubtree(1).stop]
-                        )
-                    )
-                )
-            )
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop :]))))
-        else:
-            terms.append(individual)
-        return terms
-    return [individual]
-
-
 op_mapp = {
     ast.Add: "add",
     ast.Sub: "sub",
     ast.Mult: "mul",
 }
-
-
-def infix_to_prefix2(expr):
-    """
-    Convert an infix arithmetic expression like '(r0 + r2 * 10)'
-    into DEAP prefix notation: add(r0, mul(r2, 10))
-    """
-    tree = ast.parse(expr, mode="eval")
-    return recurse(tree.body)
-
-
-def recurse(node):
-    if isinstance(node, ast.BinOp):
-        op = op_mapp[type(node.op)]
-        return f"{op}({recurse(node.left)}, {recurse(node.right)})"
-    elif isinstance(node, ast.UnaryOp):
-        if isinstance(node.op, ast.USub):
-            return f"-{recurse(node.operand)}"
-        return recurse(node.operand)
-    elif isinstance(node, ast.Constant):
-        return str(node.value)
-    elif isinstance(node, ast.Name):
-        return node.id
-    elif isinstance(node, ast.Call):
-        # Handle inner I(...) wrappers
-        if isinstance(node.func, ast.Name) and node.func.id == "I":
-            return recurse(node.args[0])
-        elif isinstance(node.func, ast.Name) and node.func.id in {"add", "sub", "mul", "div", "pow"}:
-            args = ", ".join(recurse(a) for a in node.args)
-            return f"{node.func.id}({args})"
-        raise NotImplementedError(node)
-    else:
-        raise NotImplementedError(node)
-
-
-def choose_terminal(pset, type_, prob=0.7):
-    try:
-        variables = [t for t in pset.terminals[type_] if t.name.startswith("ARG")]
-        return random.choice(variables)
-    except IndexError:
-        constants = [t for t in pset.terminals[type_] if t not in variables]
-        return random.choice(constants)
-
-
-def mutateByTerminal(individual, pset):
-    if len(individual) < 2:
-        return (individual,)
-
-    index = random.randrange(1, len(individual))
-    node = individual[index]
-    slice_ = individual.searchSubtree(index)
-    term = choose_terminal(pset, node.ret)
-
-    if gp.isclass(term):
-        term = term()
-    individual[slice_] = [term]
-
-    return (individual,)
-
-
-def mutateByCommute(individual, pset):
-    if len(individual) < 2:
-        return (individual,)
-
-    possible_nodes = [(i, node) for i, node in enumerate(individual) if node.arity > 1]
-    if len(possible_nodes) == 0:
-        return (individual,)
-    i, node = random.choice(possible_nodes)
-    individual[i].args.reverse()
-    return (individual,)
-
-
-def mutateByFuzz(individual, pset):
-    terminals = [(i, node) for i, node in enumerate(individual) if node.arity == 0]
-
-    index, node = random.choice(terminals)
-
-    term = random.choice(pset.terminals[node.ret])
-    if gp.isclass(term):
-        term = term()
-    individual[index] = term
-
-    return (individual,)
-
-
-def mutInsert(individual, pset):
-    """Inserts a new branch at a random position in *individual*. The subtree
-    at the chosen position is used as child node of the created subtree, in
-    that way, it is really an insertion rather than a replacement. Note that
-    the original subtree will become one of the children of the new primitive
-    inserted, but not perforce the first (its position is randomly selected if
-    the new primitive has more than one child).
-
-    :param individual: The normal or typed tree to be mutated.
-    :returns: A tuple of one tree.
-    """
-    index = random.randrange(len(individual))
-    node = individual[index]
-    slice_ = individual.searchSubtree(index)
-    choice = random.choice
-
-    # As we want to keep the current node as children of the new one,
-    # it must accept the return value of the current node
-    primitives = [p for p in pset.primitives[node.ret] if node.ret in p.args]
-
-    if len(primitives) == 0:
-        return (individual,)
-
-    new_node = choice(primitives)
-    new_subtree = [None] * len(new_node.args)
-    position = choice([i for i, a in enumerate(new_node.args) if a == node.ret])
-
-    for i, arg_type in enumerate(new_node.args):
-        if i != position:
-            term = choose_terminal(pset, arg_type)
-            if gp.isclass(term):
-                term = term()
-            new_subtree[i] = term
-
-    new_subtree[position : position + 1] = individual[slice_]
-    new_subtree.insert(0, new_node)
-    individual[slice_] = new_subtree
-    return (individual,)
-
-
-def mutate(individual, pset, MAX_MUTATIONS=3):
-    mutations = 0
-    newNode = creator.Individual(gp.PrimitiveTree.from_string(str(individual), pset))
-    mutate = True
-    while mutate and mutations < MAX_MUTATIONS:
-        mutations += 1
-        mutate = random.choice([True, False])
-        if len(individual) < 2:
-            newNode = mutInsert(newNode, pset)[0]
-            continue
-
-        op = random.choice(range(6))
-        if op == 0:
-            # HVL SUB
-            newNode = gp.mutNodeReplacement(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by substitution", newNode)
-        if op == 1:
-            # HLV DEL
-            newNode = gp.mutShrink(newNode)[0]
-            # logger.debug("Mutating", individual, "by deletion", newNode)
-        if op == 2:
-            # HVL INS
-            newNode = mutInsert(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by insertion", newNode)
-        if op == 3:
-            # Reverse this.children if they have the same return type, e.g. (x - y) -> (y - x)
-            newNode = mutateByCommute(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by commutation", newNode)
-        if op == 4:
-            # mutate by replacing a random node with a terminal
-            newNode = mutateByTerminal(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by terminal swap", newNode)
-        if op == 5:
-            # fuzz a terminal
-            newNode = mutateByFuzz(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by fuzzing", newNode)
-    return (newNode,)
-
-
-def gen_terminal(expr, pset, type_):
-    try:
-        term = choose_terminal(pset, type_)
-    except IndexError:
-        _, _, traceback = sys.exc_info()
-        raise IndexError(
-            "The gp.generate function tried to add "
-            "a terminal of type '%s', but there is "
-            "none available." % (type_,)
-        ).with_traceback(traceback)
-    if gp.isclass(term):
-        term = term()
-    expr.append((term))
-
-
-def gen_primitive(expr, pset, type_, stack, depth):
-    try:
-        prim = random.choice(pset.primitives[type_])
-        expr.append(prim)
-        for arg in reversed(prim.args):
-            stack.append((depth + 1, arg))
-    except IndexError:
-        gen_terminal(expr, pset, type_)
-
-
-def generate(pset, min_, max_, condition, type_=None, simp=None):
-    """Generate a Tree as a list of list. The tree is build
-    from the root to the leaves, and it stop growing when the
-    condition is fulfilled.
-
-    :param pset: Primitive set from which primitives are selected.
-    :param min_: Minimum height of the produced trees.
-    :param max_: Maximum Height of the produced trees.
-    :param condition: The condition is a function that takes two arguments,
-                      the height of the tree to build and the current
-                      depth in the tree.
-    :param type_: The type that should return the tree when called, when
-                  :obj:`None` (default) the type of :pset: (pset.ret)
-                  is assumed.
-    :returns: A grown tree with leaves at possibly different depths
-              depending on the condition function.
-    """
-    if type_ is None:
-        type_ = pset.ret
-    expr = []
-    height = random.randint(min_, max_)
-    stack = [(0, type_)]
-    while len(stack) != 0:
-        d, t = stack.pop()
-        if condition(height, d):
-            gen_terminal(expr, pset, t)
-        else:
-            gen_primitive(expr, pset, t, stack, d)
-    if simp is not None:
-        nodes, edges, labels = gp.graph(expr)
-        types = [type(v) for v in labels.values()]
-        assert all(
-            [t in {int, str, float, bool} for t in types]
-        ), f"Bad type {[(v, type(v)) for v in labels.values()]} in {str(creator.Individual(expr))}\n Type was {type_}"
-        return simp(expr)
-    return expr
-
-
-def genHalfAndHalf(pset, min_, max_, type_=None, simp=None):
-    """Generate an expression with a PrimitiveSet *pset*.
-    Half the time, the expression is generated with :func:`~deap.gp.genGrow`,
-    the other half, the expression is generated with :func:`~deap.gp.genFull`.
-
-    :param pset: Primitive set from which primitives are selected.
-    :param min_: Minimum height of the produced trees.
-    :param max_: Maximum Height of the produced trees.
-    :param type_: The type that should return the tree when called, when
-                  :obj:`None` (default) the type of :pset: (pset.ret)
-                  is assumed.
-    :returns: Either, a full or a grown tree.
-    """
-
-    def genGrow(height, depth):
-        """Expression generation stops when the depth is equal to height
-        or when it is randomly determined that a node should be a terminal.
-        """
-        return depth == height or (depth >= min_ and random.random() < pset.terminalRatio)
-
-    def genFull(height, depth):
-        """Expression generation stops when the depth is equal to height."""
-        return depth == height
-
-    return generate(
-        pset,
-        min_,
-        max_,
-        condition=random.choice([genGrow, genFull]),
-        type_=type_,
-        simp=simp,
-    )
 
 
 def is_distinct(pop):
@@ -429,19 +150,13 @@ def run_gp(
 
     types = {k: generators.get(points.dtypes[k], generators[points.dtypes[points.columns[-1]]]) for k in points}
     toolbox.register("simplify", simplify, pset=pset, types=types)
-    toolbox.register(
-        "expr",
-        genHalfAndHalf,
-        pset=pset,
-        min_=1,
-        max_=max_init,
-    )
+    toolbox.register("expr", genHalfAndHalf, pset=pset, min_=1, max_=max_init, creator=creator)
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("mate", new_mate, pset=pset)
     toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-    toolbox.register("mutate", mutate, pset=pset)
+    toolbox.register("mutate", mutate, pset=pset, creator=creator)
 
     toolbox.decorate("mate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
     toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
