@@ -10,17 +10,15 @@ import ast
 import logging
 import operator
 import random
-import re
 import sys
 import traceback
 import warnings
 
-import networkx as nx
 import numpy as np
 import pandas as pd
 import z3
 from deap import algorithms, base, creator, gp, tools
-from gp_fitness import fitness, is_null
+from gp_fitness import fitness, latent_variables
 from gp_generation_mutation import genHalfAndHalf, mutate
 from gp_pset import setup_pset
 from gp_repair import repair
@@ -36,13 +34,6 @@ logger.setLevel(logging.DEBUG)
 
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
-
-
-op_mapp = {
-    ast.Add: "add",
-    ast.Sub: "sub",
-    ast.Mult: "mul",
-}
 
 
 def is_distinct(pop):
@@ -162,13 +153,9 @@ def run_gp(
     toolbox.decorate("mate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
     toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max_value=max_depth))
 
-    toolbox.register("repair", repair, data_points=points, pset=pset)
-    print(points)
-
-    # print("Generating initial population")
+    toolbox.register("repair", repair, data_points=points, pset=pset, creator=creator)
 
     pop = toolbox.population(n=mu)
-    # print(f"Fitness of pop[0] {pop[0]} is {pop[0].fitness.values}")
 
     if len(seeds) > 0:
         logger.debug("SEEDS!")
@@ -450,6 +437,7 @@ if __name__ == "__main__":
         if points.dtypes[col] == object:
             points[col] = points[col].astype("string")
     pset = setup_pset(points)
+    print(pset.mapping)
 
     best = run_gp(
         1,
@@ -460,7 +448,6 @@ if __name__ == "__main__":
         mu=10,
         lamb=5,
         ngen=10,
-        latent_vars_rows=[() for i in range(len(points))],
     )
     logger.debug(f"\nbest is {best}:{round(best.fitness.values[0],2)}")
     logger.debug(best.height)

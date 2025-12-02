@@ -189,6 +189,8 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)
             pset.addPrimitive(operator.mul, [int, int], int)
+    elif output_type == str:
+        pass
     else:
         raise ValueError(f"Invalid output type {output_type}.")
 

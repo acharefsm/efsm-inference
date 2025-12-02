@@ -1,6 +1,17 @@
+import ast
+import re
+
 import patsy
 import statsmodels
 import statsmodels.formula.api as smf
+from deap import gp
+from patsy import EvalEnvironment
+
+op_mapp = {
+    ast.Add: "add",
+    ast.Sub: "sub",
+    ast.Mult: "mul",
+}
 
 
 def recurse(node):
@@ -36,7 +47,7 @@ def infix_to_prefix2(expr):
     return recurse(tree.body)
 
 
-def split(individual):
+def split(individual, creator):
     if len(individual) > 1:
         terms = []
         # Recurse over children if add/sub
@@ -47,19 +58,22 @@ def split(individual):
                         gp.PrimitiveTree(
                             individual[individual.searchSubtree(1).start : individual.searchSubtree(1).stop]
                         )
-                    )
+                    ),
+                    creator,
                 )
             )
-            terms.extend(split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop :]))))
+            terms.extend(
+                split(creator.Individual(gp.PrimitiveTree(individual[individual.searchSubtree(1).stop :])), creator)
+            )
         else:
             terms.append(individual)
         return terms
     return [individual]
 
 
-def repair(individual, data_points, pset):
+def repair(individual, data_points, pset, creator):
     if data_points.iloc[:, -1].dtype == "int64":
-        eq = f"y ~ {' + '.join(str(x) for x in split(individual))}"
+        eq = f"y ~ {' + '.join(str(x) for x in split(individual, creator))}"
         data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)
         data_points = data_points.astype(float)
 
