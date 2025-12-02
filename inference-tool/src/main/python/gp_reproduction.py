@@ -170,6 +170,24 @@ def mutate(individual, pset, creator, MAX_MUTATIONS=3):
     return (newNode,)
 
 
+def gen_terminal_bool(expr, pset, type_, stack, depth):
+    """
+    No point in returning boolean True/False terminals as they add nothing to guards.
+    Instead, generate a short but meaningful test.
+    """
+    if type_ == bool:
+        try:
+            primitives = list(filter(lambda p: bool not in p.args, pset.primitives[type_]))
+            prim = random.choices(primitives, weights=[pset.weights[pset.context[p.name]] for p in primitives])[0]
+            expr.append(prim)
+            for arg in reversed(prim.args):
+                stack.append((depth + 1, arg))
+        except IndexError:
+            gen_terminal(expr, pset, type_)
+    else:
+        gen_terminal(expr, pset, type_)
+
+
 def gen_terminal(expr, pset, type_):
     try:
         term = choose_terminal(pset, type_)
@@ -221,7 +239,10 @@ def generate(pset, min_, max_, condition, creator, type_=None, simp=None):
     while len(stack) != 0:
         d, t = stack.pop()
         if condition(height, d):
-            gen_terminal(expr, pset, t)
+            if t == bool:
+                gen_terminal_bool(expr, pset, t, stack, 0)
+            else:
+                gen_terminal(expr, pset, t)
         else:
             gen_primitive(expr, pset, t, stack, d)
     if simp is not None:
