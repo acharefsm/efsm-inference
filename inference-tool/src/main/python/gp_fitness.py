@@ -13,6 +13,20 @@ from gp_repair import repair
 logger = logging.getLogger("main")
 
 
+def get_children(individual, index=0):
+    node = individual[index]
+
+    children = []
+    pos = index + 1
+    for _ in range(node.arity):
+        child_slice = individual.searchSubtree(pos)
+        child = individual[child_slice]
+        children.append(gp.PrimitiveTree(child))
+
+        pos = child_slice.stop
+    return children
+
+
 def distance_between(expected, actual, type_="continuous"):
     if isinstance(expected, Number) and isinstance(actual, Number) and not is_null(actual):
         if type_ == "step":
