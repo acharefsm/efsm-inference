@@ -21,8 +21,7 @@ def to_z3(tree, labels, types):
         if len(children) == 0:
             if labels[root] in types:
                 return types[labels[root]](labels[root])
-            else:
-                return labels[root]
+            return labels[root]
 
         nested = tuple(_make_tuple(tree, v, root) for v in children)
         if labels[root] == "lt":
@@ -176,24 +175,6 @@ def infix_to_prefix(expr):
 
     prefix_op = op_map[operator_symbol]
     return f"{prefix_op}({op1},{op2})"
-
-
-def to_nodes_edges_labels(exp, pset, rename={}):
-    # print("=" * 80)
-    # print(exp)
-    # for k, v in pset.mapping.items():
-    #     print(f"{k}: {v}")
-    # print("=" * 80)
-    try:
-        exp = creator.Individual(gp.PrimitiveTree.from_string(exp, pset))
-    except:
-        exp = creator.Individual(gp.PrimitiveTree.from_string(infix_to_prefix(exp), pset))
-    rename = {k: gp.Terminal(v, None, object) for k, v in rename.items()}
-    for inx, element in enumerate(exp):
-        if isinstance(element, gp.Terminal) and element.format() in rename:
-            exp[inx] = rename[element.format()]
-    assert "r_b" not in str(exp), f"{exp}: {rename}"
-    return gp.graph(exp)
 
 
 def simplify(individual, pset, types, creator):

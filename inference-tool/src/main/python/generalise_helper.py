@@ -4,7 +4,11 @@ from collections import OrderedDict
 
 import deap_gp
 import efsm
+import gp_pset
+import gp_simplification
 import pandas as pd
+from deap import gp
+from gp_repair import infix_to_prefix2 as infix_to_prefix
 
 
 class AdditiveDict:
@@ -33,14 +37,23 @@ def __transition_pset(ip_sig, op_sig, dest, transition):
         axis=1,
     )
 
-    return deap_gp.setup_full_pset(samples)
+    return gp_pset.setup_full_pset(samples)
 
 
-def __formula_to_tree(formula, pset):
+def __formula_to_tree(exp, pset, rename={}):
     """
     Convert inferred function from string to tree representation.
     """
-    return deap_gp.to_nodes_edges_labels(formula, pset)
+    try:
+        exp = gp.PrimitiveTree.from_string(exp, pset)
+    except:
+        exp = gp.PrimitiveTree.from_string(infix_to_prefix(exp), pset)
+    rename = {k: gp.Terminal(v, None, object) for k, v in rename.items()}
+    for inx, element in enumerate(exp):
+        if isinstance(element, gp.Terminal) and element.format() in rename:
+            exp[inx] = rename[element.format()]
+    assert "r_b" not in str(exp), f"{exp}: {rename}"
+    return gp.graph(exp)
 
 
 def efsm_to_json(_efsm: efsm.EFSM, filepath):
@@ -62,7 +75,7 @@ def efsm_to_json(_efsm: efsm.EFSM, filepath):
 
     samples = efsm.expand_list(pd.DataFrame([_efsm.initialisation], index=[0]), "registers", "r")
     samples = pd.concat([samples, pd.Series("epsilon", index=samples.index, name="op_sig").astype("string")], axis=1)
-    pset = deap_gp.setup_full_pset(samples)
+    pset = gp_pset.setup_full_pset(samples)
 
     initial = _efsm.initialisation["state"]
     configuration = _efsm.initialisation["registers"]
@@ -102,7 +115,7 @@ def efsm_to_json(_efsm: efsm.EFSM, filepath):
                     "origin": state_ids[origin],
                     "dest": state_ids[dest],
                     "label": ip_sig,
-                    "arity": input_arity,
+                    "arity": int(input_arity),
                     "guards": guards,
                     "outputs": outputs,
                     "updates": updates,

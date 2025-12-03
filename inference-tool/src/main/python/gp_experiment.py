@@ -2,6 +2,7 @@ import csv
 
 import deap_gp
 import efsm
+import gp_fitness
 import networkx as nx
 import numpy as np
 from generalise_helper import efsm_to_dot, efsm_to_json
@@ -32,7 +33,7 @@ def infer_output(
     args = samples[samples.columns[:-1]]
     outputs = samples[samples.columns[-1]]
 
-    correct = deap_gp.correct(best, samples, pset, [() for i in range(len(samples))])
+    correct = gp_fitness.correct(best, samples, pset, [() for i in range(len(samples))])
 
     if not correct:
         total_correct += 1
