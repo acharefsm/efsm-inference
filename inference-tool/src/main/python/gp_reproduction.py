@@ -91,6 +91,11 @@ def mutateByFuzz(individual, pset):
     return (individual,)
 
 
+def mutateByNegate(individual, pset):
+    individual.insert(0, pset.mapping["not_"])
+    return (individual,)
+
+
 def mutInsert(individual, pset):
     """Inserts a new branch at a random position in *individual*. The subtree
     at the chosen position is used as child node of the created subtree, in
@@ -135,6 +140,23 @@ def mutate(individual, pset, creator, MAX_MUTATIONS=3):
     mutations = 0
     newNode = creator.Individual(gp.PrimitiveTree.from_string(str(individual), pset))
     mutate = True
+    operators = [
+        # HVL SUB
+        gp.mutNodeReplacement,
+        # HLV DEL
+        lambda individual, pset: gp.mutShrink(individual),
+        # HVL INS
+        mutInsert,
+        # Reverse this.children if they have the same return type, e.g. (x - y) -> (y - x)
+        mutateByCommute,
+        # mutate by replacing a random node with a terminal
+        mutateByTerminal,
+        # fuzz a terminal
+        mutateByFuzz,
+    ]
+    if pset.ret == bool:
+        operators.append(mutateByNegate)
+
     while mutate and mutations < MAX_MUTATIONS:
         mutations += 1
         mutate = random.choice([True, False])
@@ -142,31 +164,7 @@ def mutate(individual, pset, creator, MAX_MUTATIONS=3):
             newNode = mutInsert(newNode, pset)[0]
             continue
 
-        op = random.choice(range(6))
-        if op == 0:
-            # HVL SUB
-            newNode = gp.mutNodeReplacement(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by substitution", newNode)
-        if op == 1:
-            # HLV DEL
-            newNode = gp.mutShrink(newNode)[0]
-            # logger.debug("Mutating", individual, "by deletion", newNode)
-        if op == 2:
-            # HVL INS
-            newNode = mutInsert(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by insertion", newNode)
-        if op == 3:
-            # Reverse this.children if they have the same return type, e.g. (x - y) -> (y - x)
-            newNode = mutateByCommute(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by commutation", newNode)
-        if op == 4:
-            # mutate by replacing a random node with a terminal
-            newNode = mutateByTerminal(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by terminal swap", newNode)
-        if op == 5:
-            # fuzz a terminal
-            newNode = mutateByFuzz(newNode, pset)[0]
-            # logger.debug("Mutating", individual, "by fuzzing", newNode)
+        newNode = random.choice(operators)(newNode, pset)[0]
     return (newNode,)
 
 
