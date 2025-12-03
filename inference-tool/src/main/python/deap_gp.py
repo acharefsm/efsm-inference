@@ -155,7 +155,7 @@ def run_gp(
 
     assert is_distinct(pop), "Population contains duplicated individuals."
     pop += toolbox.population(n=mu - len(pop))
-    # pop = [toolbox.simplify(i) for i in pop]
+    pop = [toolbox.simplify(i) for i in pop]
     # pop = [toolbox.repair(ind) for ind in pop]
     pop = sorted(pop, key=lambda x: x.fitness.values)
     print("pop", [str(x) for x in pop])
@@ -181,6 +181,7 @@ def run_gp(
             verbose=False,
         )
 
+        print("FINAL POP", [str(x) for x in pop])
         best = toolbox.simplify(toolbox.repair(pop[0]))
         best.fitness.values = toolbox.evaluate(best)
         return best
@@ -285,7 +286,7 @@ def eaMuPlusLambda(
     fitnesses = list(toolbox.map(toolbox.evaluate, invalid_ind))
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
-    population = sorted(population, key=lambda i: i.fitness.values + (toolbox.height(i),))[:mu]
+    population = sorted(population, key=lambda i: (i.fitness.values, toolbox.height(i)))[:mu]
     assert all(ind.fitness.valid for ind in population), "Invalid fitnesses in population after setting fitnesses!"
 
     if halloffame is not None:
@@ -329,7 +330,7 @@ def eaMuPlusLambda(
             ind.fitness.values = fit
 
         # Select the next generation population
-        population = sorted(population, key=lambda i: i.fitness.values + (toolbox.height(i),))[:mu]
+        population = sorted(population, key=lambda i: (i.fitness.values, toolbox.height(i)))[:mu]
         assert len(population) == mu, f"Population should contain {mu} individuals but contains {len(population)}."
         # Update the statistics with the new population
         # record = stats.compile(population) if stats is not None else {}
@@ -390,7 +391,7 @@ def shortcut_latent(points: pd.DataFrame) -> bool:
 
 
 if __name__ == "__main__":
-    train = "test-guard.csv" if not len(sys.argv) > 1 else sys.argv[1]
+    train = "test-guard2.csv" if not len(sys.argv) > 1 else sys.argv[1]
 
     points = pd.read_csv(train)
 
@@ -400,6 +401,6 @@ if __name__ == "__main__":
     pset = setup_pset(points)
     print(pset.mapping)
 
-    best = run_gp(1, points, pset, random_seed=3, seeds=[], mu=10, lamb=5, ngen=20, max_init=2)
+    best = run_gp(1, points, pset, random_seed=3, seeds=[], mu=10, lamb=5, ngen=100, max_init=2)
     logger.debug(f"\nbest is {best}:{round(best.fitness.values[0],2)}")
     logger.debug(best.height)

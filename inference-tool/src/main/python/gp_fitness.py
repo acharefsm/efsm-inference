@@ -200,6 +200,75 @@ def evaluate_candidate(
     return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
 
 
+def fitness_bool(individual, points, pset):
+    expected = points["expected"]
+    args = points[[c for c in points.columns if c != "expected"]]
+    match individual[0].name:
+        case "True":
+            return float("inf")
+        case "False":
+            return float("inf")
+        case "and_":
+            # Sum of the two child fitnesses, since both have to be true to satisfy the and
+            c1, c2 = get_children(individual)
+            # return fitness_bool(c1, points, pset) + fitness_bool(c2, points, pset)
+            return max(fitness_bool(c1, points, pset), fitness_bool(c2, points, pset))
+        case "or_":
+            # Return the minimal child fitness, since only one must be true to satisfy the or
+            c1, c2 = get_children(individual)
+            return min(fitness_bool(c1, points, pset), fitness_bool(c2, points, pset))
+        case "not_":
+            # Return the fitness of the child, since negation doesn't really change the utility of the guard
+            (c1,) = get_children(individual)
+            return fitness_bool(c1, points, pset)
+        case "eq":
+            # Return the sum of the differences between individuals that are supposed to be equal but are not
+            # plus one for every pair that were equal but shouldn't have been
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            distances = args.apply(lambda row: c1(**row), axis=1) - args.apply(lambda row: c2(**row), axis=1)
+            return distances.loc[expected].abs().sum() + (~distances.loc[~expected].astype(bool)).astype(int).sum()
+        case "ne":
+            # Inverse of eq
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            distances = args.apply(lambda row: c1(**row), axis=1) - args.apply(lambda row: c2(**row), axis=1)
+            return distances.loc[~expected].abs().sum() + (~distances.loc[expected].astype(bool)).astype(int).sum()
+        case "gt":
+            # Return the sum of the differences between individuals that are supposed to be > but are not
+            # plus the sum of the differences between individuals that are not supposed to be > but are
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            e1 = args.apply(lambda row: c1(**row), axis=1)
+            e2 = args.apply(lambda row: c2(**row), axis=1)
+            return ((e2 - e1) + 1).loc[expected & (e1 <= e2)].sum() + ((e1 - e2) + 1).loc[~expected & (e1 > e2)].sum()
+        case "ge":
+            # Return the sum of the differences between individuals that are supposed to be >= but are not
+            # plus the sum of the differences between individuals that are not supposed to be >= but are
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            e1 = args.apply(lambda row: c1(**row), axis=1)
+            e2 = args.apply(lambda row: c2(**row), axis=1)
+            print("=" * 80)
+            print(individual)
+            print(pd.concat([points, e1 >= e2], axis=1))
+            print(((e2 - e1) + 1).loc[~expected])
+            print("=" * 80)
+            return ((e2 - e1)).loc[expected & (e1 < e2)].sum() + ((e1 - e2) + 1).loc[~expected & (e1 >= e2)].sum()
+        case "lt":
+            # Return the sum of the differences between individuals that are supposed to be < but are not
+            # plus the sum of the differences between individuals that are not supposed to be < but are
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            e1 = args.apply(lambda row: c1(**row), axis=1)
+            e2 = args.apply(lambda row: c2(**row), axis=1)
+            return ((e1 - e2) + 1).loc[expected & (e1 >= e2)].sum() + ((e2 - e1) + 1).loc[~expected & (e1 < e2)].sum()
+        case "le":
+            # Return the sum of the differences between individuals that are supposed to be <= but are not
+            # plus the sum of the differences between individuals that are not supposed to be <= but are
+            c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
+            e1 = args.apply(lambda row: c1(**row), axis=1)
+            e2 = args.apply(lambda row: c2(**row), axis=1)
+            return ((e1 - e2)).loc[expected & (e1 > e2)].sum() + ((e2 - e1) + 1).loc[~expected & (e1 <= e2)].sum()
+        case _:
+            raise ValueError(f"Could not evaluate {individual}")
+
+
 def fitness(
     individual,
     points: pd.DataFrame,
@@ -224,6 +293,8 @@ def fitness(
     """
     if individual in bad:
         return (float("inf"),)
+    if pset.ret == bool:
+        return (fitness_bool(individual, points, pset),)
     try:
         ind = repair(individual, points, pset, creator)
 
