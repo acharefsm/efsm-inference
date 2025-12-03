@@ -81,6 +81,7 @@ def setup_full_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     pset.addPrimitive(operator.add, 2)
     pset.addPrimitive(operator.sub, 2)
     pset.addPrimitive(operator.mul, 2)
+    pset.addPrimitive(operator.__ne__, 2)
     pset.addPrimitive(operator.__le__, 2)
     pset.addPrimitive(operator.__ge__, 2)
     pset.addPrimitive(operator.__lt__, 2)
@@ -234,12 +235,13 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     elif output_type == bool:
         pset.addPrimitive(operator.__le__, [int, int], bool, weight=2)
         pset.addPrimitive(operator.__ge__, [int, int], bool, weight=2)
+        pset.addPrimitive(operator.__ne__, [int, int], bool, weight=2)
         pset.addPrimitive(operator.__lt__, [int, int], bool, weight=2)
         pset.addPrimitive(operator.__gt__, [int, int], bool, weight=2)
         pset.addPrimitive(operator.__eq__, [int, int], bool, weight=2)
         pset.addPrimitive(operator.__and__, [bool, bool], bool, weight=1)
         pset.addPrimitive(operator.__or__, [bool, bool], bool, weight=1)
-        pset.addPrimitive(operator.__not__, [bool], bool, weight=2)
+        pset.addPrimitive(operator.__not__, [bool], bool, weight=1)
         if int in datatypes:
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)

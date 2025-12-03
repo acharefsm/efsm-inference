@@ -135,8 +135,9 @@ def run_gp(
             logger.debug(f"Trying to add {seed}")
             try:
                 individual = creator.Individual(gp.PrimitiveTree.from_string(seed, pset))
-                logger.debug(f"Fitness of {individual} is {fitness(individual, points, pset, bad, latent_vars_rows)}")
-                if fitness(individual, points, pset, bad, latent_vars_rows) == (0,):
+                individual.fitness.values = toolbox.evaluate(individual)
+                logger.debug(f"Fitness of {individual} is {individual.fitness.values[0]}")
+                if individual.fitness.values[0] == 0:
                     logger.debug("Found perfect individual!")
                     return individual
                 pop.append(individual)

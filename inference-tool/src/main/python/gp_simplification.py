@@ -3,10 +3,14 @@ This module contains the z3 simplification code.
 Long term, it would be nice to switch to sympy.
 """
 
+import logging
+
 import networkx as nx
 import numpy as np
 import z3
 from deap import gp
+
+logger = logging.getLogger(__name__)
 
 
 def to_z3(tree, labels, types):
@@ -36,6 +40,9 @@ def to_z3(tree, labels, types):
         if labels[root] == "eq":
             c1, c2 = nested
             return c1 == c2
+        if labels[root] == "ne":
+            c1, c2 = nested
+            return c1 != c2
         if labels[root] == "and_":
             c1, c2 = nested
             return z3.And(c1, c2)
