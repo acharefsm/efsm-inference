@@ -3,20 +3,20 @@ This module implements the GP fitness function and auxilliary functions.
 """
 
 import logging
-import traceback
 import re
+import traceback
 from itertools import product
 from math import isclose, sqrt
 from numbers import Number
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from deap import gp
 from enchant.utils import levenshtein
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from gp_pset import is_null
 from gp_repair import repair
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 
 logger = logging.getLogger("main")
 
@@ -361,61 +361,24 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
             logger.debug(f"Problem executing {individual} with arguments\n{row}")
     return True
 
-op_map = {
-    'eq': operator.eq,
-    'ne': operator.ne,
-    'lt': operator.lt,
-    'gt': operator.gt,
-    'le': operator.le,
-    'ge': operator.ge,
-}
 
-def prefix_to_infix(expr):
-    """
-    Convert a simple DEAP-style prefix expression like 'le(i0,r1)'
-    into an infix expression like 'i0 <= r1'.
-    Only works for simple operations.
-    """
-    expr = expr.replace(" ", "")
-    
-    match = re.match(r"(\w+)\(\s*(\w+)\s*,\s*(\w+)\s*\)", expr)
-    if not match:
-        raise ValueError(f"Expression '{expr}' not recognized")
-    
-    prefix_op, op1, op2 = match.groups()
-    
-    if prefix_op not in op_map:
-        raise ValueError(f"Unknown operator '{prefix_op}'")
-    else:
-        infix_op = op_map[prefix_op]
-
-    return (op1, prefix_op, op2, infix_op)
-
-def fitness_DT(individual, points: pd.DataFrame, pset):
+def fitness_dt(individual, points: pd.DataFrame, pset):
     # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
-    listOfExprs = []
-    for simple_expr in individual:
-        op1, prefix_op, op2, infix_op = prefix_to_infix(str(simple_expr))
-        name = op1 + "_" + prefix_op + "_" + op2
-        points[name] = infix_op(points[op1], points[op2]).astype(int)
-        listOfExprs.append(name)
 
-    X = points[listOfExprs]
+    expressions = {}
+    for simple_expr in individual:
+        f = gp.compile(simple_expr, pset)
+        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
+    expressions = pd.DataFrame(expressions)
+
+    X = expressions
     y = points["expected"]
-    
+
     clf = DecisionTreeClassifier(max_depth=4, random_state=0)
     clf.fit(X, y)
 
-    print("\nDecision Tree Rules:")
-    print(export_text(clf, feature_names=list(X.columns)))
+    predicted_outcome = clf.predict(expressions)
 
-    points["predicted_outcome"] = clf.predict(points[listOfExprs])
+    diff = points["expected"] != predicted_outcome
 
-    print("\nPoints with new columns")
-    print(points)
-
-    diff = points["expected"] != points["predicted_outcome"]
-
-    print(f"Number of differences: {diff.sum()}")
-
-    return (diff.sum,)
+    return (diff.sum(),)

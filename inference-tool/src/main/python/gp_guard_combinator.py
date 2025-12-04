@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import z3
 from deap import algorithms, base, creator, gp, tools
+from gp_fitness import fitness_dt
 from gp_pset import setup_pset, setup_simple_pset
 from gp_repair import repair
 from gp_reproduction import genHalfAndHalf, mutateByCommute, mutateByFuzz, mutateByNegate, mutateByTerminal, mutInsert
@@ -44,8 +45,6 @@ def mutate(individual, pset, creator, MAX_MUTATIONS=3):
         # fuzz a terminal
         mutateByFuzz,
     ]
-    if pset.ret == bool:
-        operators.append(mutateByNegate)
 
     while mutate and mutations < MAX_MUTATIONS:
         mutations += 1
@@ -83,7 +82,7 @@ def run_gp(
 
     toolbox = base.Toolbox()
 
-    toolbox.register("evaluate", fitness, pset=pset, points=points)
+    toolbox.register("evaluate", fitness_dt, pset=pset, points=points)
     toolbox.register("clause", generate, pset=simple_pset, min_=1, max_=max_clause_depth, creator=creator)
     toolbox.register("complex_exp", tools.initRepeat, list, toolbox.clause, n=max_clauses)
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.complex_exp)
@@ -92,11 +91,14 @@ def run_gp(
     toolbox.register("mate", tools.cxOnePoint)
     toolbox.register("mutate", list_mutate, pset=simple_pset, creator=creator)
 
+    ind = toolbox.individual()
+
     pop, _ = algorithms.eaMuPlusLambda(toolbox.population(mu), toolbox, mu, lambda_, cxpb, mutpb, ngen)
     return max(pop, key=lambda ind: ind.fitness.values)
 
 
 if __name__ == "__main__":
     points = pd.read_csv("test-guard2.csv")
-    best = run_gp(points, 10)
+    best = run_gp(points, 100)
     print([str(x) for x in best])
+    print(best.fitness.values)

@@ -239,7 +239,6 @@ def setup_simple_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
         pset.addPrimitive(operator.__lt__, [int, int], bool, weight=1)
         pset.addPrimitive(operator.__gt__, [int, int], bool, weight=1)
         pset.addPrimitive(operator.__eq__, [int, int], bool, weight=1)
-        pset.addPrimitive(operator.__not__, [bool], bool, weight=1)
         if int in datatypes:
             pset.addPrimitive(operator.add, [int, int], int)
             pset.addPrimitive(operator.sub, [int, int], int)
