@@ -4,14 +4,17 @@ This module implements the GP fitness function and auxilliary functions.
 
 import logging
 import traceback
+import re
 from itertools import product
 from math import isclose, sqrt
 from numbers import Number
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from deap import gp
 from enchant.utils import levenshtein
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from gp_pset import is_null
 from gp_repair import repair
 
@@ -245,11 +248,6 @@ def fitness_bool(individual, points, pset):
             c1, c2 = [gp.compile(c, pset) for c in get_children(individual)]
             e1 = args.apply(lambda row: c1(**row), axis=1)
             e2 = args.apply(lambda row: c2(**row), axis=1)
-            print("=" * 80)
-            print(individual)
-            print(pd.concat([points, e1 >= e2], axis=1))
-            print(((e2 - e1) + 1).loc[~expected])
-            print("=" * 80)
             return ((e2 - e1)).loc[expected & (e1 < e2)].sum() + ((e1 - e2) + 1).loc[~expected & (e1 >= e2)].sum()
         case "lt":
             # Return the sum of the differences between individuals that are supposed to be < but are not
@@ -294,6 +292,8 @@ def fitness(
     if individual in bad:
         return (float("inf"),)
     if pset.ret == bool:
+        if "guard" in points.columns and "expected" not in points.columns:
+            points.rename(columns={"guard": "expected"}, inplace=True)
         return (fitness_bool(individual, points, pset),)
     try:
         ind = repair(individual, points, pset, creator)
@@ -360,3 +360,62 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
         except:
             logger.debug(f"Problem executing {individual} with arguments\n{row}")
     return True
+
+op_map = {
+    'eq': operator.eq,
+    'ne': operator.ne,
+    'lt': operator.lt,
+    'gt': operator.gt,
+    'le': operator.le,
+    'ge': operator.ge,
+}
+
+def prefix_to_infix(expr):
+    """
+    Convert a simple DEAP-style prefix expression like 'le(i0,r1)'
+    into an infix expression like 'i0 <= r1'.
+    Only works for simple operations.
+    """
+    expr = expr.replace(" ", "")
+    
+    match = re.match(r"(\w+)\(\s*(\w+)\s*,\s*(\w+)\s*\)", expr)
+    if not match:
+        raise ValueError(f"Expression '{expr}' not recognized")
+    
+    prefix_op, op1, op2 = match.groups()
+    
+    if prefix_op not in op_map:
+        raise ValueError(f"Unknown operator '{prefix_op}'")
+    else:
+        infix_op = op_map[prefix_op]
+
+    return (op1, prefix_op, op2, infix_op)
+
+def fitness_DT(individual, points: pd.DataFrame, pset):
+    # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
+    listOfExprs = []
+    for simple_expr in individual:
+        op1, prefix_op, op2, infix_op = prefix_to_infix(str(simple_expr))
+        name = op1 + "_" + prefix_op + "_" + op2
+        points[name] = infix_op(points[op1], points[op2]).astype(int)
+        listOfExprs.append(name)
+
+    X = points[listOfExprs]
+    y = points["expected"]
+    
+    clf = DecisionTreeClassifier(max_depth=4, random_state=0)
+    clf.fit(X, y)
+
+    print("\nDecision Tree Rules:")
+    print(export_text(clf, feature_names=list(X.columns)))
+
+    points["predicted_outcome"] = clf.predict(points[listOfExprs])
+
+    print("\nPoints with new columns")
+    print(points)
+
+    diff = points["expected"] != points["predicted_outcome"]
+
+    print(f"Number of differences: {diff.sum()}")
+
+    return (diff.sum,)

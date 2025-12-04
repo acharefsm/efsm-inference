@@ -5,10 +5,13 @@ import efsm
 import gp_fitness
 import networkx as nx
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from generalise_helper import efsm_to_dot, efsm_to_json
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.validation import check_is_fitted
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 
 
 def infer_output(
@@ -268,95 +271,97 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
     except Exception:
         print("GridSearch finished. Inspect experiment_results.csv for per-configuration metrics.")
 
-    # data_s1_s0 = [
-    #     [1234, 1000, 2, 2345, True],
-    #     [2345, -500, 2, -9999, True],
-    #     [2345, -500, 2, 1234, True],
-    #     [1234, 1000, 0, -9999, False],
-    #     [1234, 1000, 0, 2345, False],
-    #     [1234, 1000, 1, -9999, False],
-    #     [2345, -500, 0, 1234, False],
-    #     [2345, -500, 1, 1234, False],
-    #     [1234, 1000, 1, 2345, False],
-    #     [2345, -500, 1, -9999, False],
-    #     [2345, -500, 0, -9999, False],
-    #     [1234, 1000, 1, 1234, False],
-    #     [1234, 1000, 0, 1234, False],
-    #     [2345, -500, 0, 2345, False],
-    #     [2345, -500, 2, 2345, False],
-    #     [2345, -500, 1, 2345, False],
-    #     [1234, 1000, 2, 1234, False]
-    # ]
-    # df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s0["target"] = "s1->s0"
+    data_s1_s0 = [
+        [1234, 1000, 2, 2345, True],
+        [2345, -500, 2, -9999, True],
+        [2345, -500, 2, 1234, True],
+        [1234, 1000, 0, -9999, False],
+        [1234, 1000, 0, 2345, False],
+        [1234, 1000, 1, -9999, False],
+        [2345, -500, 0, 1234, False],
+        [2345, -500, 1, 1234, False],
+        [1234, 1000, 1, 2345, False],
+        [2345, -500, 1, -9999, False],
+        [2345, -500, 0, -9999, False],
+        [1234, 1000, 1, 1234, False],
+        [1234, 1000, 0, 1234, False],
+        [2345, -500, 0, 2345, False],
+        [2345, -500, 2, 2345, False],
+        [2345, -500, 1, 2345, False],
+        [1234, 1000, 2, 1234, False]
+    ]
+    df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s0["target"] = "s1->s0"
 
-    # data_s1_s2 = [
-    #     [1234, 1000, 2, 2345, False],
-    #     [2345, -500, 2, -9999, False],
-    #     [2345, -500, 2, 1234, False],
-    #     [1234, 1000, 0, -9999, False],
-    #     [1234, 1000, 0, 2345, False],
-    #     [1234, 1000, 1, -9999, False],
-    #     [2345, -500, 0, 1234, False],
-    #     [2345, -500, 1, 1234, False],
-    #     [1234, 1000, 1, 2345, False],
-    #     [2345, -500, 1, -9999, False],
-    #     [2345, -500, 0, -9999, False],
-    #     [1234, 1000, 1, 1234, True],
-    #     [1234, 1000, 0, 1234, True],
-    #     [2345, -500, 0, 2345, True],
-    #     [2345, -500, 2, 2345, True],
-    #     [2345, -500, 1, 2345, True],
-    #     [1234, 1000, 2, 1234, True]
-    # ]
-    # df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s2["target"] = "s1->s2"
+    data_s1_s2 = [
+        [1234, 1000, 2, 2345, False],
+        [2345, -500, 2, -9999, False],
+        [2345, -500, 2, 1234, False],
+        [1234, 1000, 0, -9999, False],
+        [1234, 1000, 0, 2345, False],
+        [1234, 1000, 1, -9999, False],
+        [2345, -500, 0, 1234, False],
+        [2345, -500, 1, 1234, False],
+        [1234, 1000, 1, 2345, False],
+        [2345, -500, 1, -9999, False],
+        [2345, -500, 0, -9999, False],
+        [1234, 1000, 1, 1234, True],
+        [1234, 1000, 0, 1234, True],
+        [2345, -500, 0, 2345, True],
+        [2345, -500, 2, 2345, True],
+        [2345, -500, 1, 2345, True],
+        [1234, 1000, 2, 1234, True]
+    ]
+    df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s2["target"] = "s1->s2"
 
-    # data_s1_s1 = [
-    #     [1234, 1000, 2, 2345, False],
-    #     [2345, -500, 2, -9999, False],
-    #     [2345, -500, 2, 1234, False],
-    #     [1234, 1000, 0, -9999, True],
-    #     [1234, 1000, 0, 2345, True],
-    #     [1234, 1000, 1, -9999, True],
-    #     [2345, -500, 0, 1234, True],
-    #     [2345, -500, 1, 1234, True],
-    #     [1234, 1000, 1, 2345, True],
-    #     [2345, -500, 1, -9999, True],
-    #     [2345, -500, 0, -9999, True],
-    #     [1234, 1000, 1, 1234, False],
-    #     [1234, 1000, 0, 1234, False],
-    #     [2345, -500, 0, 2345, False],
-    #     [2345, -500, 2, 2345, False],
-    #     [2345, -500, 1, 2345, False],
-    #     [1234, 1000, 2, 1234, False]
-    # ]
-    # df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s1["target"] = "s1->s1"
+    data_s1_s1 = [
+        [1234, 1000, 2, 2345, False],
+        [2345, -500, 2, -9999, False],
+        [2345, -500, 2, 1234, False],
+        [1234, 1000, 0, -9999, True],
+        [1234, 1000, 0, 2345, True],
+        [1234, 1000, 1, -9999, True],
+        [2345, -500, 0, 1234, True],
+        [2345, -500, 1, 1234, True],
+        [1234, 1000, 1, 2345, True],
+        [2345, -500, 1, -9999, True],
+        [2345, -500, 0, -9999, True],
+        [1234, 1000, 1, 1234, False],
+        [1234, 1000, 0, 1234, False],
+        [2345, -500, 0, 2345, False],
+        [2345, -500, 2, 2345, False],
+        [2345, -500, 1, 2345, False],
+        [1234, 1000, 2, 1234, False]
+    ]
+    df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s1["target"] = "s1->s1"
 
-    # df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
+    df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
 
-    # train_data = df_all[df_all["guard"] == True].copy()
+    train_data = df_all[df_all["guard"] == True].copy()
 
-    # for df in [df_all, train_data]:
-    #     df["i0_eq_r0"] = (df["i0"] == df["r0"]).astype(int)
-    #     df["r2_ge_2"] = (df["r2"] >= 2).astype(int)
-    #     df["i0_is_neg"] = (df["i0"] < 0).astype(int)
+    for df in [df_all, train_data]:
+        df["i0_eq_r0"] = (df["i0"] == df["r0"]).astype(int)
+        df["r2_ge_2"] = (df["r2"] >= 2).astype(int)
+        df["i0_is_neg"] = (df["i0"] < 0).astype(int)
 
-    # X = train_data[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]]
-    # y = train_data["target"]
+    X = train_data[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]]
+    y = train_data["target"]
 
-    # clf = DecisionTreeClassifier(max_depth=4, random_state=42)
-    # clf.fit(X, y)
+    print(df)
 
-    # print("\nDecision Tree Rules:")
-    # print(export_text(clf, feature_names=list(X.columns)))
+    clf = DecisionTreeClassifier(max_depth=4, random_state=42)
+    clf.fit(X, y)
 
-    # df_all["predicted_transition"] = clf.predict(df_all[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]])
+    print("\nDecision Tree Rules:")
+    print(export_text(clf, feature_names=list(X.columns)))
 
-    # print("\nPredicted transitions:")
-    # print(df_all[["r0", "r1", "r2", "i0", "guard", "target", "predicted_transition"]])
+    df_all["predicted_transition"] = clf.predict(df_all[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]])
 
-    # plt.figure(figsize=(10,6))
-    # plot_tree(clf, feature_names=list(X.columns), class_names=clf.classes_, filled=True, rounded=True)
-    # plt.show()
+    print("\nPredicted transitions:")
+    print(df_all[["r0", "r1", "r2", "i0", "guard", "target", "predicted_transition"]])
+
+    plt.figure(figsize=(10,6))
+    plot_tree(clf, feature_names=list(X.columns), class_names=clf.classes_, filled=True, rounded=True)
+    plt.show()
