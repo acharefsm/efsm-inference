@@ -6,3 +6,5 @@ z3-solver==4.8.9.0
 sympy==1.12
 numpy==1.26.2
 pydot==3.0.4
+patsy
+statsmodels

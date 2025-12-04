@@ -174,6 +174,87 @@ class PrimitiveSetTyped(gp.PrimitiveSetTyped):
                 dict_[type_].append(prim)
 
 
+def setup_simple_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
+    """
+    Set up and return the primitive set. Currently supported operators are +, -, *, and /.
+
+    :param points: The sample function executions with expected outputs.
+    N.B. The expected output MUST be the last column in the dataframe.
+    N.B. Strings will, by default, appear as objects, so will be indistinguishable from latent registers.
+    They MUST be converted explicitly using `.astype('string')` before calling this method.
+    :type points: pd.DataFrame
+    :return: The primitive set.
+    :rtype: gp.PrimitiveSet
+    """
+
+    generators = {
+        np.dtype("float64"): float,
+        np.dtype("int64"): int,
+        np.dtype("int32"): int,
+        np.dtype("bool"): bool,
+        np.dtype("O"): str,
+        pd.Int64Dtype(): int,
+        pd.StringDtype(): str,
+    }
+    output_type = generators[points.dtypes[points.columns[-1]]]
+    # generators[np.dtype("O")] = output_type
+
+    assert output_type in {int, float, str, bool}, f"Bad output type {output_type}"
+
+    types = points.dtypes.to_dict()
+    names = list(types)
+    datatypes = [generators[types[v]] for v in names]
+    assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
+
+    pset = PrimitiveSetTyped("MAIN", datatypes[:-1], output_type)
+
+    rename = {f"ARG{i}": col for i, col in enumerate(names)}
+    pset.renameArguments(**rename)
+
+    assert all([type(t.value) in {int, str, float} for t in pset.mapping.values() if hasattr(t, "value")]), "Bad type"
+
+    # Add literal terminals
+    for v, typ in zip(names, datatypes):
+        assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
+        term_set = set(points[v])
+        # print("----------", v, typ)
+        for term in term_set:
+            if not is_null(term):
+                pset.addTerminal(typ(term), typ)
+                # print(typ(term))
+
+    types = [(t.value, type(t.value)) for t in pset.mapping.values() if hasattr(t, "value")]
+    assert all(
+        [type(t.value) in {int, str, float, bool} for t in pset.mapping.values() if hasattr(t, "value")]
+    ), f"Bad type: {types}"
+
+    if output_type == int:
+        pset.addPrimitive(operator.add, [int, int], int)
+        pset.addPrimitive(operator.sub, [int, int], int)
+        pset.addPrimitive(operator.mul, [int, int], int)
+    elif output_type == bool:
+        pset.addPrimitive(operator.__le__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__ge__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__ne__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__lt__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__gt__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__eq__, [int, int], bool, weight=1)
+        pset.addPrimitive(operator.__not__, [bool], bool, weight=1)
+        if int in datatypes:
+            pset.addPrimitive(operator.add, [int, int], int)
+            pset.addPrimitive(operator.sub, [int, int], int)
+            pset.addPrimitive(operator.mul, [int, int], int)
+    elif output_type == str:
+        pass
+    else:
+        raise ValueError(f"Invalid output type {output_type}.")
+
+    assert all(
+        [type(t.value) in {int, str, float, bool} for t in pset.mapping.values() if hasattr(t, "value")]
+    ), "Bad type"
+    return pset
+
+
 def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     """
     Set up and return the primitive set. Currently supported operators are +, -, *, and /.
