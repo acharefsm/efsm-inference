@@ -3,20 +3,18 @@ This module implements the GP fitness function and auxilliary functions.
 """
 
 import logging
-import re
 import traceback
 from itertools import product
 from math import isclose, sqrt
 from numbers import Number
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from deap import gp
 from enchant.utils import levenshtein
 from gp_pset import is_null
 from gp_repair import repair
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+from sklearn.tree import DecisionTreeClassifier
 
 logger = logging.getLogger("main")
 
@@ -362,7 +360,7 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
     return True
 
 
-def fitness_dt(individual, points: pd.DataFrame, pset):
+def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
     # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
 
     expressions = {}
@@ -374,7 +372,7 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     X = expressions
     y = points["expected"]
 
-    clf = DecisionTreeClassifier(max_depth=4, random_state=0)
+    clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
 
     predicted_outcome = clf.predict(expressions)
@@ -382,3 +380,21 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     diff = points["expected"] == predicted_outcome
 
     return (diff.sum(),)
+
+
+def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
+    expressions = {}
+    for simple_expr in individual:
+        f = gp.compile(simple_expr, pset)
+        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
+    expressions = pd.DataFrame(expressions)
+
+    X = expressions
+    y = points["expected"]
+
+    clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
+    clf.fit(X, y)
+
+    predicted_outcome = clf.predict(expressions)
+
+    return (points["expected"] == predicted_outcome).all()
