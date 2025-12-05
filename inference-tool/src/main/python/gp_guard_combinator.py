@@ -20,13 +20,6 @@ creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 
-def fitness(individual, pset, points):
-    """
-    This is a stub. Wait for Luca's implementation.
-    """
-    return (1,)
-
-
 def mutate(individual, pset, creator, MAX_MUTATIONS=3):
     mutations = 0
     newNode = gp.PrimitiveTree(gp.PrimitiveTree.from_string(str(individual), pset))
@@ -76,6 +69,7 @@ def run_gp(
     max_clause_depth: int = 4,
     cxpb=0.5,
     mutpb=0.5,
+    seeds=None,
 ):
     pset = setup_pset(points)
     simple_pset = setup_simple_pset(points)
@@ -93,12 +87,23 @@ def run_gp(
 
     ind = toolbox.individual()
 
-    pop, _ = algorithms.eaMuPlusLambda(toolbox.population(mu), toolbox, mu, lambda_, cxpb, mutpb, ngen)
+    pop = toolbox.population(mu)
+
+    if seeds is not None:
+        for seed in seeds:
+            individual = creator.Individual([gp.PrimitiveTree.from_string(clause, pset) for clause in seed])
+            individual.fitness.values = toolbox.evaluate(individual)
+            if individual.fitness.values[0] == 0:
+                return individual
+            pop.append(individual)
+
+    pop, _ = algorithms.eaMuPlusLambda(pop, toolbox, mu, lambda_, cxpb, mutpb, ngen)
     return max(pop, key=lambda ind: ind.fitness.values)
 
 
 if __name__ == "__main__":
     points = pd.read_csv("test-guard2.csv")
-    best = run_gp(points, 100)
+    # best = run_gp(points, 100, seeds=[["ne(i0, r0)", "ge(r2, 2)"]])
+    best = run_gp(points, 100, seeds=[])
     print([str(x) for x in best])
     print(best.fitness.values)

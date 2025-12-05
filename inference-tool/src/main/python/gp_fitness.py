@@ -379,6 +379,6 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
 
     predicted_outcome = clf.predict(expressions)
 
-    diff = points["expected"] != predicted_outcome
+    diff = points["expected"] == predicted_outcome
 
     return (diff.sum(),)
