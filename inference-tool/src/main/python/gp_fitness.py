@@ -360,13 +360,14 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
     return True
 
 
-def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
+def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
     # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
 
     expressions = {}
     for simple_expr in individual:
-        f = gp.compile(simple_expr, pset)
-        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
+        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(
+            lambda row: gp.compile(simple_expr, pset)(**row), axis=1
+        )
     expressions = pd.DataFrame(expressions)
 
     X = expressions
@@ -374,8 +375,11 @@ def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
+    return clf.predict(expressions)
 
-    predicted_outcome = clf.predict(expressions)
+
+def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
+    predicted_outcome = predict_dt(individual, points, pset, random_state)
 
     diff = points["expected"] == predicted_outcome
 
@@ -383,18 +387,6 @@ def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
 
 def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
-    expressions = {}
-    for simple_expr in individual:
-        f = gp.compile(simple_expr, pset)
-        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
-    expressions = pd.DataFrame(expressions)
-
-    X = expressions
-    y = points["expected"]
-
-    clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
-    clf.fit(X, y)
-
-    predicted_outcome = clf.predict(expressions)
+    predicted_outcome = predict_dt(individual, points, pset, random_state)
 
     return (points["expected"] == predicted_outcome).all()
