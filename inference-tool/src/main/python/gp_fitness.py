@@ -361,12 +361,65 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
             logger.debug(f"Problem executing {individual} with arguments\n{row}")
     return True
 
+reverse_op = {
+    'eq' : 'ne',
+    'ne' : 'eq',
+    'lt' : 'ge',
+    'gt' : 'le',
+    'le' : 'gt',
+    'ge' : 'lt',
+}
+
+def tree_to_guard(tree, feature_names):
+    def reverse(operation):
+        return reverse_op[operation[:2]] + operation[2:]
+        
+    def make_list(node):
+        if tree.feature[node] == -2:  # leaf
+            outcome = int(tree.value[node][0].argmax())
+            return outcome
+        else:
+            return [[reverse(feature_names[tree.feature[node]]), make_list(tree.children_left[node])], [feature_names[tree.feature[node]], make_list(tree.children_right[node])]]
+
+    print(make_list(0))
+
+    def find_paths(mylist):
+        child1, child2 = mylist
+        paths = []
+
+        if isinstance(child1, list) and isinstance(child2, list):
+            child1paths = find_paths(child1)
+            for path in child1paths:
+                paths.append(path)
+            child2paths = find_paths(child2)
+            for path in child2paths:
+                paths.append(path)
+        
+        if isinstance(child1, str) and isinstance(child2, list):
+            child2paths = find_paths(child2)
+            for path in child2paths:
+                paths.append(child1 + path)
+
+        if isinstance(child1, str) and isinstance(child2, int) and child2 == 1:
+            paths.append(child1)
+        
+        return paths
+    
+    if (tree.feature[0] == -2):
+        return []
+    
+    print(find_paths(make_list(0)))
+        
+    return make_list(0)
+
+
 
 def fitness_dt(individual, points: pd.DataFrame, pset):
     # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
 
     expressions = {}
     for simple_expr in individual:
+        print(simple_expr)
         f = gp.compile(simple_expr, pset)
         expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
     expressions = pd.DataFrame(expressions)
@@ -377,8 +430,19 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     clf = DecisionTreeClassifier(max_depth=4, random_state=0)
     clf.fit(X, y)
 
+    print("\nDecision Tree Rules:")
+    print(export_text(clf, feature_names=list(X.columns)))
+
     predicted_outcome = clf.predict(expressions)
 
+    print("\nPredicted transitions:")
+
     diff = points["expected"] == predicted_outcome
+
+    print(diff)
+
+    print(clf.classes_)
+
+    tree_to_guard(clf.tree_, list(X.columns))
 
     return (diff.sum(),)
