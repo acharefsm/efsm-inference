@@ -359,25 +359,30 @@ def correct(individual, points: pd.DataFrame, pset: gp.PrimitiveSet, latent_vars
             logger.debug(f"Problem executing {individual} with arguments\n{row}")
     return True
 
+
 reverse_op = {
-    'eq' : 'ne',
-    'ne' : 'eq',
-    'lt' : 'ge',
-    'gt' : 'le',
-    'le' : 'gt',
-    'ge' : 'lt',
+    "eq": "ne",
+    "ne": "eq",
+    "lt": "ge",
+    "gt": "le",
+    "le": "gt",
+    "ge": "lt",
 }
+
 
 def tree_to_guard(tree, feature_names):
     def reverse(operation):
         return reverse_op[operation[:2]] + operation[2:]
-        
+
     def make_list(node):
         if tree.feature[node] == -2:  # leaf
             outcome = int(tree.value[node][0].argmax())
             return outcome
         else:
-            return [[reverse(feature_names[tree.feature[node]]), make_list(tree.children_left[node])], [feature_names[tree.feature[node]], make_list(tree.children_right[node])]]
+            return [
+                [reverse(feature_names[tree.feature[node]]), make_list(tree.children_left[node])],
+                [feature_names[tree.feature[node]], make_list(tree.children_right[node])],
+            ]
 
     print(make_list(0))
 
@@ -392,7 +397,7 @@ def tree_to_guard(tree, feature_names):
             child2paths = find_paths(child2)
             for path in child2paths:
                 paths.append(path)
-        
+
         if isinstance(child1, str) and isinstance(child2, list):
             child2paths = find_paths(child2)
             for path in child2paths:
@@ -400,19 +405,18 @@ def tree_to_guard(tree, feature_names):
 
         if isinstance(child1, str) and isinstance(child2, int) and child2 == 1:
             paths.append(child1)
-        
+
         return paths
-    
-    if (tree.feature[0] == -2):
+
+    if tree.feature[0] == -2:
         return []
-    
+
     print(find_paths(make_list(0)))
-        
+
     return make_list(0)
 
 
-
-def fitness_dt(individual, points: pd.DataFrame, pset):
+def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
     # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
 
     expressions = {}
@@ -432,19 +436,24 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     clf.fit(X, y)
 
     print("\nDecision Tree Rules:")
-    print(export_text(clf, feature_names=list(X.columns)))
+    # print(export_text(clf, feature_names=list(X.columns)))
 
-    predicted_outcome = clf.predict(expressions)
+    print(clf.classes_)
+
+    tree_to_guard(clf.tree_, list(X.columns))
+    return clf.predict(expressions)
+
+
+def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
+    # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
+
+    predicted_outcome = predict_dt(individual, points, pset, random_state)
 
     print("\nPredicted transitions:")
 
     diff = points["expected"] == predicted_outcome
 
     print(diff)
-
-    print(clf.classes_)
-
-    tree_to_guard(clf.tree_, list(X.columns))
 
     return (diff.sum(),)
 
