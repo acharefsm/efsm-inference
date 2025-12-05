@@ -14,7 +14,7 @@ from deap import gp
 from enchant.utils import levenshtein
 from gp_pset import is_null
 from gp_repair import repair
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_text
 
 logger = logging.getLogger("main")
 
@@ -436,7 +436,7 @@ def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
     clf.fit(X, y)
 
     print("\nDecision Tree Rules:")
-    # print(export_text(clf, feature_names=list(X.columns)))
+    print(export_text(clf, feature_names=list(X.columns)))
 
     print(clf.classes_)
 
