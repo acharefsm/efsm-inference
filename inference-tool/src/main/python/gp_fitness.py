@@ -3,20 +3,18 @@ This module implements the GP fitness function and auxilliary functions.
 """
 
 import logging
-import re
 import traceback
 from itertools import product
 from math import isclose, sqrt
 from numbers import Number
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from deap import gp
 from enchant.utils import levenshtein
 from gp_pset import is_null
 from gp_repair import repair
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+from sklearn.tree import DecisionTreeClassifier
 
 logger = logging.getLogger("main")
 
@@ -419,6 +417,9 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
 
     expressions = {}
     for simple_expr in individual:
+        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(
+            lambda row: gp.compile(simple_expr, pset)(**row), axis=1
+        )
         print(simple_expr)
         f = gp.compile(simple_expr, pset)
         expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
@@ -427,7 +428,7 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     X = expressions
     y = points["expected"]
 
-    clf = DecisionTreeClassifier(max_depth=4, random_state=0)
+    clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
 
     print("\nDecision Tree Rules:")
@@ -446,3 +447,9 @@ def fitness_dt(individual, points: pd.DataFrame, pset):
     tree_to_guard(clf.tree_, list(X.columns))
 
     return (diff.sum(),)
+
+
+def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
+    predicted_outcome = predict_dt(individual, points, pset, random_state)
+
+    return (points["expected"] == predicted_outcome).all()

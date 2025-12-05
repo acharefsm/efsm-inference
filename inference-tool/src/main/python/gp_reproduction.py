@@ -9,6 +9,10 @@ import sys
 from deap import gp
 
 
+def random_seed(seed):
+    random.seed(seed)
+
+
 def new_mate(ind1, ind2, pset, creator):
     def new_mate_and(ind1, ind2):
         try:
