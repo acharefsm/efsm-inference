@@ -17,6 +17,21 @@ op_mapp = {
     ast.Mult: "mul",
 }
 
+cmpop_map = {
+    ast.Lt: "lt",
+    ast.LtE: "le",
+    ast.Gt: "gt",
+    ast.GtE: "ge",
+    ast.Eq: "eq",
+    ast.NotEq: "ne_",
+}
+
+allowed_primitives = {
+                "add", "sub", "mul", "div", "pow", 
+                "lt", "le", "gt", "ge", "eq", "ne",
+                "and", "or", "not"
+            }
+
 
 def recurse(node):
     if isinstance(node, ast.BinOp):
@@ -28,13 +43,34 @@ def recurse(node):
         return recurse(node.operand)
     elif isinstance(node, ast.Constant):
         return str(node.value)
+    elif isinstance(node, ast.BoolOp):
+        if isinstance(node.op, ast.And):
+            op = "and_"
+        elif isinstance(node.op, ast.Or):
+            op = "or_"
+        else:
+            raise NotImplementedError(node.op)
+
+        args = ", ".join(recurse(v) for v in node.values)
+        return f"{op}({args})"
+    elif isinstance(node, ast.Compare):
+        left = recurse(node.left)
+        result = []
+
+        for op, right in zip(node.ops, node.comparators):
+            cmp = cmpop_map[type(op)]
+            result.append(f"{cmp}({left}, {recurse(right)})")
+            left = recurse(right)
+        if len(result) == 1:
+            return result[0]
+        return f"and({', '.join(result)})"
     elif isinstance(node, ast.Name):
         return node.id
     elif isinstance(node, ast.Call):
         # Handle inner I(...) wrappers
         if isinstance(node.func, ast.Name) and node.func.id == "I":
             return recurse(node.args[0])
-        elif isinstance(node.func, ast.Name) and node.func.id in {"add", "sub", "mul", "div", "pow"}:
+        elif isinstance(node.func, ast.Name) and node.func.id in allowed_primitives:
             args = ", ".join(recurse(a) for a in node.args)
             return f"{node.func.id}({args})"
         raise NotImplementedError(node)
@@ -156,3 +192,6 @@ def repair(individual, data_points, pset, creator):
             return individual
     else:
         return individual
+    
+if __name__ == "__main__":
+    print(infix_to_prefix2("(le(mul(sub(mul(r2, i0), sub(r0, r0)), mul(r2, r2)), add(add(add(r0, i0), add(r2, r1)), add(sub(r0, r2), sub(r2, r0)))) and ne(i0, r0))"))

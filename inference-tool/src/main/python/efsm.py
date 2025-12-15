@@ -113,15 +113,9 @@ def to_dot(efsm, filepath, translation=None):
 
 
 def generalise(
-    mu_size,
-    lambda_size,
-    ngen,
-    mut_prob,
-    max_init_depth,
-    max_depth,
-    fitness_type,
     efsm: EFSM,
     infer_function,
+    guard_infer_function,
     *args,
     **kwargs,
 ) -> EFSM:
@@ -132,13 +126,13 @@ def generalise(
     def infer_output(samples: pd.DataFrame):
         return infer_function(
             samples,
-            mu_size=mu_size,
-            lambda_size=lambda_size,
-            generation_size=ngen,
-            mut_proba=mut_prob,
-            max_init_depth=max_init_depth,
-            max_depth=max_depth,
-            fitness_type=fitness_type,
+            *args,
+            **kwargs,
+        )
+    
+    def infer_guard(samples: pd.DataFrame):
+        return guard_infer_function(
+            samples,
             *args,
             **kwargs,
         )
@@ -189,7 +183,6 @@ def generalise(
                 # for each branch compute a branching expression (must evaluate to True for the given branch
                 # and False for any other branch)
 
-                branching["guard"] = False
                 columns = branching.columns.to_list()
                 args_columns = columns[:-3]
 
@@ -199,7 +192,7 @@ def generalise(
                     branching.loc[branch.index, "guard"] = True
 
                     transition = efsm[origin][(ip_sig, op_sig, dest)]
-                    transition.guard = infer_output(branching[args_columns + ["guard"]])
+                    transition.guard = infer_guard(branching[args_columns + ["dest"]])
 
     return efsm
 

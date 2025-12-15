@@ -1,59 +1,23 @@
-import csv
+"""
+This module creates a gridSearchCV estimator that genrelsies an EFSM in the fit function. The experiment is setup
+to optimise the hyperparameters of our genetic program
+"""
 
-import deap_gp
+import csv
+import argparse
+
 import efsm
-import gp_fitness
+
 import networkx as nx
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from generalise_helper import efsm_to_dot, efsm_to_json
+
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.validation import check_is_fitted
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 
-
-def infer_output(
-    samples, mu_size, lambda_size, generation_size, mut_proba, max_init_depth, max_depth, fitness_type, **kwargs
-):
-    global total_correct
-
-    pset = deap_gp.setup_pset(samples)
-    best = deap_gp.run_gp(
-        mut_proba,
-        samples,
-        pset,
-        mu=mu_size,
-        lamb=lambda_size,
-        max_init=max_init_depth,
-        max_depth=max_depth,
-        ngen=generation_size,
-        type_=fitness_type,
-        **kwargs,
-    )
-
-    args = samples[samples.columns[:-1]]
-    outputs = samples[samples.columns[-1]]
-
-    correct = gp_fitness.correct(best, samples, pset, [() for i in range(len(samples))])
-
-    if not correct:
-        total_correct += 1
-        bf = deap_gp.gp.compile(expr=best, pset=pset)
-        predicted = args.apply(lambda args: bf(**(args.to_dict())), axis=1)
-        correct = outputs == predicted
-        # print("guard inferred ",str(best))
-        # print("samples",samples)
-        # print("correct",correct)
-
-    return str(best)
-
-
-def get_total_correct():
-    global total_correct
-
-    return total_correct
+from gp_generalise import infer_output, infer_guard, Counter, efsm_to_dot, efsm_to_json
 
 
 class EFSMGeneraliserEstimator(BaseEstimator):
@@ -67,12 +31,18 @@ class EFSMGeneraliserEstimator(BaseEstimator):
         max_init_depth=1,
         max_depth=5,
         fitness_type="step",
+        mu_guard=11,
+        lambda_guard=7,
+        ngen_guard=15,
+        cxpb_guard=0.6,
+        mutpb_guard=0.75,
         conjecture_efsm=None,
         original=None,
         conjecture_path=None,
         random_seed=None,
         infer_output=None,
         total_wrong_fn=None,
+        counter=None,
     ):
         self.mu_size = mu_size
         self.lambda_size = lambda_size
@@ -81,6 +51,11 @@ class EFSMGeneraliserEstimator(BaseEstimator):
         self.max_init_depth = max_init_depth
         self.max_depth = max_depth
         self.fitness_type = fitness_type
+        self.mu_guard = mu_guard
+        self.lambda_guard = lambda_guard
+        self.ngen_guard = ngen_guard
+        self.cxpb_guard = cxpb_guard
+        self.mutpb_guard = mutpb_guard
 
         # dependencies injected once (not hyperparameters)
         self.conjecture_efsm = conjecture_efsm
@@ -90,6 +65,7 @@ class EFSMGeneraliserEstimator(BaseEstimator):
 
         self.infer_output = infer_output
         self.total_wrong_fn = total_wrong_fn
+        self.counter = counter
 
     def fit(self, X=None, y=None):
         """
@@ -101,22 +77,26 @@ class EFSMGeneraliserEstimator(BaseEstimator):
             raise ValueError("sampled efsm (the EFSM model to generalise) must be provided")
         if self.original is None:
             raise ValueError("original (the original EFSM graph) must be provided")
-
-        global total_correct
-
-        total_correct = 0
-
+        
         generalised = efsm.generalise(
-            self.mu_size,
-            self.lambda_size,
-            self.generation_size,
-            self.mutation_prob,
-            self.max_init_depth,
-            self.max_depth,
-            self.fitness_type,
             self.conjecture_efsm,
             self.infer_output,
+            infer_guard,
+            mu=self.mu_size,
+            lamb=self.lambda_size,
+            ngen=self.generation_size,
+            mut_prob=self.mutation_prob,
+            max_init=self.max_init_depth,
+            max_depth=self.max_depth,
+            type_=self.fitness_type,
+            mu_guard=self.mu_guard,
+            lambda_guard=self.lambda_guard,
+            ngen_guard=self.ngen_guard,
+            cxpb_guard=self.cxpb_guard,
+            mutpb_guard=self.mutpb_guard,
             random_seed=self.random_seed,
+            counter = self.counter,
+            estimator=self,
         )
 
         if self.conjecture_path:
@@ -135,7 +115,7 @@ class EFSMGeneraliserEstimator(BaseEstimator):
 
         if callable(self.total_wrong_fn):
             try:
-                total_wrong_val = self.total_wrong_fn()
+                total_wrong_val = self.total_wrong_fn(self.counter)
             except Exception as e:
                 print(e)
                 total_wrong_val = None
@@ -156,7 +136,7 @@ class EFSMGeneraliserEstimator(BaseEstimator):
         return -float(self.total_wrong)
 
 
-def run_experiment(trace, conjecture_path, seed, n_jobs):
+def run_experiment(conjecture_path, seed, n_jobs):
     original = nx.nx_pydot.read_dot(conjecture_path)
     conjecture_efsm = efsm.efsm(original)
 
@@ -173,11 +153,16 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
     param_grid = {
         "mu_size": [50],
         "lambda_size": [5],
-        "generation_size": [50],
+        "generation_size": [5],
         "mutation_prob": [0.5],
         "max_init_depth": [1],
         "max_depth": [5],
         "fitness_type": ["step"],
+        "mu_guard": [11],
+        "lambda_guard": [7],
+        "ngen_guard": [15],
+        "cxpb_guard": [0.6],
+        "mutpb_guard": [0.75],
     }
 
     base_est = EFSMGeneraliserEstimator(
@@ -186,7 +171,8 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
         conjecture_path=conjecture_path,
         random_seed=seed,
         infer_output=infer_output,
-        total_wrong_fn=get_total_correct,
+        total_wrong_fn=Counter.get_total_incorrect,
+        counter=Counter()
     )
 
     X = np.zeros((1, 1))
@@ -271,97 +257,111 @@ def run_experiment(trace, conjecture_path, seed, n_jobs):
     except Exception:
         print("GridSearch finished. Inspect experiment_results.csv for per-configuration metrics.")
 
-    data_s1_s0 = [
-        [1234, 1000, 2, 2345, True],
-        [2345, -500, 2, -9999, True],
-        [2345, -500, 2, 1234, True],
-        [1234, 1000, 0, -9999, False],
-        [1234, 1000, 0, 2345, False],
-        [1234, 1000, 1, -9999, False],
-        [2345, -500, 0, 1234, False],
-        [2345, -500, 1, 1234, False],
-        [1234, 1000, 1, 2345, False],
-        [2345, -500, 1, -9999, False],
-        [2345, -500, 0, -9999, False],
-        [1234, 1000, 1, 1234, False],
-        [1234, 1000, 0, 1234, False],
-        [2345, -500, 0, 2345, False],
-        [2345, -500, 2, 2345, False],
-        [2345, -500, 1, 2345, False],
-        [1234, 1000, 2, 1234, False]
-    ]
-    df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
-    df_s1_s0["target"] = "s1->s0"
+    # data_s1_s0 = [
+    #     [1234, 1000, 2, 2345, True],
+    #     [2345, -500, 2, -9999, True],
+    #     [2345, -500, 2, 1234, True],
+    #     [1234, 1000, 0, -9999, False],
+    #     [1234, 1000, 0, 2345, False],
+    #     [1234, 1000, 1, -9999, False],
+    #     [2345, -500, 0, 1234, False],
+    #     [2345, -500, 1, 1234, False],
+    #     [1234, 1000, 1, 2345, False],
+    #     [2345, -500, 1, -9999, False],
+    #     [2345, -500, 0, -9999, False],
+    #     [1234, 1000, 1, 1234, False],
+    #     [1234, 1000, 0, 1234, False],
+    #     [2345, -500, 0, 2345, False],
+    #     [2345, -500, 2, 2345, False],
+    #     [2345, -500, 1, 2345, False],
+    #     [1234, 1000, 2, 1234, False]
+    # ]
+    # df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
+    # df_s1_s0["target"] = "s1->s0"
 
-    data_s1_s2 = [
-        [1234, 1000, 2, 2345, False],
-        [2345, -500, 2, -9999, False],
-        [2345, -500, 2, 1234, False],
-        [1234, 1000, 0, -9999, False],
-        [1234, 1000, 0, 2345, False],
-        [1234, 1000, 1, -9999, False],
-        [2345, -500, 0, 1234, False],
-        [2345, -500, 1, 1234, False],
-        [1234, 1000, 1, 2345, False],
-        [2345, -500, 1, -9999, False],
-        [2345, -500, 0, -9999, False],
-        [1234, 1000, 1, 1234, True],
-        [1234, 1000, 0, 1234, True],
-        [2345, -500, 0, 2345, True],
-        [2345, -500, 2, 2345, True],
-        [2345, -500, 1, 2345, True],
-        [1234, 1000, 2, 1234, True]
-    ]
-    df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
-    df_s1_s2["target"] = "s1->s2"
+    # data_s1_s2 = [
+    #     [1234, 1000, 2, 2345, False],
+    #     [2345, -500, 2, -9999, False],
+    #     [2345, -500, 2, 1234, False],
+    #     [1234, 1000, 0, -9999, False],
+    #     [1234, 1000, 0, 2345, False],
+    #     [1234, 1000, 1, -9999, False],
+    #     [2345, -500, 0, 1234, False],
+    #     [2345, -500, 1, 1234, False],
+    #     [1234, 1000, 1, 2345, False],
+    #     [2345, -500, 1, -9999, False],
+    #     [2345, -500, 0, -9999, False],
+    #     [1234, 1000, 1, 1234, True],
+    #     [1234, 1000, 0, 1234, True],
+    #     [2345, -500, 0, 2345, True],
+    #     [2345, -500, 2, 2345, True],
+    #     [2345, -500, 1, 2345, True],
+    #     [1234, 1000, 2, 1234, True]
+    # ]
+    # df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
+    # df_s1_s2["target"] = "s1->s2"
 
-    data_s1_s1 = [
-        [1234, 1000, 2, 2345, False],
-        [2345, -500, 2, -9999, False],
-        [2345, -500, 2, 1234, False],
-        [1234, 1000, 0, -9999, True],
-        [1234, 1000, 0, 2345, True],
-        [1234, 1000, 1, -9999, True],
-        [2345, -500, 0, 1234, True],
-        [2345, -500, 1, 1234, True],
-        [1234, 1000, 1, 2345, True],
-        [2345, -500, 1, -9999, True],
-        [2345, -500, 0, -9999, True],
-        [1234, 1000, 1, 1234, False],
-        [1234, 1000, 0, 1234, False],
-        [2345, -500, 0, 2345, False],
-        [2345, -500, 2, 2345, False],
-        [2345, -500, 1, 2345, False],
-        [1234, 1000, 2, 1234, False]
-    ]
-    df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
-    df_s1_s1["target"] = "s1->s1"
+    # data_s1_s1 = [
+    #     [1234, 1000, 2, 2345, False],
+    #     [2345, -500, 2, -9999, False],
+    #     [2345, -500, 2, 1234, False],
+    #     [1234, 1000, 0, -9999, True],
+    #     [1234, 1000, 0, 2345, True],
+    #     [1234, 1000, 1, -9999, True],
+    #     [2345, -500, 0, 1234, True],
+    #     [2345, -500, 1, 1234, True],
+    #     [1234, 1000, 1, 2345, True],
+    #     [2345, -500, 1, -9999, True],
+    #     [2345, -500, 0, -9999, True],
+    #     [1234, 1000, 1, 1234, False],
+    #     [1234, 1000, 0, 1234, False],
+    #     [2345, -500, 0, 2345, False],
+    #     [2345, -500, 2, 2345, False],
+    #     [2345, -500, 1, 2345, False],
+    #     [1234, 1000, 2, 1234, False]
+    # ]
+    # df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
+    # df_s1_s1["target"] = "s1->s1"
 
-    df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
+    # df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
 
-    train_data = df_all[df_all["guard"] == True].copy()
+    # train_data = df_all[df_all["guard"] == True].copy()
 
-    for df in [df_all, train_data]:
-        df["i0_eq_r0"] = (df["i0"] == df["r0"]).astype(int)
-        df["r2_ge_2"] = (df["r2"] >= 2).astype(int)
-        df["i0_is_neg"] = (df["i0"] < 0).astype(int)
+    # for df in [df_all, train_data]:
+    #     df["i0_eq_r0"] = (df["i0"] == df["r0"]).astype(int)
+    #     df["r2_ge_2"] = (df["r2"] >= 2).astype(int)
+    #     df["i0_is_neg"] = (df["i0"] < 0).astype(int)
 
-    X = train_data[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]]
-    y = train_data["target"]
+    # X = train_data[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]]
+    # y = train_data["target"]
 
-    print(df)
+    # print(df)
 
-    clf = DecisionTreeClassifier(max_depth=4, random_state=42)
-    clf.fit(X, y)
+    # clf = DecisionTreeClassifier(max_depth=4, random_state=42)
+    # clf.fit(X, y)
 
-    print("\nDecision Tree Rules:")
-    print(export_text(clf, feature_names=list(X.columns)))
+    # print("\nDecision Tree Rules:")
+    # print(export_text(clf, feature_names=list(X.columns)))
 
-    df_all["predicted_transition"] = clf.predict(df_all[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]])
+    # df_all["predicted_transition"] = clf.predict(df_all[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]])
 
-    print("\nPredicted transitions:")
-    print(df_all[["r0", "r1", "r2", "i0", "guard", "target", "predicted_transition"]])
+    # print("\nPredicted transitions:")
+    # print(df_all[["r0", "r1", "r2", "i0", "guard", "target", "predicted_transition"]])
 
-    plt.figure(figsize=(10,6))
-    plot_tree(clf, feature_names=list(X.columns), class_names=clf.classes_, filled=True, rounded=True)
-    plt.show()
+    # plt.figure(figsize=(10,6))
+    # plot_tree(clf, feature_names=list(X.columns), class_names=clf.classes_, filled=True, rounded=True)
+    # plt.show()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="get_groups.py",
+        description="Determines the transition grouping and runs GP to generalise the conjecture model.",
+    )
+    parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True)
+    parser.add_argument("-t", "--trace", help="Path to the CSV containing the trace.", required=False)
+    parser.add_argument("-s", "--seed", help="The random seed.", required=False, default=0)
+    parser.add_argument("--n_jobs", required=False, type=int, default=1)
+
+    args = parser.parse_args()
+
+    run_experiment(args.conjecture, args.seed, args.n_jobs)

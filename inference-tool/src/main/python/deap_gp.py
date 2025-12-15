@@ -63,10 +63,10 @@ def sort_height(individual, training_set):
 
 
 def run_gp(
-    mut_prob,
     points: pd.DataFrame,
     pset,
     latent_vars_rows=None,
+    mut_prob=0.5,
     max_init=1,
     max_depth=5,
     type_="continuous",
@@ -76,6 +76,7 @@ def run_gp(
     random_seed=0,
     seeds=None,
     bad=None,
+    **kwargs,
 ):
     seeds = [] if seeds is None else seeds
     bad = [] if bad is None else bad
@@ -158,7 +159,7 @@ def run_gp(
     pop = [toolbox.simplify(i) for i in pop]
     # pop = [toolbox.repair(ind) for ind in pop]
     pop = sorted(pop, key=lambda x: x.fitness.values)
-    print("pop", [str(x) for x in pop])
+    # print("pop", [str(x) for x in pop])
 
     stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
     stats_size = tools.Statistics(len)
@@ -300,7 +301,8 @@ def eaMuPlusLambda(
     # Begin the generational process
     # print("Entering main loop")
     for gen in range(0, ngen):
-        print("pop", [(str(x), round(x.fitness.values[0], 2)) for x in population])
+        print(gen)
+        # print("pop", [(str(x), round(x.fitness.values[0], 2)) for x in population])
         # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
             return population, logbook

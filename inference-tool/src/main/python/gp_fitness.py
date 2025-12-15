@@ -370,7 +370,25 @@ reverse_op = {
 }
 
 
-def tree_to_guard(tree, feature_names):
+def tree_to_guard(individual, points: pd.DataFrame, pset, random_state=0):
+    """
+    Turns an individual (list of expressions) into a guard
+
+    :param individual: The candidate to be used.
+    :param points: The points with which to evaluate the individual.
+    N.B. The guard expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The individual in a guard form.
+    :rtype: str
+    """
+
+    classifier, expressions = predict_dt(individual, points, pset, random_state)
+
+    tree = classifier.tree_
+    feature_names = list(expressions.columns)
+
     def reverse(operation):
         return reverse_op[operation[:2]] + operation[2:]
 
@@ -383,8 +401,6 @@ def tree_to_guard(tree, feature_names):
                 [reverse(feature_names[tree.feature[node]]), make_list(tree.children_left[node])],
                 [feature_names[tree.feature[node]], make_list(tree.children_right[node])],
             ]
-
-    print(make_list(0))
 
     def find_paths(mylist):
         child1, child2 = mylist
@@ -401,7 +417,7 @@ def tree_to_guard(tree, feature_names):
         if isinstance(child1, str) and isinstance(child2, list):
             child2paths = find_paths(child2)
             for path in child2paths:
-                paths.append(child1 + path)
+                paths.append(child1 + ' and ' + path)
 
         if isinstance(child1, str) and isinstance(child2, int) and child2 == 1:
             paths.append(child1)
@@ -409,56 +425,82 @@ def tree_to_guard(tree, feature_names):
         return paths
 
     if tree.feature[0] == -2:
-        return []
+        return "False"
 
-    print(find_paths(make_list(0)))
 
-    return make_list(0)
+    return " or ".join(f"({item})" for item in find_paths(make_list(0)))
 
 
 def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
-    # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
+    """
+    Turns an individual (list of expressions) into a decision tree classifier
+
+    :param individual: The candidate to be used.
+    :param points: The points with which to evaluate the individual.
+    N.B. The guard expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The classifier and list of operators in the individual
+    """
 
     expressions = {}
     for simple_expr in individual:
-        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(
+        expressions[str(simple_expr)] = points.drop("guard", axis=1).apply(
             lambda row: gp.compile(simple_expr, pset)(**row), axis=1
         )
-        print(simple_expr)
         f = gp.compile(simple_expr, pset)
-        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(lambda row: f(**row), axis=1)
     expressions = pd.DataFrame(expressions)
 
     X = expressions
-    y = points["expected"]
+    y = points["guard"]
+
 
     clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
 
-    print("\nDecision Tree Rules:")
-    print(export_text(clf, feature_names=list(X.columns)))
-
-    print(clf.classes_)
-
-    tree_to_guard(clf.tree_, list(X.columns))
-    return clf.predict(expressions)
+    return (clf, X)
 
 
 def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
-    # reaslised that need all transitions from a state on a input all guards essentially I think actually no tho, we shall see
+    """
+    Gives the fitness of an individual (list of expressions)
 
-    predicted_outcome = predict_dt(individual, points, pset, random_state)
+    :param individual: The candidate to be used.
+    :param points: The points with which to evaluate the individual.
+    N.B. The guard expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: The fitness of the individual
+    :rtype: int
+    """
 
-    print("\nPredicted transitions:")
+    classifier, expressions = predict_dt(individual, points, pset, random_state)
 
-    diff = points["expected"] == predicted_outcome
+    predicted_outcome = classifier.predict(expressions)
 
-    print(diff)
+    diff = points["guard"] == predicted_outcome
 
     return (diff.sum(),)
 
 
 def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
-    predicted_outcome = predict_dt(individual, points, pset, random_state)
+    """
+    Gives if an indivudal has 0 errors for our sample i.e fitness = 0
 
-    return (points["expected"] == predicted_outcome).all()
+    :param individual: The candidate to be used.
+    :param points: The points with which to evaluate the individual.
+    N.B. The guard expected output MUST be the last column in the table.
+    :type points: pd.DataFrame
+    :param pset: The set of primitives.
+    :type pset: TYPE
+    :return: Boolean of if an indivudal has 0 errors for our sample i.e fitness = 0
+    :rtype: bool
+    """
+
+    classifier, expressions = predict_dt(individual, points, pset, random_state)
+
+    predicted_outcome = classifier.predict(expressions)
+
+    return (points["guard"] == predicted_outcome).all()
