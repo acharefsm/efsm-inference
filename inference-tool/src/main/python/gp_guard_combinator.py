@@ -4,7 +4,7 @@ from itertools import chain, combinations
 import numpy as np
 import pandas as pd
 from deap import algorithms, base, creator, gp, tools
-from gp_fitness import correct_dt, fitness_dt, tree_to_guard
+from gp_fitness import correct_dt, fitness_dt
 from gp_pset import setup_pset, setup_simple_pset
 from gp_reproduction import (
     genHalfAndHalf,
@@ -17,8 +17,8 @@ from gp_reproduction import (
 )
 from gp_simplification import simplify
 
-creator.create("Fitness_Guard", base.Fitness, weights=(1.0,))
-creator.create("Individual_Guard", list, fitness=creator.Fitness_Guard)
+creator.create("Fitness", base.Fitness, weights=(1.0,))
+creator.create("Individual", list, fitness=creator.Fitness)
 
 
 def subsets(individual):
@@ -31,7 +31,7 @@ def strip_unnecessary_clauses(individual, points, pset):
     Return the original individual if no clauses can be removed.
     """
     for subset in subsets(individual):
-        subset = creator.Individual_Guard(subset)
+        subset = creator.Individual(subset)
         if correct_dt(subset, points, pset):
             subset.fitness.values = fitness_dt(subset, points, pset)
             return subset
@@ -55,7 +55,7 @@ def parsimony_select(individuals, k):
     )[:k]
 
 
-def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen):
+def eaMuPlusLambda(population, toolbox, mu, lambda_, mutpb, ngen):
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in population if not ind.fitness.valid]
     fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
@@ -64,12 +64,10 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen):
 
     # Begin the generational process
     best = max(population, key=lambda ind: ind.fitness.values)
-    best_guard = toolbox.guard(best)
     for _ in range(ngen):
-        print(_)
         # Exit early as found optimal individual
         if toolbox.correct(best):
-            return (best, best_guard)
+            return best
         # Vary the population
         offspring = algorithms.varAnd(population, toolbox, lambda_, mutpb)
 
@@ -82,9 +80,8 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen):
         # Select the next generation population
         population[:] = toolbox.select(population + offspring, mu)
         best = max(population, key=lambda ind: ind.fitness.values)
-        best_guard = toolbox.guard(best)
 
-    return (best, best_guard)
+    return best
 
 
 def mutate(individual, pset, MAX_MUTATIONS=3):
@@ -118,7 +115,7 @@ def mutate(individual, pset, MAX_MUTATIONS=3):
 
 
 def list_mutate(expression, pset):
-    return (creator.Individual_Guard([mutate(x, pset)[0] if random.choice([True, False]) else x for x in expression]),)
+    return (creator.Individual([mutate(x, pset)[0] if random.choice([True, False]) else x for x in expression]),)
 
 
 def generate(pset, min_, max_, creator, type_=None, simp=None):
@@ -135,79 +132,56 @@ def initRepeatUpTo(container, func, n):
     :param n: The maximum number of times to repeat func.
     :returns: An instance of the container filled with data from func.
     """
-    return container(func() for _ in range(n))
+    return container(func() for _ in range(random.randint(1, n)))
 
 
 def run_gp(
     points: pd.DataFrame,
-    pset,
-    simple_pset,
-    ngen_guard = 10,
-    mu_guard=10,
-    lambda_guard=5,
+    ngen: int,
+    mu=10,
+    lambda_=5,
     max_clauses: int = 4,
     max_clause_depth: int = 4,
-    cxpb_guard=0.5,
-    mutpb_guard=0.5,
-    random_seed=0,
+    indpb=0.5,
+    mutpb=0.5,
+    seed=0,
     seeds=None,
-    **kwargs,
 ):
-    random.seed(random_seed)
-    np.random.seed(random_seed)
+    random_seed(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    pset = setup_pset(points)
+    simple_pset = setup_simple_pset(points)
 
     toolbox = base.Toolbox()
 
-    toolbox.register("evaluate", fitness_dt, pset=pset, points=points, random_state=random_seed)
-    toolbox.register("correct", correct_dt, pset=pset, points=points, random_state=random_seed)
-    toolbox.register("guard", tree_to_guard, pset=pset, points=points, random_state=random_seed)
+    toolbox.register("evaluate", fitness_dt, pset=pset, points=points, random_state=seed)
+    toolbox.register("correct", correct_dt, pset=pset, points=points)
     toolbox.register("clause", generate, pset=simple_pset, min_=1, max_=max_clause_depth, creator=creator)
     toolbox.register("complex_exp", initRepeatUpTo, list, toolbox.clause, n=max_clauses)
-    toolbox.register("individual", tools.initIterate, creator.Individual_Guard, toolbox.complex_exp)
+    toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.complex_exp)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("select", parsimony_select)
-    toolbox.register("mate", tools.cxUniform, indpb=cxpb_guard)
+    toolbox.register("mate", tools.cxUniform, indpb=indpb)
     toolbox.register("mutate", list_mutate, pset=simple_pset)
 
-    pop = toolbox.population(mu_guard)
+    pop = toolbox.population(mu)
 
     if seeds is not None:
         for s in seeds:
-            individual = creator.Individual_Guard([gp.PrimitiveTree.from_string(clause, pset) for clause in s])
+            individual = creator.Individual([gp.PrimitiveTree.from_string(clause, pset) for clause in s])
             individual.fitness.values = toolbox.evaluate(individual)
             if individual.fitness.values[0] == 0:
                 return individual
             pop.append(individual)
 
-    best, best_guard = eaMuPlusLambda(pop, toolbox, mu_guard, lambda_guard, cxpb_guard, mutpb_guard, ngen_guard)
-    return (best, best_guard)
+    best = eaMuPlusLambda(pop, toolbox, mu, lambda_, mutpb, ngen)
+    return strip_unnecessary_clauses(best, points, pset)
 
 
 if __name__ == "__main__":
-    import sys
-
-    random.seed(sys.argv[1])
+    random.seed(0)
     points = pd.read_csv("test-guard3.csv")[["r0", "r1", "r2", "r3", "i0", "expected"]]
-    data_s1_s0 = [
-        [1234, 1000, 2, 2345, True],
-        [2345, -500, 2, -9999, True],
-        [2345, -500, 2, 1234, True],
-        [1234, 1000, 0, -9999, False],
-        [1234, 1000, 0, 2345, False],
-        [1234, 1000, 1, -9999, False],
-        [2345, -500, 0, 1234, False],
-        [2345, -500, 1, 1234, False],
-        [1234, 1000, 1, 2345, False],
-        [2345, -500, 1, -9999, False],
-        [2345, -500, 0, -9999, False],
-        [1234, 1000, 1, 1234, False],
-        [1234, 1000, 0, 1234, False],
-        [2345, -500, 0, 2345, False],
-        [2345, -500, 2, 2345, False],
-        [2345, -500, 1, 2345, False],
-        [1234, 1000, 2, 1234, False]
-    ]
-    df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
 
     samples = list(range(100))
     points = pd.DataFrame({k: [random.randint(0, 100) for _ in samples] for k in ["r1", "r2", "r3", "i0"]})
@@ -215,8 +189,6 @@ if __name__ == "__main__":
 
     # best = run_gp(points, 100, seeds=[["ne(i0, r0)", "ge(r2, 2)"]])
     # best = run_gp(points, 100, seeds=[["le(add(r2, i0), r3)"]])
-    pset = setup_pset(df_s1_s0)
-    simple_pset = setup_simple_pset(df_s1_s0)
-    best, best_guard = run_gp(df_s1_s0, pset, simple_pset, 5, seeds=[], random_seed=1)
-    print(best_guard)
-    print(len(data_s1_s0) - best.fitness.values[0])
+    best = run_gp(points, 100, seeds=[], seed=2)
+    print([str(x) for x in best])
+    print(len(points) - best.fitness.values[0])

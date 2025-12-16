@@ -445,14 +445,14 @@ def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     expressions = {}
     for simple_expr in individual:
-        expressions[str(simple_expr)] = points.drop("guard", axis=1).apply(
+        expressions[str(simple_expr)] = points.drop("expected", axis=1).apply(
             lambda row: gp.compile(simple_expr, pset)(**row), axis=1
         )
         f = gp.compile(simple_expr, pset)
     expressions = pd.DataFrame(expressions)
 
     X = expressions
-    y = points["guard"]
+    y = points["expected"]
 
     clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
@@ -495,7 +495,7 @@ def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
     predicted_outcome = classifier.predict(expressions)
 
     # <<<<<<< Updated upstream
-    diff = points["guard"] == predicted_outcome
+    diff = points["expected"] == predicted_outcome
     # =======
     # print(diff)
     # >>>>>>> Stashed changes
@@ -521,4 +521,4 @@ def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     predicted_outcome = classifier.predict(expressions)
 
-    return (points["guard"] == predicted_outcome).all()
+    return (points["expected"] == predicted_outcome).all()
