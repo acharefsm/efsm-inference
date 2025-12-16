@@ -417,7 +417,7 @@ def tree_to_guard(individual, points: pd.DataFrame, pset, random_state=0):
         if isinstance(child1, str) and isinstance(child2, list):
             child2paths = find_paths(child2)
             for path in child2paths:
-                paths.append(child1 + ' and ' + path)
+                paths.append(child1 + " and " + path)
 
         if isinstance(child1, str) and isinstance(child2, int) and child2 == 1:
             paths.append(child1)
@@ -426,7 +426,6 @@ def tree_to_guard(individual, points: pd.DataFrame, pset, random_state=0):
 
     if tree.feature[0] == -2:
         return "False"
-
 
     return " or ".join(f"({item})" for item in find_paths(make_list(0)))
 
@@ -455,11 +454,22 @@ def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
     X = expressions
     y = points["guard"]
 
-
     clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
     clf.fit(X, y)
 
+    # <<<<<<< Updated upstream
     return (clf, X)
+
+
+# =======
+# print("\nDecision Tree Rules:")
+# print(export_text(clf, feature_names=list(X.columns)))
+#
+# print(clf.classes_)
+
+#     tree_to_guard(clf.tree_, list(X.columns))
+#     return clf.predict(expressions)
+# >>>>>>> Stashed changes
 
 
 def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
@@ -476,11 +486,19 @@ def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
     :rtype: int
     """
 
+    # <<<<<<< Updated upstream
     classifier, expressions = predict_dt(individual, points, pset, random_state)
+    # =======
+    # print("\nPredicted transitions:")
+    # >>>>>>> Stashed changes
 
     predicted_outcome = classifier.predict(expressions)
 
+    # <<<<<<< Updated upstream
     diff = points["guard"] == predicted_outcome
+    # =======
+    # print(diff)
+    # >>>>>>> Stashed changes
 
     return (diff.sum(),)
 

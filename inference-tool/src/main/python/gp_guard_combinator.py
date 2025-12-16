@@ -184,7 +184,9 @@ def run_gp(
 
 
 if __name__ == "__main__":
-    random.seed(0)
+    import sys
+
+    random.seed(sys.argv[1])
     points = pd.read_csv("test-guard3.csv")[["r0", "r1", "r2", "r3", "i0", "expected"]]
     data_s1_s0 = [
         [1234, 1000, 2, 2345, True],
