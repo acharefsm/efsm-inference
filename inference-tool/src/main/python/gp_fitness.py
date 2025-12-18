@@ -383,12 +383,6 @@ def tree_to_guard(individual, points: pd.DataFrame, pset, random_state=0):
     :return: The individual in a guard form.
     :rtype: str
     """
-
-    classifier, expressions = predict_dt(individual, points, pset, random_state)
-
-    tree = classifier.tree_
-    feature_names = list(expressions.columns)
-
     def reverse(operation):
         return reverse_op[operation[:2]] + operation[2:]
 
@@ -402,33 +396,48 @@ def tree_to_guard(individual, points: pd.DataFrame, pset, random_state=0):
                 [feature_names[tree.feature[node]], make_list(tree.children_right[node])],
             ]
 
-    def find_paths(mylist):
+    def find_paths(mylist, target):
         child1, child2 = mylist
         paths = []
 
         if isinstance(child1, list) and isinstance(child2, list):
-            child1paths = find_paths(child1)
+            child1paths = find_paths(child1, target)
             for path in child1paths:
                 paths.append(path)
-            child2paths = find_paths(child2)
+            child2paths = find_paths(child2, target)
             for path in child2paths:
                 paths.append(path)
 
         if isinstance(child1, str) and isinstance(child2, list):
-            child2paths = find_paths(child2)
+            child2paths = find_paths(child2, target)
             for path in child2paths:
                 paths.append(child1 + ' and ' + path)
 
-        if isinstance(child1, str) and isinstance(child2, int) and child2 == 1:
+        if isinstance(child1, str) and isinstance(child2, int) and child2 == target:
             paths.append(child1)
 
         return paths
 
+    classifier, expressions = predict_dt(individual, points, pset, random_state)
+
+    tree = classifier.tree_
+    feature_names = list(expressions.columns)
+
+    output = []
+
     if tree.feature[0] == -2:
-        return "False"
+        for i, branch in enumerate(classifier.classes_):
+            guard = "False"
+            output.append((branch, guard))
+        return output
+    
+    for i, branch in enumerate(classifier.classes_):
+        guard = " or ".join(f"({item})" for item in find_paths(make_list(0), i))
+        if guard == "":
+            guard = "False"
+        output.append((branch, guard))
 
-
-    return " or ".join(f"({item})" for item in find_paths(make_list(0)))
+    return output
 
 
 def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
@@ -446,14 +455,13 @@ def predict_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     expressions = {}
     for simple_expr in individual:
-        expressions[str(simple_expr)] = points.drop("guard", axis=1).apply(
+        expressions[str(simple_expr)] = points.drop("target", axis=1).apply(
             lambda row: gp.compile(simple_expr, pset)(**row), axis=1
         )
-        f = gp.compile(simple_expr, pset)
     expressions = pd.DataFrame(expressions)
 
     X = expressions
-    y = points["guard"]
+    y = points["target"]
 
 
     clf = DecisionTreeClassifier(max_depth=4, random_state=random_state)
@@ -480,7 +488,7 @@ def fitness_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     predicted_outcome = classifier.predict(expressions)
 
-    diff = points["guard"] == predicted_outcome
+    diff = points["target"] == predicted_outcome
 
     return (diff.sum(),)
 
@@ -503,4 +511,4 @@ def correct_dt(individual, points: pd.DataFrame, pset, random_state=0):
 
     predicted_outcome = classifier.predict(expressions)
 
-    return (points["guard"] == predicted_outcome).all()
+    return (points["target"] == predicted_outcome).all()

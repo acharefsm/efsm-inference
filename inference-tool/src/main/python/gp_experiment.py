@@ -96,14 +96,14 @@ class EFSMGeneraliserEstimator(BaseEstimator):
             mutpb_guard=self.mutpb_guard,
             random_seed=self.random_seed,
             counter = self.counter,
-            estimator=self,
         )
 
         if self.conjecture_path:
             dot_path = self.conjecture_path.replace(
                 ".dot",
                 f"_generalised_{self.mu_size}_{self.lambda_size}_{self.generation_size}_"
-                f"{self.mutation_prob}_{self.max_init_depth}_{self.max_depth}_{self.fitness_type}.dot",
+                f"{self.mutation_prob}_{self.max_init_depth}_{self.max_depth}_{self.fitness_type}"
+                f"_{self.mu_guard}_{self.lambda_guard}_{self.ngen_guard}_{self.cxpb_guard}_{self.mutpb_guard}.dot",
             )
             json_path = dot_path.replace(".dot", ".json")
             try:

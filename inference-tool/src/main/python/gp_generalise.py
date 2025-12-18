@@ -52,6 +52,7 @@ class AdditiveDict:
 def infer_guard(samples, counter=None, **kwargs):
     pset = setup_pset(samples)
     simple_pset = setup_simple_pset(samples)
+    print(samples)
     best, best_guard = run_gp(samples, pset, simple_pset, **kwargs)
 
     correct = correct_dt(best, samples, pset)

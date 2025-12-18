@@ -153,6 +153,8 @@ def run_gp(
     seeds=None,
     **kwargs,
 ):
+    print("random_seed:", random_seed, type(random_seed))
+    random_seed = int(random_seed)
     random.seed(random_seed)
     np.random.seed(random_seed)
 
@@ -206,15 +208,80 @@ if __name__ == "__main__":
         [1234, 1000, 2, 1234, False]
     ]
     df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s0["target"] = "s0"
 
-    samples = list(range(100))
-    points = pd.DataFrame({k: [random.randint(0, 100) for _ in samples] for k in ["r1", "r2", "r3", "i0"]})
-    points["expected"] = (points["r2"] + points["i0"]) <= points["r3"]
+    data_s1_s2 = [
+        [1234, 1000, 2, 2345, False],
+        [2345, -500, 2, -9999, False],
+        [2345, -500, 2, 1234, False],
+        [1234, 1000, 0, -9999, False],
+        [1234, 1000, 0, 2345, False],
+        [1234, 1000, 1, -9999, False],
+        [2345, -500, 0, 1234, False],
+        [2345, -500, 1, 1234, False],
+        [1234, 1000, 1, 2345, False],
+        [2345, -500, 1, -9999, False],
+        [2345, -500, 0, -9999, False],
+        [1234, 1000, 1, 1234, True],
+        [1234, 1000, 0, 1234, True],
+        [2345, -500, 0, 2345, True],
+        [2345, -500, 2, 2345, True],
+        [2345, -500, 1, 2345, True],
+        [1234, 1000, 2, 1234, True]
+    ]
+    df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s2["target"] = "s2"
 
-    # best = run_gp(points, 100, seeds=[["ne(i0, r0)", "ge(r2, 2)"]])
-    # best = run_gp(points, 100, seeds=[["le(add(r2, i0), r3)"]])
-    pset = setup_pset(df_s1_s0)
-    simple_pset = setup_simple_pset(df_s1_s0)
-    best, best_guard = run_gp(df_s1_s0, pset, simple_pset, 5, seeds=[], random_seed=1)
-    print(best_guard)
-    print(len(data_s1_s0) - best.fitness.values[0])
+    data_s1_s1 = [
+        [1234, 1000, 2, 2345, False],
+        [2345, -500, 2, -9999, False],
+        [2345, -500, 2, 1234, False],
+        [1234, 1000, 0, -9999, True],
+        [1234, 1000, 0, 2345, True],
+        [1234, 1000, 1, -9999, True],
+        [2345, -500, 0, 1234, True],
+        [2345, -500, 1, 1234, True],
+        [1234, 1000, 1, 2345, True],
+        [2345, -500, 1, -9999, True],
+        [2345, -500, 0, -9999, True],
+        [1234, 1000, 1, 1234, False],
+        [1234, 1000, 0, 1234, False],
+        [2345, -500, 0, 2345, False],
+        [2345, -500, 2, 2345, False],
+        [2345, -500, 1, 2345, False],
+        [1234, 1000, 2, 1234, False]
+    ]
+    df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
+    df_s1_s1["target"] = "s1"
+
+    df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
+
+    train_data = df_all[df_all["guard"] == True].copy()
+
+    pset = setup_pset(train_data)
+    simple_pset = setup_simple_pset(train_data)
+
+    # s = ["eq(i0, r0)", "ge(r2, 2)"]
+    # individual = creator.Individual_Guard([gp.PrimitiveTree.from_string(clause, pset) for clause in s])
+    # predict_dt(individual, train_data, pset)
+    # print(len(train_data), fitness_dt(individual, train_data, pset))
+    # print(tree_to_guard(individual, train_data, pset))
+
+    train_data = train_data.drop("guard", axis=1, inplace=False)
+
+    print(train_data)
+
+    best, best_guards = run_gp(train_data, pset, simple_pset, 10, seeds=[], random_seed=0)
+
+
+    # samples = list(range(100))
+    # points = pd.DataFrame({k: [random.randint(0, 100) for _ in samples] for k in ["r1", "r2", "r3", "i0"]})
+    # points["expected"] = (points["r2"] + points["i0"]) <= points["r3"]
+
+    # # best = run_gp(points, 100, seeds=[["ne(i0, r0)", "ge(r2, 2)"]])
+    # # best = run_gp(points, 100, seeds=[["le(add(r2, i0), r3)"]])
+    # pset = setup_pset(points)
+    # simple_pset = setup_simple_pset(points)
+    # best, best_guard = run_gp(points, pset, simple_pset, 50, seeds=[], random_seed=10)
+    print(best_guards)
+    print(len(train_data) - best.fitness.values[0])

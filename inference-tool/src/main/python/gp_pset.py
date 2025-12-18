@@ -196,12 +196,17 @@ def setup_simple_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
         pd.Int64Dtype(): int,
         pd.StringDtype(): str,
     }
-    output_type = generators[points.dtypes[points.columns[-1]]]
+    local_points = points.copy()
+    if local_points.columns[-1] == "target":
+        output_type = bool
+        local_points.drop("target", axis=1, inplace=True)
+    else:
+        output_type = generators[local_points.dtypes[local_points.columns[-1]]]
     # generators[np.dtype("O")] = output_type
 
     assert output_type in {int, float, str, bool}, f"Bad output type {output_type}"
 
-    types = points.dtypes.to_dict()
+    types = local_points.dtypes.to_dict()
     names = list(types)
     datatypes = [generators[types[v]] for v in names]
     assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
@@ -216,7 +221,7 @@ def setup_simple_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     # Add literal terminals
     for v, typ in zip(names, datatypes):
         assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
-        term_set = set(points[v])
+        term_set = set(local_points[v])
         # print("----------", v, typ)
         for term in term_set:
             if not is_null(term):
@@ -276,17 +281,25 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         pd.Int64Dtype(): int,
         pd.StringDtype(): str,
     }
-    output_type = generators[points.dtypes[points.columns[-1]]]
+    local_points = points.copy()
+    if local_points.columns[-1] == "target":
+        output_type = bool
+        local_points.drop("target", axis=1, inplace=True)
+    else:
+        output_type = generators[local_points.dtypes[local_points.columns[-1]]]
     # generators[np.dtype("O")] = output_type
 
     assert output_type in {int, float, str, bool}, f"Bad output type {output_type}"
 
-    types = points.dtypes.to_dict()
+    types = local_points.dtypes.to_dict()
     names = list(types)
     datatypes = [generators[types[v]] for v in names]
     assert all([t in {int, float, str, bool} for t in datatypes]), f"Bad datatype {output_type}"
 
-    pset = PrimitiveSetTyped("MAIN", datatypes[:-1], output_type)
+    if output_type == bool:
+        pset = PrimitiveSetTyped("MAIN", datatypes, output_type)
+    else:
+        pset = PrimitiveSetTyped("MAIN", datatypes[:-1], output_type)
 
     rename = {f"ARG{i}": col for i, col in enumerate(names)}
     pset.renameArguments(**rename)
@@ -296,7 +309,7 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
     # Add literal terminals
     for v, typ in zip(names, datatypes):
         assert typ in {int, str, float, bool}, "Bad pset terminal type {typ}"
-        term_set = set(points[v])
+        term_set = set(local_points[v])
         # print("----------", v, typ)
         for term in term_set:
             if not is_null(term):

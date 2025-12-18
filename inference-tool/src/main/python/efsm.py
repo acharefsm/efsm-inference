@@ -184,15 +184,23 @@ def generalise(
                 # and False for any other branch)
 
                 columns = branching.columns.to_list()
-                args_columns = columns[:-3]
+                args_columns = columns[:-2]
 
-                for (op_sig, dest), branch in branching.groupby(["op_sig", "dest"]):
+                # branching["guard"] = False
+                # branching.loc[branch.index, "guard"] = True
 
-                    branching["guard"] = False
-                    branching.loc[branch.index, "guard"] = True
+                branching.rename(columns={"dest":"target"}, inplace=True)
+
+                guards = infer_guard(branching[args_columns + ["target"]])
+
+                print(guards)
+
+                for (op_sig, dest), branch in branching.groupby(["op_sig", "target"]):
+
+                    # print(infer_guard(branching[args_columns + ["target"]]))
 
                     transition = efsm[origin][(ip_sig, op_sig, dest)]
-                    transition.guard = infer_guard(branching[args_columns + ["dest"]])
+                    # transition.guard = 
 
     return efsm
 
