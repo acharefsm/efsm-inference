@@ -112,6 +112,8 @@ def split(individual, creator):
 
 
 def repair(individual, data_points, pset, creator):
+    if pset.ret != bool:
+        return individual
     if data_points.iloc[:, -1].dtype == "int64":
         eq = f"y ~ {' + '.join(str(x) for x in split(individual, creator))}"
         data_points.rename(columns={data_points.columns[-1]: "y"}, inplace=True)

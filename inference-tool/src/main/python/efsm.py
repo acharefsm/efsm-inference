@@ -189,13 +189,10 @@ def generalise(
                 # branching["guard"] = False
                 # branching.loc[branch.index, "guard"] = True
 
-                branching.rename(columns={"dest":"target"}, inplace=True)
+                branching["target"] = branching["dest"].astype(str) + branching["op_sig"].astype(str)
 
                 guards = infer_guard(branching[args_columns + ["target"]])
-
-                print(guards)
-
-                for (op_sig, dest), branch in branching.groupby(["op_sig", "target"]):
+                for (op_sig, dest), branch in branching.groupby(["op_sig", "dest"]):
 
                     # print(infer_guard(branching[args_columns + ["target"]]))
 

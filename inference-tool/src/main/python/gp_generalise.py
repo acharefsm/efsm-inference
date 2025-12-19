@@ -52,15 +52,14 @@ class AdditiveDict:
 def infer_guard(samples, counter=None, **kwargs):
     pset = setup_pset(samples)
     simple_pset = setup_simple_pset(samples)
-    print(samples)
     best, best_guard = run_gp(samples, pset, simple_pset, **kwargs)
+    print(best_guard)
 
     correct = correct_dt(best, samples, pset)
 
     if not correct:
+        print("failed to infer guard")
         counter.increment()
-
-    print(best_guard)
 
     return best_guard
     
@@ -71,6 +70,7 @@ def infer_output(samples, counter=None, **kwargs):
         pset,
         **kwargs,
     )
+    print(str(best))
 
     args = samples[samples.columns[:-1]]
     outputs = samples[samples.columns[-1]]
@@ -78,6 +78,7 @@ def infer_output(samples, counter=None, **kwargs):
     correct = gp_fitness.correct(best, samples, pset, [() for i in range(len(samples))])
 
     if not correct:
+        print("failed to infer output")
         counter.increment()
         bf = deap_gp.gp.compile(expr=best, pset=pset)
         predicted = args.apply(lambda args: bf(**(args.to_dict())), axis=1)
@@ -284,7 +285,6 @@ if __name__ == "__main__":
         description="Determines the transition grouping and runs GP to generalise the conjecture model.",
     )
     parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True)
-    parser.add_argument("-t", "--trace", help="Path to the CSV containing the trace.", required=False)
     parser.add_argument("-s", "--seed", help="The random seed.", required=False, default=0)
 
     args = parser.parse_args()

@@ -199,7 +199,6 @@ def setup_simple_pset(points: pd.DataFrame) -> gp.PrimitiveSet:
     local_points = points.copy()
     if local_points.columns[-1] == "target":
         output_type = bool
-        local_points.drop("target", axis=1, inplace=True)
     else:
         output_type = generators[local_points.dtypes[local_points.columns[-1]]]
     # generators[np.dtype("O")] = output_type

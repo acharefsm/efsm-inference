@@ -182,7 +182,6 @@ def run_gp(
             verbose=False,
         )
 
-        print("FINAL POP", [str(x) for x in pop])
         best = toolbox.simplify(toolbox.repair(pop[0]))
         best.fitness.values = toolbox.evaluate(best)
         return best
@@ -301,7 +300,6 @@ def eaMuPlusLambda(
     # Begin the generational process
     # print("Entering main loop")
     for gen in range(0, ngen):
-        print(gen)
         # print("pop", [(str(x), round(x.fitness.values[0], 2)) for x in population])
         # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):

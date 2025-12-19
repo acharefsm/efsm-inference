@@ -153,14 +153,14 @@ def run_experiment(conjecture_path, seed, n_jobs):
     param_grid = {
         "mu_size": [50],
         "lambda_size": [5],
-        "generation_size": [5],
+        "generation_size": [50],
         "mutation_prob": [0.5],
         "max_init_depth": [1],
         "max_depth": [5],
         "fitness_type": ["step"],
         "mu_guard": [11],
         "lambda_guard": [7],
-        "ngen_guard": [15],
+        "ngen_guard": [50],
         "cxpb_guard": [0.6],
         "mutpb_guard": [0.75],
     }
@@ -257,108 +257,12 @@ def run_experiment(conjecture_path, seed, n_jobs):
     except Exception:
         print("GridSearch finished. Inspect experiment_results.csv for per-configuration metrics.")
 
-    # data_s1_s0 = [
-    #     [1234, 1000, 2, 2345, True],
-    #     [2345, -500, 2, -9999, True],
-    #     [2345, -500, 2, 1234, True],
-    #     [1234, 1000, 0, -9999, False],
-    #     [1234, 1000, 0, 2345, False],
-    #     [1234, 1000, 1, -9999, False],
-    #     [2345, -500, 0, 1234, False],
-    #     [2345, -500, 1, 1234, False],
-    #     [1234, 1000, 1, 2345, False],
-    #     [2345, -500, 1, -9999, False],
-    #     [2345, -500, 0, -9999, False],
-    #     [1234, 1000, 1, 1234, False],
-    #     [1234, 1000, 0, 1234, False],
-    #     [2345, -500, 0, 2345, False],
-    #     [2345, -500, 2, 2345, False],
-    #     [2345, -500, 1, 2345, False],
-    #     [1234, 1000, 2, 1234, False]
-    # ]
-    # df_s1_s0 = pd.DataFrame(data_s1_s0, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s0["target"] = "s1->s0"
-
-    # data_s1_s2 = [
-    #     [1234, 1000, 2, 2345, False],
-    #     [2345, -500, 2, -9999, False],
-    #     [2345, -500, 2, 1234, False],
-    #     [1234, 1000, 0, -9999, False],
-    #     [1234, 1000, 0, 2345, False],
-    #     [1234, 1000, 1, -9999, False],
-    #     [2345, -500, 0, 1234, False],
-    #     [2345, -500, 1, 1234, False],
-    #     [1234, 1000, 1, 2345, False],
-    #     [2345, -500, 1, -9999, False],
-    #     [2345, -500, 0, -9999, False],
-    #     [1234, 1000, 1, 1234, True],
-    #     [1234, 1000, 0, 1234, True],
-    #     [2345, -500, 0, 2345, True],
-    #     [2345, -500, 2, 2345, True],
-    #     [2345, -500, 1, 2345, True],
-    #     [1234, 1000, 2, 1234, True]
-    # ]
-    # df_s1_s2 = pd.DataFrame(data_s1_s2, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s2["target"] = "s1->s2"
-
-    # data_s1_s1 = [
-    #     [1234, 1000, 2, 2345, False],
-    #     [2345, -500, 2, -9999, False],
-    #     [2345, -500, 2, 1234, False],
-    #     [1234, 1000, 0, -9999, True],
-    #     [1234, 1000, 0, 2345, True],
-    #     [1234, 1000, 1, -9999, True],
-    #     [2345, -500, 0, 1234, True],
-    #     [2345, -500, 1, 1234, True],
-    #     [1234, 1000, 1, 2345, True],
-    #     [2345, -500, 1, -9999, True],
-    #     [2345, -500, 0, -9999, True],
-    #     [1234, 1000, 1, 1234, False],
-    #     [1234, 1000, 0, 1234, False],
-    #     [2345, -500, 0, 2345, False],
-    #     [2345, -500, 2, 2345, False],
-    #     [2345, -500, 1, 2345, False],
-    #     [1234, 1000, 2, 1234, False]
-    # ]
-    # df_s1_s1 = pd.DataFrame(data_s1_s1, columns=["r0", "r1", "r2", "i0", "guard"])
-    # df_s1_s1["target"] = "s1->s1"
-
-    # df_all = pd.concat([df_s1_s0, df_s1_s1, df_s1_s2])
-
-    # train_data = df_all[df_all["guard"] == True].copy()
-
-    # for df in [df_all, train_data]:
-    #     df["i0_eq_r0"] = (df["i0"] == df["r0"]).astype(int)
-    #     df["r2_ge_2"] = (df["r2"] >= 2).astype(int)
-    #     df["i0_is_neg"] = (df["i0"] < 0).astype(int)
-
-    # X = train_data[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]]
-    # y = train_data["target"]
-
-    # print(df)
-
-    # clf = DecisionTreeClassifier(max_depth=4, random_state=42)
-    # clf.fit(X, y)
-
-    # print("\nDecision Tree Rules:")
-    # print(export_text(clf, feature_names=list(X.columns)))
-
-    # df_all["predicted_transition"] = clf.predict(df_all[["i0_eq_r0", "r2_ge_2", "i0_is_neg"]])
-
-    # print("\nPredicted transitions:")
-    # print(df_all[["r0", "r1", "r2", "i0", "guard", "target", "predicted_transition"]])
-
-    # plt.figure(figsize=(10,6))
-    # plot_tree(clf, feature_names=list(X.columns), class_names=clf.classes_, filled=True, rounded=True)
-    # plt.show()
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="get_groups.py",
         description="Determines the transition grouping and runs GP to generalise the conjecture model.",
     )
     parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True)
-    parser.add_argument("-t", "--trace", help="Path to the CSV containing the trace.", required=False)
     parser.add_argument("-s", "--seed", help="The random seed.", required=False, default=0)
     parser.add_argument("--n_jobs", required=False, type=int, default=1)
 

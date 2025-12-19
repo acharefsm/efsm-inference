@@ -66,12 +66,11 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen):
     best = max(population, key=lambda ind: ind.fitness.values)
     best_guard = toolbox.guard(best)
     for _ in range(ngen):
-        print(_)
         # Exit early as found optimal individual
         if toolbox.correct(best):
             return (best, best_guard)
         # Vary the population
-        offspring = algorithms.varAnd(population, toolbox, lambda_, mutpb)
+        offspring = algorithms.varAnd(population, toolbox, cxpb, mutpb)
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
@@ -146,14 +145,13 @@ def run_gp(
     mu_guard=10,
     lambda_guard=5,
     max_clauses: int = 4,
-    max_clause_depth: int = 4,
+    max_clause_depth: int = 1,
     cxpb_guard=0.5,
     mutpb_guard=0.5,
     random_seed=0,
     seeds=None,
     **kwargs,
 ):
-    print("random_seed:", random_seed, type(random_seed))
     random_seed = int(random_seed)
     random.seed(random_seed)
     np.random.seed(random_seed)
