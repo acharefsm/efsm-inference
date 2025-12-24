@@ -192,12 +192,13 @@ def generalise(
                 branching["target"] = branching["dest"].astype(str) + branching["op_sig"].astype(str)
 
                 guards = infer_guard(branching[args_columns + ["target"]])
+                guard_map = dict(guards)
                 for (op_sig, dest), branch in branching.groupby(["op_sig", "dest"]):
-
-                    # print(infer_guard(branching[args_columns + ["target"]]))
-
                     transition = efsm[origin][(ip_sig, op_sig, dest)]
-                    # transition.guard = 
+
+                    target = str(dest) + str(op_sig)
+                    
+                    transition.guard = guard_map[target]
 
     return efsm
 

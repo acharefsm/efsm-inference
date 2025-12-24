@@ -151,15 +151,15 @@ def run_experiment(conjecture_path, seed, n_jobs):
     # }
 
     param_grid = {
-        "mu_size": [50],
-        "lambda_size": [5],
-        "generation_size": [50],
-        "mutation_prob": [0.5],
+        "mu_size": [500],
+        "lambda_size": [1000],
+        "generation_size": [75],
+        "mutation_prob": [0.3],
         "max_init_depth": [1],
         "max_depth": [5],
         "fitness_type": ["step"],
-        "mu_guard": [11],
-        "lambda_guard": [7],
+        "mu_guard": [25],
+        "lambda_guard": [50],
         "ngen_guard": [50],
         "cxpb_guard": [0.6],
         "mutpb_guard": [0.75],
@@ -262,10 +262,12 @@ if __name__ == "__main__":
         prog="get_groups.py",
         description="Determines the transition grouping and runs GP to generalise the conjecture model.",
     )
-    parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True)
+    parser.add_argument("-c", "--conjecture", help="Path to the DOT file containing the conjecture model.", required=True, nargs="+")
     parser.add_argument("-s", "--seed", help="The random seed.", required=False, default=0)
     parser.add_argument("--n_jobs", required=False, type=int, default=1)
 
     args = parser.parse_args()
 
-    run_experiment(args.conjecture, args.seed, args.n_jobs)
+    for conjecture in args.conjecture:
+        print(conjecture)
+        run_experiment(conjecture, args.seed, args.n_jobs)

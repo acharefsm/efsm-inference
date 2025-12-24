@@ -57,6 +57,13 @@ def infer_guard(samples, counter=None, **kwargs):
 
     correct = correct_dt(best, samples, pset)
 
+    i = 2
+
+    while not correct and i != 4:
+        best, best_guard = run_gp(samples, pset, simple_pset, max_clause_depth=i, **kwargs)
+        correct = correct_dt(best, samples, pset)
+        i = i + 1
+
     if not correct:
         print("failed to infer guard")
         counter.increment()
@@ -64,6 +71,7 @@ def infer_guard(samples, counter=None, **kwargs):
     return best_guard
     
 def infer_output(samples, counter=None, **kwargs):
+    print(samples)
     pset = deap_gp.setup_pset(samples)
     best = deap_gp.run_gp(
         samples,
@@ -297,7 +305,7 @@ if __name__ == "__main__":
 
     counter = Counter()
 
-    generalised = efsm.generalise(efsm.efsm(conjecture),infer_output, infer_guard, random_seed=args.seed, counter=counter)
+    generalised = efsm.generalise(efsm.efsm(conjecture),infer_output, infer_guard, random_seed=args.seed, counter=counter, mu=500, lamb=1000, ngnen=100, mutprob=0.3)
 
     print(counter.get_total_incorrect())
 

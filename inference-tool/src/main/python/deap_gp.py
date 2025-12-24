@@ -27,7 +27,6 @@ from gp_repair import repair
 from gp_reproduction import genHalfAndHalf, mutate, new_mate
 from gp_simplification import simplify
 from patsy import EvalEnvironment
-from pyrsistent import pset
 
 warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")
 logging.basicConfig()
@@ -69,7 +68,7 @@ def run_gp(
     mut_prob=0.5,
     max_init=1,
     max_depth=5,
-    type_="continuous",
+    type_="step",
     mu=500,
     lamb=10,
     ngen=100,
@@ -300,6 +299,8 @@ def eaMuPlusLambda(
     # Begin the generational process
     # print("Entering main loop")
     for gen in range(0, ngen):
+        print(gen)
+        print(population[0].fitness.values)
         # print("pop", [(str(x), round(x.fitness.values[0], 2)) for x in population])
         # print("gen", gen, "best", toolbox.simplify(toolbox.repair(population[0], )), population[0].fitness.values)
         if population[0].fitness.values == (0,):
@@ -391,16 +392,31 @@ def shortcut_latent(points: pd.DataFrame) -> bool:
 
 
 if __name__ == "__main__":
-    train = "test-guard2.csv" if not len(sys.argv) > 1 else sys.argv[1]
+    # train = "test-guard2.csv" if not len(sys.argv) > 1 else sys.argv[1]
 
-    points = pd.read_csv(train)
+    # points = pd.read_csv(train)
 
-    for col in points:
-        if points.dtypes[col] == object:
-            points[col] = points[col].astype("string")
-    pset = setup_pset(points)
+    # for col in points:
+    #     if points.dtypes[col] == object:
+    #         points[col] = points[col].astype("string")
+
+    data = {
+    "tid": [122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154],
+    "r0":  [256]*33,
+    "r1":  [270]*33,
+    "r2":  [27,29,27,27,27,27,29,27,27,29,27,29,27,27,27,29,27,29,27,29,29,27,27,27,29,27,29,29,29,27,27,27,27],
+    "r3":  [23069,23069,15509,87883,15509,1512,23069,95443,167817,15509,1604,73978,73978,146352,218726,95443,7949,1512,73886,146260,80323,1604,1512,73886,66326,138700,167817,1604,7949,73978,66418,58858,95443],
+    "r4":  [7290,7290,-72644,7290,7290,7290,-72644,-72644,-72644,-72644,-72644,-72644,-72644,-72644,7290,-72644,7290,-72644,-72644,-72644,-72644,7290,-72644,7290,-72644,-72644,-72644,-72644,-72644,7290,7290,7290,7290],
+    "i0":  [256]*33,
+    "i1":  [270]*33,
+    "o0":  [15509,15509,87883,80323,7949,-6048,95443,167817,240191,87883,73978,146352,146352,218726,211166,167817,389,73886,146260,218634,152697,-5956,73886,66326,138700,211074,240191,73978,80323,66418,58858,51298,87883]
+}
+
+    df = pd.DataFrame(data).set_index("tid")
+    print(df)
+    pset = setup_pset(df)
     print(pset.mapping)
 
-    best = run_gp(1, points, pset, random_seed=3, seeds=[], mu=10, lamb=5, ngen=100, max_init=2)
+    best = run_gp(df, pset, random_seed=3, seeds=[], mu=500, lamb=1000, ngen=100, mut_prob=0.3)
     logger.debug(f"\nbest is {best}:{round(best.fitness.values[0],2)}")
     logger.debug(best.height)
