@@ -1,0 +1,50 @@
+# ========================
+#  JAVA & MAVEN
+# ========================
+*.class
+*.jar
+*.war
+*.ear
+target/
+
+
+# ========================
+#  INTELLIJ IDEA
+# ========================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+
+# ========================
+#  PYTHON
+# ========================
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+.python-version
+
+
+# ========================
+#  VS CODE
+# ========================
+.vscode/
+!.vscode/extensions.json
+*.code-workspace
+
+
+# ========================
+#  GENERAL
+# ========================
+*.log
+.DS_Store
+Thumbs.db
+*.pem
+*.key
