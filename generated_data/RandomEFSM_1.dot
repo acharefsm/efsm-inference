@@ -1,0 +1,29 @@
+digraph g {
+
+    /* Randomly Generated EFSM */
+
+    registers="r0:INTEGER,r1:INTEGER,r2:INTEGER,r3:INTEGER,r4:INTEGER,r5:INTEGER"
+
+    inputs="in0(INTEGER,INTEGER) | in1(INTEGER,INTEGER)"
+
+    outputs="out0 | out1(INTEGER,INTEGER)"
+
+    s0 [shape="box" label="s0"];
+    s1 [shape="circle" label="s1"];
+    s2 [shape="circle" label="s2"];
+    s3 [shape="circle" label="s3"];
+
+    s0 -> s3 [label=<in0 / out0() (i0, i1, r2, r3, r4, r5)>];
+    s0 -> s0 [label=<in1 / out0() (r0, r1, i0, i1, r4, r5)>];
+    s1 -> s0 [label=<in0 / out0() (i0, i1, r2, r3, r4, r5)>];
+    s1 -> s3 [label=<in1[((r4 &lt; r2) or (r4 &gt; 5)) or (r5 not = r3)] / out1(8,i1 + r5) (r0, r1, i0, i1, o0, o1)>];
+    s1 -> s3 [label=<in1[((r4 &gt;= r2) and (r4 &lt;= 5)) and (r5 = r3)] / out0() (r0, r1, i0, i1, r4, r5)>];
+    s2 -> s1 [label=<in0 / out1(r0 - 10,r2) (i0, i1, r2, r3, o0, o1)>];
+    s2 -> s2 [label=<in1 / out0() (r0, r1, i0, i1, r4, r5)>];
+    s3 -> s1 [label=<in0[((r3 &lt; r5) and (r3 = 10)) or (i0 &lt;= i0)] / out1(0,0) (i0, i1, r2, r3, o0, o1)>];
+    s3 -> s2 [label=<in1 / out0() (r0, r1, i0, i1, r4, r5)>];
+    s3 -> s3 [label=<in0[((r3 &gt;= r5) or (r3 not = 10)) and (i0 &gt; i0)] / out0() (i0, i1, r2, r3, r4, r5)>];
+
+    __start0 [label="", shape="none", width="0", height="0"];
+    __start0 -> s0;
+}

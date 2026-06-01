@@ -1,0 +1,33 @@
+digraph g {
+
+	s0 [shape="circle" configuration="[0,0,0,0,0,0]" label=<s0>];
+	s1 [shape="circle" label=<s1>];
+	s2 [shape="circle" label=<s2>];
+	s3 [shape="circle" label=<s3>];
+	s0 -> s0 [configuration="[0,0,0,0,0,0]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s0 -> s0 [configuration="[0,0,6,3,0,0]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s0 -> s3 [configuration="[0,0,6,3,0,0]" update="( i0 , i1 , r2 , r3 , r4 , r5 )" label=<in0(10,3)/out0>];
+	s0 -> s0 [configuration="[10,3,6,3,0,0]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s0 -> s3 [configuration="[10,3,6,3,0,0]" update="( i0 , i1 , r2 , r3 , r4 , r5 )" label=<in0(10,3)/out0>];
+	s0 -> s0 [configuration="[10,3,6,3,0,6]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s0 -> s3 [configuration="[10,3,6,3,0,6]" update="( i0 , i1 , r2 , r3 , r4 , r5 )" label=<in0(10,3)/out0>];
+	s1 -> s3 [configuration="[10,3,6,3,0,0]" update="( r0 , r1 , i0 , i1 , o0 , o1 )" label=<in1(6,3)/out1(8,3)>];
+	s1 -> s0 [configuration="[10,3,6,3,0,0]" update="( i0 , i1 , r2 , r3 , r4 , r5 )" label=<in0(10,3)/out0>];
+	s1 -> s3 [configuration="[10,3,6,3,0,6]" update="( r0 , r1 , i0 , i1 , o0 , o1 )" label=<in1(6,3)/out1(8,9)>];
+	s1 -> s0 [configuration="[10,3,6,3,0,6]" update="( i0 , i1 , r2 , r3 , r4 , r5 )" label=<in0(10,3)/out0>];
+	s2 -> s2 [configuration="[10,3,6,3,0,0]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s2 -> s1 [configuration="[10,3,6,3,0,0]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,6)>];
+	s2 -> s2 [configuration="[10,3,6,3,0,6]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s2 -> s1 [configuration="[10,3,6,3,8,3]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,6)>];
+	s2 -> s1 [configuration="[10,3,6,3,0,6]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,6)>];
+	s3 -> s2 [configuration="[10,3,6,3,0,0]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s3 -> s1 [configuration="[10,3,6,3,0,0]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,0)>];
+	s3 -> s2 [configuration="[10,3,6,3,0,6]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s3 -> s1 [configuration="[10,3,6,3,8,9]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,0)>];
+	s3 -> s2 [configuration="[10,3,6,3,8,3]" update="( r0 , r1 , i0 , i1 , r4 , r5 )" label=<in1(6,3)/out0>];
+	s3 -> s1 [configuration="[10,3,6,3,0,6]" update="( i0 , i1 , r2 , r3 , o0 , o1 )" label=<in0(10,3)/out1(0,0)>];
+
+__start0 [label="" shape="none" width="0" height="0"];
+__start0 -> s0;
+
+}
