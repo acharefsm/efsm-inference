@@ -1,0 +1,386 @@
+<!--
+  #%L
+  This file is part of ehW inference
+  Please visit http://achar.net/ for further information
+  
+  Authors : Roland Groz, German Vega, Luca Devlin
+            Laboratoire d'Informatique de Grenoble,University of Sheffield
+  %-
+  Copyright (C) 2020 - 2026 Achar group
+  %-
+  This program and the accompanying materials are made
+  available under the terms of the Eclipse Public License 2.0
+  which is available at https://www.eclipse.org/legal/epl-2.0/
+  
+  SPDX-License-Identifier: EPL-2.0
+  #L%
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.achar</groupId>
+	<artifactId>petreaProject</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>ehW inference	</name>
+	<description>ehW Extended FSM inference algorithm</description>
+
+	<properties>
+		<copyright.holder>Achar group</copyright.holder>
+		<url>http://achar.net/</url>
+	</properties>
+
+	<url>${url}</url>
+	
+	<inceptionYear>2020</inceptionYear>
+
+	<!-- Licensing information -->
+
+	<licenses>
+		<license>
+			<name>Eclipse Public License - v 2.0</name>
+			<url>https://www.eclipse.org/legal/epl-2.0/</url>
+			<distribution>repo</distribution>
+
+			<!-- We use the comment to specify the identifier used by the License 
+				plugin -->
+			<comments>epl_only_v2</comments>
+		</license>
+	</licenses>
+
+	<!-- General information about the team -->
+	<organization>
+		<name></name>
+		<url></url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>grozr</id>
+			<name>Roland Groz</name>
+			<email>roland.groz@grenoble-inp.fr</email>
+			<organization>Laboratoire d'Informatique de Grenoble</organization>
+		</developer>
+		<developer>
+			<id>vegabage</id>
+			<name>German Vega</name>
+			<email>german.vega@imag.fr</email>
+			<organization>Laboratoire d'Informatique de Grenoble</organization>
+		</developer>
+		<developer>
+			<id>luca</id>
+			<name>Luca Devlin</name>
+			<email>ldevlin1@sheffield.ac.uk</email>
+			<organization>University of Sheffield</organization>
+		</developer>
+	</developers>
+
+	<dependencies>
+
+        <dependency>
+            <groupId>org.achar</groupId>
+            <artifactId>ehw</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.9.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<!-- This section fixes the default version and configuration of the most 
+			commonly used plugins -->
+
+		<pluginManagement>
+			<plugins>
+
+				<!-- License management configuration -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>2.0.0</version>
+
+					<configuration>
+						<encoding>UTF-8</encoding>
+
+						<roots combine.children="append">
+							<root>.</root>
+						</roots>
+
+						<extraExtensions combine.children="append">
+						</extraExtensions>
+
+						<includes combine.children="append">
+						</includes>
+
+						<excludes combine.children="append">
+							<exclude>target/**/*</exclude>
+							<exclude>jar</exclude>
+							<exclude>zip</exclude> 
+						</excludes>
+
+						<licenseName>${project.licenses[0].comments}</licenseName>
+						<copyrightOwners>${copyright.holder}</copyrightOwners>
+
+						<licenseFile>${basedir}/LICENSE</licenseFile>
+
+						<descriptionTemplate>${basedir}/src/main/license/license.description.ftl</descriptionTemplate>
+						<fileTemplate>${basedir}/src/main/license/third-party.format.ftl</fileTemplate>
+						<sectionDelimiter>%-</sectionDelimiter>
+						<canUpdateCopyright>true</canUpdateCopyright>
+						<canUpdateDescription>true</canUpdateDescription>
+
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.freemarker</groupId>
+							<artifactId>freemarker</artifactId>
+							<version>2.3.31</version>
+						</dependency>
+					</dependencies>
+
+					<executions>
+
+						<execution>
+							<id>add-license</id>
+							<goals>
+								<goal>update-project-license</goal>
+							</goals>
+						</execution>
+
+						<execution>
+							<id>update-source-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+							<configuration>
+								<includes>
+									<include>**/main/java/**/*</include>
+									<include>**/main/rubby/**/*</include>
+								</includes>
+							</configuration>
+						</execution>
+
+						<execution>
+							<id>update-test-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-test-sources</phase>
+							<configuration>
+								<includes>
+									<include>**/test/java/**/*</include>
+								</includes>
+							</configuration>
+						</execution>
+
+						<execution>
+							<id>update-resource-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-resources</phase>
+							<configuration>
+								<includes>
+									<include>pom.xml</include>
+									<include>**/main/resources/**/*</include>
+								</includes>
+							</configuration>
+						</execution>
+
+						<execution>
+							<id>update-test-resource-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-test-resources</phase>
+							<configuration>
+								<includes>
+									<include>**/test/resources/**/*</include>
+								</includes>
+							</configuration>
+						</execution>
+
+						<execution>
+							<id>check-license-headers</id>
+							<goals>
+								<goal>check-file-header</goal>
+							</goals>
+							<phase>deploy</phase>
+							<configuration>
+								<failOnMissingHeader>true</failOnMissingHeader>
+							</configuration>
+						</execution>
+
+					</executions>
+				</plugin>
+
+				<!-- Configure java compilation to set Java 17 as the default option  -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.10.1</version>
+					<configuration>
+						<forceJavacCompilerUse>true</forceJavacCompilerUse>
+						<release>17</release>
+						<encoding>UTF-8</encoding>
+						<source>1.17</source>
+						<target>1.17</target>
+					</configuration>
+				</plugin>
+
+				<!-- Configure encoding of resource files -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.3.0</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- Configure packaging of source files -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.2.1</version>
+				</plugin>
+
+				<!-- Configure helping plugin to attach additional artifacts -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+			
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+			
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.4.2</version>
+				</plugin>
+
+				<!-- Configure unit test plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.0.0</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.junit.jupiter</groupId>
+							<artifactId>junit-jupiter-engine</artifactId>
+							<version>5.9.2</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
+		<!-- The plugins that will be executed -->
+		<plugins>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>gather-licenses</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-third-party</goal>
+						</goals>
+						<configuration>
+							<thirdPartyFilename>THIRD-PARTY-LICENSES</thirdPartyFilename>
+							<useMissingFile>true</useMissingFile>
+							<missingFile>${project.build.outputDirectory}/third-party.missing.licenses.properties</missingFile>
+							<licenseMerges>
+								<licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+								<licenseMerge>Eclipse Public License - v 1.0|Eclipse Public License</licenseMerge>
+							</licenseMerges>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
+			
+		</plugins>
+		
+
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+									<goal>test-jar</goal>
+								</goals>
+							</execution>
+						</executions>						
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-tests</id>
+								<goals>
+									<goal>test-jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
