@@ -97,24 +97,23 @@ def setFunction(parameters, complexity, constantProb=0.3, maxConstant=10, random
         return op + "(" + param1 + "," + func + ")"
 
 def setFunctionLinear(parameters, depth, maxCoeff=10, random_seed=42):
-    ops = ['add', 'sub', 'mul']
     expr = ""
     np.random.seed(random_seed)
     while depth > 0:
-        op = np.random.choice(ops)
         param = np.random.choice(parameters)
-        if op == 'mul':
-            coeff = np.random.randint(1, maxCoeff + 1)
-            plusMinus = np.random.choice(['', '-'])
-            newexpr = plusMinus + str(coeff) + "*" + param
-        else:
-            param1 = np.random.choice(parameters)
-            param2 = np.random.choice(parameters)
-            newexpr = param1 + op + param2
-            depth -= 1
+        coeff = np.random.randint(1, maxCoeff + 1)
+        plusMinus = np.random.choice(['', '-'])
+        newexpr = 'mul(' + plusMinus + str(coeff) + ',' + param + ')'
         if expr == "":
             expr = newexpr
         else:
-            expr = expr + "+" + newexpr
+            expr = 'add(' + expr + ',' + newexpr + ')'
+        if (depth == 1):
+            u = np.random.random_sample()
+            if u < 0.5:
+                const = str(np.random.randint(1, maxCoeff + 1))
+                expr = 'add(' + expr + ',' + const + ')'
+        depth -= 1
     return expr
+
 
