@@ -2,6 +2,15 @@ import numpy as np
 import pandas as pd
 
 
+'''Based on the decision treee from the slides/report. 
+The function takes as input a list of candidates, the sample table, 
+the inferred outputs from the current best candidate and the current best candidate.
+The candiates and the current best candidate needs to be strings representing the mathematical expression of the function.
+The function exprects the LAST column of the table to be the true output and the other columns to be the input parameters.
+The function also expects that the inferred outputs are in the same order as the rows of the table and not represented in the table.
+For the inputs and registers, the function expects that they are named i0, i1, ... and r0, r1, ... respectively.
+It returns a list of probable candidates and a list of not probable candidates.'''
+
 def getProbableCandidates(candidates, table, inferredOutputs, currentBestCandidate):
     probableCandidates = []
     notProbableCandidates = []
