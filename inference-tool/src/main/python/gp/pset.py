@@ -324,6 +324,16 @@ def setup_pset_aux(points: pd.DataFrame) -> gp.PrimitiveSet:
         pset.addPrimitive(operator.add, [int, int], int)
         pset.addPrimitive(operator.sub, [int, int], int)
         pset.addPrimitive(operator.mul, [int, int], int)
+    elif output_type == float:
+        pset.addPrimitive(operator.add, [float, float], float)
+        pset.addPrimitive(operator.sub, [float, float], float)
+        pset.addPrimitive(operator.mul, [float, float], float)
+        pset.addPrimitive(operator.add, [float, int], float)
+        pset.addPrimitive(operator.sub, [float, int], float)
+        pset.addPrimitive(operator.mul, [float, int], float)
+        pset.addPrimitive(operator.add, [int, float], float)
+        pset.addPrimitive(operator.sub, [int, float], float)
+        pset.addPrimitive(operator.mul, [int, float], float)
     elif output_type == bool:
         pset.addPrimitive(operator.__le__, [int, int], bool, weight=1)
         pset.addPrimitive(operator.__ge__, [int, int], bool, weight=1)

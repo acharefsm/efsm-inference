@@ -4,9 +4,11 @@ from itertools import chain, combinations
 import numpy as np
 import pandas as pd
 from deap import algorithms, base, creator, gp, tools
-from gp_fitness import correct_dt, fitness_dt, tree_to_guard
-from gp_pset import setup_pset, setup_simple_pset
-from gp_reproduction import (
+
+from .fitness import correct_dt, fitness_dt, tree_to_guard
+from .pset import setup_pset, setup_simple_pset
+
+from .reproduction import (
     genHalfAndHalf,
     mutateByCommute,
     mutateByFuzz,
@@ -15,7 +17,7 @@ from gp_reproduction import (
     mutInsert,
     random_seed,
 )
-from gp_simplification import simplify
+from .simplification import simplify
 
 creator.create("Fitness_Guard", base.Fitness, weights=(1.0,))
 creator.create("Individual_Guard", list, fitness=creator.Fitness_Guard)

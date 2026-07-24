@@ -12,9 +12,10 @@ import numpy as np
 import pandas as pd
 from deap import gp
 from enchant.utils import levenshtein
-from gp_pset import is_null
-from gp_repair import repair
 from sklearn.tree import DecisionTreeClassifier, export_text
+
+from .pset import is_null
+from .repair import repair
 
 logger = logging.getLogger("main")
 
@@ -198,6 +199,7 @@ def evaluate_candidate(
 
     assert not is_null(fitness), "fitness cannot be nan (evaluate_candidate:148)"
 
+    #remove unsed vars from fitness
     return fitness + len(set(unused_vars).intersection(latent_variables(individual, points)))
 
 

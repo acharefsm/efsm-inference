@@ -21,11 +21,13 @@ import numpy as np
 import pandas as pd
 import z3
 from deap import algorithms, base, creator, gp, tools
-from gp_fitness import fitness, latent_variables
-from gp_pset import setup_pset
-from gp_repair import repair
-from gp_reproduction import genHalfAndHalf, mutate, new_mate
-from gp_simplification import simplify
+
+from .fitness import fitness, latent_variables
+from .pset import setup_pset
+from .repair import repair
+from .reproduction import genHalfAndHalf, mutate, new_mate
+from .simplification import simplify
+
 from patsy import EvalEnvironment
 
 warnings.filterwarnings("ignore", category=FutureWarning, message=".*Series.__getitem__.*")

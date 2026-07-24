@@ -134,7 +134,7 @@ object Dirties {
   sys.path.append("./src/main/python")
   for (p <- site.getsitepackages().as[List[String]])
     sys.path.append(p)
-  val deap_gp = py.module("deap_gp")
+  val deap_gp = py.module("gp.inference")
   val sympify = py.module("sympy")
   val exp_symp = py.module("exp_simp")
 

@@ -10,21 +10,18 @@ import argparse
 import json
 import re
 
-import gp_pset
-import gp_simplification
-import gp_fitness
 import efsm
-import deap_gp
 
 import pandas as pd
 import networkx as nx
 
-from deap import gp
+import deap.gp
 
-from gp_repair import infix_to_prefix2 as infix_to_prefix
-from gp_guard_combinator import run_gp
-from gp_pset import setup_pset, setup_simple_pset
-from gp_fitness import correct_dt
+from gp.inference import run_gp as run_gp__output, setup_pset as setup_pset_inference
+from gp.repair import infix_to_prefix2 as infix_to_prefix
+from gp.guard_combinator import run_gp as run_gp_guard
+from gp.pset import setup_pset, setup_simple_pset, setup_full_pset
+from gp.fitness import correct_dt, correct
 
 
 from collections import OrderedDict
@@ -52,7 +49,7 @@ class AdditiveDict:
 def infer_guard(samples, counter=None, **kwargs):
     pset = setup_pset(samples)
     simple_pset = setup_simple_pset(samples)
-    best, best_guard = run_gp(samples, pset, simple_pset, **kwargs)
+    best, best_guard = run_gp_guard(samples, pset, simple_pset, **kwargs)
     print(best_guard)
 
     correct = correct_dt(best, samples, pset)
@@ -60,7 +57,7 @@ def infer_guard(samples, counter=None, **kwargs):
     i = 2
 
     while not correct and i != 4:
-        best, best_guard = run_gp(samples, pset, simple_pset, max_clause_depth=i, **kwargs)
+        best, best_guard = run_gp_guard(samples, pset, simple_pset, max_clause_depth=i, **kwargs)
         correct = correct_dt(best, samples, pset)
         i = i + 1
 
@@ -72,8 +69,8 @@ def infer_guard(samples, counter=None, **kwargs):
     
 def infer_output(samples, counter=None, **kwargs):
     print(samples)
-    pset = deap_gp.setup_pset(samples)
-    best = deap_gp.run_gp(
+    pset = setup_pset_inference(samples)
+    best = run_gp__output(
         samples,
         pset,
         **kwargs,
@@ -83,14 +80,14 @@ def infer_output(samples, counter=None, **kwargs):
     args = samples[samples.columns[:-1]]
     outputs = samples[samples.columns[-1]]
 
-    correct = gp_fitness.correct(best, samples, pset, [() for i in range(len(samples))])
+    isCorrect = correct(best, samples, pset, [() for i in range(len(samples))])
 
-    if not correct:
+    if not isCorrect:
         print("failed to infer output")
         counter.increment()
-        bf = deap_gp.gp.compile(expr=best, pset=pset)
+        bf = deap.gp.compile(expr=best, pset=pset)
         predicted = args.apply(lambda args: bf(**(args.to_dict())), axis=1)
-        correct = outputs == predicted
+        isCorrect = outputs == predicted
         # print("guard inferred ",str(best))
         # print("samples",samples)
         # print("correct",correct)
@@ -136,7 +133,7 @@ def __transition_pset(ip_sig, op_sig, dest, transition):
         axis=1,
     )
 
-    return gp_pset.setup_full_pset(samples)
+    return setup_full_pset(samples)
 
 
 def __formula_to_tree(exp, pset, rename={}):
@@ -144,16 +141,16 @@ def __formula_to_tree(exp, pset, rename={}):
     Convert inferred function from string to tree representation.
     """
     try:
-        exp = gp.PrimitiveTree.from_string(exp, pset)
+        exp = deap.gp.PrimitiveTree.from_string(exp, pset)
     except:
         print(exp)
-        exp = gp.PrimitiveTree.from_string(infix_to_prefix(exp), pset)
-    rename = {k: gp.Terminal(v, None, object) for k, v in rename.items()}
+        exp = deap.gp.PrimitiveTree.from_string(infix_to_prefix(exp), pset)
+    rename = {k: deap.gp.Terminal(v, None, object) for k, v in rename.items()}
     for inx, element in enumerate(exp):
-        if isinstance(element, gp.Terminal) and element.format() in rename:
+        if isinstance(element, deap.gp.Terminal) and element.format() in rename:
             exp[inx] = rename[element.format()]
     assert "r_b" not in str(exp), f"{exp}: {rename}"
-    return gp.graph(exp)
+    return deap.gp.graph(exp)
 
 
 def efsm_to_json(_efsm: efsm.EFSM, filepath):
@@ -175,7 +172,7 @@ def efsm_to_json(_efsm: efsm.EFSM, filepath):
 
     samples = efsm.expand_list(pd.DataFrame([_efsm.initialisation], index=[0]), "registers", "r")
     samples = pd.concat([samples, pd.Series("epsilon", index=samples.index, name="op_sig").astype("string")], axis=1)
-    pset = gp_pset.setup_full_pset(samples)
+    pset = setup_full_pset(samples)
 
     initial = _efsm.initialisation["state"]
     configuration = _efsm.initialisation["registers"]

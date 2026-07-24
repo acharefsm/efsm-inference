@@ -303,7 +303,7 @@ object Config {
           sys.path.append("./src/main/python")
           for (p <- site.getsitepackages().as[List[String]])
             sys.path.append(p)
-          val deap_gp = py.module("deap_gp")
+          val deap_gp = py.module("gp.inference")
           val ptaParsed = parse(Source.fromFile(config.ptaFile).getLines.mkString).values.asInstanceOf[List[Map[String, Any]]]
           var pta: Types.IEFSM = FSet.bot_fset
           var freePTA: Types.IEFSM = FSet.bot_fset
