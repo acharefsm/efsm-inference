@@ -1,0 +1,17 @@
+digraph "EFSM" {
+s2;
+s0;
+s1;
+s2 -> s0 [key=0, label="vend[(r3 <= r2)]/Serv(r0,0,0) (r0,r1,o1,o2)"];
+s2 -> s2 [key=0, label="coin[(((20 >= i0) and (r2 not = r3)) or ((20 < i0) and (i0 <= 60)))]/Display((i0 + r2)) (r0,i0,o0,r3)"];
+s2 -> s2 [key=1, label="coin[(((20 >= i0) and (r2 = r3)) or ((20 < i0) and (i0 > 60)))]/Reject(i0) (r0,i0,r2,r3)"];
+s2 -> s2 [key=2, label="select/Omega (r0,r1,r2,r3)"];
+s2 -> s2 [key=3, label="vend[(r3 > r2)]/omega (r0,r1,r2,r3)"];
+s0 -> s0 [key=0, label="coin/Omega (r0,r1,r2,r3)"];
+s0 -> s0 [key=1, label="vend/Omega (r0,r1,r2,r3)"];
+s0 -> s1 [key=0, label="select/Beverage(i0,0,(100 + r3)) (i0,r1,o1,o2)"];
+s1 -> s1 [key=0, label="coin[((r3 <= i0) and (r3 not = i0))]/Reject((i0 + r2)) (r0,i0,r2,r3)"];
+s1 -> s1 [key=1, label="select/Omega (r0,r1,r2,r3)"];
+s1 -> s1 [key=2, label="vend/omega (r0,r1,r2,r3)"];
+s1 -> s2 [key=0, label="coin[(((r3 <= i0) and (r3 = i0)) or (r3 > i0))]/Display((i0 + r2)) (r0,i0,o0,r3)"];
+}
