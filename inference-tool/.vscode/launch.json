@@ -12,7 +12,8 @@
 			"request": "launch",
 			"module": "gp_generalise",
 			"console": "integratedTerminal",
-			"args": "-c drinks_register_guard_bounded_inferred.sampled.dot -t drinks_register_guard_bounded_inferred.simulation.csv"
+			"args": "-c drinks_register_guard_bounded_inferred.sampled.dot",
+			"justMyCode": false
 		},
 		
 		{
@@ -21,6 +22,7 @@
 			"request": "launch",
 			"program": "${file}",
 			"console": "integratedTerminal",
+			"cwd": "${workspaceFolder}/src/main/python",
 			"args": "${command:pickArgs}"
 		},
 		
@@ -35,14 +37,22 @@
 				"${workspaceFolder}/sample-traces/drinks/drinks_register_guard_bounded_inferred.sampled_generalised.json",
 				"-h",
 				"distinguish",
-				"${workspaceFolder}/sample-traces/drinks_register_guard_bounded_inferred.simulation_new_trace.json",
-				"${workspaceFolder}/sample-traces/drinks_register_guard_bounded_inferred.simulation_new_trace.json",
+				"${workspaceFolder}/sample-traces/drinks/drinks_register_guard_bounded_inferred.simulation_new_trace.json",
+				"${workspaceFolder}/sample-traces/drinks/drinks_register_guard_bounded_inferred.simulation_new_trace.json",
 			],
+			"jvmOptions": [
+				"-Djna.debug_load=true",
+				"-Djna.library.path=/Users/vega/.pyenv/versions/3.12.12/lib",
+				"-Dscalapy.python.programname=/Users/vega/.pyenv/versions/efsm-inference/bin/python",
+				"-Dscalapy.python.library=python3.12",
+			],
+			/*
 			"jvmOptions": [
 				"-Djna.library.path=C:\\Users\\vega\\AppData\\Local\\Programs\\Python\\Python39",
 				"-Djna.debug_load=true",
 				"-Dscalapy.python.library=python39"
 			],
+			*/
 			"env": {}
 		}
 	]

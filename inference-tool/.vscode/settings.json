@@ -1,16 +1,28 @@
 {
 	"files.watcherExclude": {
-		"**/target": true
+		"**/target/**": true
 	},
 
-	"terminal.integrated.env.windows": {
-		"PYTHONPATH": "${workspaceFolder}/src/main/python"
-	},
-	
 	"cSpell.words": [
 		"efsm",
 		"nfsm"
 	],
-	"cSpell.language": "en-GB",
-	
+
+	"cSpell.language": "en-GB,fr-FR",
+
+	"python-envs.defaultEnvManager": "ms-python.python:pyenv",
+
+	"metals.serverVersion": "1.6.8+2-01163379-SNAPSHOT",
+	"metals.suggestLatestUpgrade": "on",
+
+	"terminal.integrated.env.windows": {
+		"PYTHONPATH": "${workspaceFolder}/src/main/python"
+	},
+
+	"terminal.integrated.env.linux": {
+		"PYTHONPATH": "${workspaceFolder}/src/main/python"
+	},
+	"terminal.integrated.env.osx": {
+		"PYTHONPATH": "${workspaceFolder}/src/main/python"
+	},	
 }
