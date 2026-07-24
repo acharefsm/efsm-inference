@@ -85,7 +85,11 @@ object TypeConversion {
         val c2 = children(1)
         return GExp.Eq(toAExpAux(graph, c1, labels), toAExpAux(graph, c2, labels))
       }
-      case _ => throw new IllegalArgumentException(f"Invalid operator $root in $labels")
+     case "ne" => {
+        val c2 = children(1)
+        return GExp.Ne(toAExpAux(graph, c1, labels), toAExpAux(graph, c2, labels))
+      }
+     case _ => throw new IllegalArgumentException(f"Invalid operator $root in $labels")
     }
   }
 
